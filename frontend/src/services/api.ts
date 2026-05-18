@@ -385,6 +385,16 @@ export const apiService = {
     return handleResponse(response);
   },
 
+  addAmbulance: async (data: any) => {
+    const response = await fetch(`${API_BASE_URL}/ambulance/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return handleResponse(response);
+  },
+
+
   updateAmbulanceStatus: async (id: number, status: string) => {
     const response = await fetch(`${API_BASE_URL}/ambulance/${id}/status`, {
       method: 'PATCH',
@@ -442,6 +452,29 @@ export const apiService = {
     return handleResponse(response);
   },
 
+  scheduleSurgery: async (data: any) => {
+    const response = await fetch(`${API_BASE_URL}/specialized/surgical-schedule`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+  },
+
+  approveSurgery: async (id: number) => {
+    const response = await fetch(`${API_BASE_URL}/specialized/surgical-schedule/${id}/approve`, {
+      method: 'POST',
+    });
+    return handleResponse(response);
+  },
+
+  deleteSurgery: async (id: number) => {
+    const response = await fetch(`${API_BASE_URL}/specialized/surgical-schedule/${id}`, {
+      method: 'DELETE',
+    });
+    return handleResponse(response);
+  },
+
   getPatientRiskScore: async (patientId: number) => {
     const response = await fetch(`${API_BASE_URL}/specialized/patient/${patientId}/risk-score`);
     return handleResponse(response);
@@ -460,32 +493,6 @@ export const apiService = {
     return handleResponse(response);
   },
 
-  requestLabTest: async (data: any) => {
-    const response = await fetch(`${API_BASE_URL}/clinical/doctor/test-request`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
-  },
-
-  prescribeMedication: async (data: any) => {
-    const response = await fetch(`${API_BASE_URL}/clinical/doctor/prescribe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
-  },
-
-  requestAdmission: async (data: any) => {
-    const response = await fetch(`${API_BASE_URL}/clinical/doctor/admit-request`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
-  },
 
   uploadHealthRecord: async (patientId: number, title: string, type: string, file: File) => {
     const formData = new FormData();

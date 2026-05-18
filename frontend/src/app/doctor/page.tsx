@@ -57,7 +57,7 @@ export default function DoctorDashboard() {
       // Fetch Appointments
       const allAppts = await apiService.getDoctorAppointments(doctorId);
       setPendingAppointments(
-        allAppts.filter((a: any) => a.status === "pending"),
+        allAppts.filter((a: any) => a.status === "admin_approved"),
       );
       setQueue(
         allAppts

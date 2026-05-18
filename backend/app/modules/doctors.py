@@ -152,7 +152,8 @@ async def get_doctor_appointments(doctor_id: int, db: AsyncSession = Depends(get
 @router.patch("/appointments/{appointment_id}")
 async def update_appointment(appointment_id: int, data: dict, db: AsyncSession = Depends(get_db)):
     from app.models.models import Appointment
-    result = await db.execute(select(Appointment).filter(Appointment.id == appointment_id))
+    from sqlalchemy.orm import selectinload
+    result = await db.execute(select(Appointment).filter(Appointment.id == appointment_id).options(selectinload(Appointment.patient)))
     appt = result.scalars().first()
     if not appt:
         raise HTTPException(status_code=404, detail="Appointment not found")
@@ -175,10 +176,10 @@ async def update_appointment(appointment_id: int, data: dict, db: AsyncSession =
             start = appt.scheduled_at or datetime.now()
             new_schedule = DoctorSchedule(
                 doctor_id=appt.doctor_id,
-                task_name=f"Consultation: {appt.patient.name}",
+                task_name=f"Consultation: {appt.patient.name if appt.patient else 'Patient'} ({appt.preferred_time or 'TBD'})",
                 start_time=start,
                 end_time=start + timedelta(minutes=30),
-                status="pending"
+                status="scheduled"
             )
             db.add(new_schedule)
     

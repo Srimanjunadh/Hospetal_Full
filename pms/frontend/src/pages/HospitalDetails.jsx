@@ -277,7 +277,7 @@ const HospitalDetails = () => {
                                 
                                 {/* ERP Access Card (Admin Link) */}
                                 <div 
-                                    onClick={() => window.open('http://localhost:3000/hospital-admin/appointments', '_blank')}
+                                    onClick={() => window.open('http://localhost:3000/hospital-admin', '_blank')}
                                     className="bg-white/15 backdrop-blur-xl border border-emerald-400/40 p-3 rounded-lg hover:bg-emerald-500/20 transition-all duration-200 cursor-pointer group shadow-[0_10px_20px_-10px_rgba(16,185,129,0.3)]"
                                 >
                                     <div className="flex items-center gap-3">

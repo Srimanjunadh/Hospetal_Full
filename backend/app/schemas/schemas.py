@@ -204,3 +204,13 @@ class StaffSchedule(StaffScheduleBase):
 
     class Config:
         from_attributes = True
+
+class AmbulanceCreate(BaseModel):
+    hospital_id: int
+    vehicle_number: str
+    driver_name: str
+    driver_phone: Optional[str] = None
+    vehicle_size: Optional[str] = "MEDIUM"
+    status: str = "READY"
+    location: str = "BASE"
+

@@ -14,6 +14,15 @@ export default function FacilityControlPage() {
     oxygen: "OPTIMAL",
     hvac: "SERVICE REQ."
   });
+  const [showAddAmbulance, setShowAddAmbulance] = useState(false);
+  const [newAmbulance, setNewAmbulance] = useState({
+    vehicle_number: "",
+    driver_name: "",
+    driver_phone: "",
+    vehicle_size: "MEDIUM",
+    status: "READY",
+    location: "BASE 1 - MAIN WING"
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -33,6 +42,8 @@ export default function FacilityControlPage() {
         dbId: a.id,
         id: a.vehicle_number,
         crew: a.driver_name,
+        phone: a.driver_phone || "N/A",
+        size: a.vehicle_size || "MEDIUM",
         location: a.location,
         status: a.status.toUpperCase()
       })));
@@ -77,6 +88,43 @@ export default function FacilityControlPage() {
     } catch (e) { showToast("Service update failed", "error"); }
   };
 
+  const handleAddAmbulanceSubmit = async () => {
+    if (!newAmbulance.vehicle_number || !newAmbulance.driver_name || !newAmbulance.driver_phone) {
+      showToast("Please enter Vehicle Number, Crew Name, and Mobile Number", "error");
+      return;
+    }
+    try {
+      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      if (!session?.hospital_id) {
+        showToast("Session expired. Please login again.", "error");
+        return;
+      }
+      const { apiService } = await import("@/services/api");
+      await apiService.addAmbulance({
+        hospital_id: session.hospital_id,
+        vehicle_number: newAmbulance.vehicle_number,
+        driver_name: newAmbulance.driver_name,
+        driver_phone: newAmbulance.driver_phone,
+        vehicle_size: newAmbulance.vehicle_size,
+        status: newAmbulance.status,
+        location: newAmbulance.location || "BASE 1"
+      });
+      showToast("Ambulance unit successfully deployed", "success");
+      setShowAddAmbulance(false);
+      setNewAmbulance({
+        vehicle_number: "",
+        driver_name: "",
+        driver_phone: "",
+        vehicle_size: "MEDIUM",
+        status: "READY",
+        location: "BASE 1 - MAIN WING"
+      });
+      fetchFacilityData(session.hospital_id);
+    } catch (e: any) {
+      showToast(e.message || "Failed to add ambulance", "error");
+    }
+  };
+
   if (!mounted) return null;
 
   return (
@@ -86,10 +134,117 @@ export default function FacilityControlPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>FACILITY CONTROL TERMINAL</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>INFRASTRUCTURE MONITORING • AMBULANCE DISPATCH</p>
         </div>
-        <button className="btn-black" onClick={() => showToast("Deploying Global Emergency Fleet", "success")}>
-          <Truck size={18} /> DISPATCH EMERGENCY
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button className="btn-black" onClick={() => setShowAddAmbulance(true)}>
+            <Plus size={18} /> ADD AMBULANCE
+          </button>
+          <button className="btn-black" onClick={() => showToast("Deploying Global Emergency Fleet", "success")}>
+            <Truck size={18} /> DISPATCH EMERGENCY
+          </button>
+        </div>
       </div>
+
+      {showAddAmbulance && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div className="card" style={{ width: '500px', background: '#fff', color: '#000', border: '3px solid #000', padding: '2.5rem', boxShadow: '10px 10px 0px #000' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid #000', paddingBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Truck size={24} />
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '1px' }}>ADD AMBULANCE UNIT</h2>
+              </div>
+              <button style={{ background: 'transparent', border: 'none', fontSize: '1.5rem', fontWeight: 900, cursor: 'pointer' }} onClick={() => setShowAddAmbulance(false)}>×</button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>VEHICLE REGISTRATION NUMBER *</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. KA-04-EM-2026" 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  value={newAmbulance.vehicle_number}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, vehicle_number: e.target.value})}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>ASSIGNED CREW / EMT LEAD *</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Ramesh Kumar (EMT-P)" 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  value={newAmbulance.driver_name}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, driver_name: e.target.value})}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>CREW MOBILE NUMBER *</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. +91 98765 43210" 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  value={newAmbulance.driver_phone}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, driver_phone: e.target.value})}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>VEHICLE SIZE</label>
+                <select 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none', background: '#fff' }}
+                  value={newAmbulance.vehicle_size}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, vehicle_size: e.target.value})}
+                >
+                  <option value="SMALL">SMALL (BASIC LIFE SUPPORT)</option>
+                  <option value="MEDIUM">MEDIUM (ADVANCED LIFE SUPPORT)</option>
+                  <option value="LARGE">LARGE (MOBILE ICU / SPECIALIZED)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>OPERATIONAL STATUS</label>
+                <select 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none', background: '#fff' }}
+                  value={newAmbulance.status}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, status: e.target.value})}
+                >
+                  <option value="READY">READY (STANDBY)</option>
+                  <option value="ENGAGED">ENGAGED (DISPATCHED)</option>
+                  <option value="MAINTENANCE">MAINTENANCE (SERVICE REQ.)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>STATION / BASE LOCATION</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. BASE 1 - MAIN WING" 
+                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #000', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  value={newAmbulance.location}
+                  onChange={(e) => setNewAmbulance({...newAmbulance, location: e.target.value})}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                <button 
+                  style={{ flex: 1, padding: '12px', background: 'transparent', border: '2px solid #000', fontWeight: 900, cursor: 'pointer' }}
+                  onClick={() => setShowAddAmbulance(false)}
+                >
+                  CANCEL
+                </button>
+                <button 
+                  className="btn-black"
+                  style={{ flex: 1, padding: '12px', fontWeight: 900, textAlign: 'center', justifyContent: 'center' }}
+                  onClick={handleAddAmbulanceSubmit}
+                >
+                  DEPLOY UNIT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '3rem', marginTop: '3rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
@@ -113,8 +268,11 @@ export default function FacilityControlPage() {
                         <Truck size={18} />
                       </div>
                       <div>
-                        <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{amb.id}</p>
-                        <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#999' }}>{amb.crew}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{amb.id}</p>
+                          <span className="badge" style={{ fontSize: '0.55rem', background: '#e4e4e7', color: '#000' }}>{amb.size}</span>
+                        </div>
+                        <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#666' }}>{amb.crew} • <span style={{ color: '#999' }}>{amb.phone}</span></p>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>

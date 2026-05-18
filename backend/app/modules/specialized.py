@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.session import get_db
-from app.models.models import BloodBank, BloodRequest, SurgicalSchedule, PatientRiskScore, User, Doctor
+from app.models.models import BloodBank, BloodRequest, SurgicalSchedule, PatientRiskScore, User, Doctor, SystemAlert, DoctorSchedule
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
@@ -69,6 +69,7 @@ async def get_blood_requests(hospital_id: int, db: AsyncSession = Depends(get_db
 @router.post("/surgical-schedule")
 async def schedule_surgery(data: SurgicalScheduleCreate, db: AsyncSession = Depends(get_db)):
     new_surgery = SurgicalSchedule(**data.dict())
+    new_surgery.status = "PENDING_APPROVAL"
     new_surgery.checklist_status = {
         "Patient Identity Confirmed": False,
         "Site Marked": False,
@@ -79,12 +80,141 @@ async def schedule_surgery(data: SurgicalScheduleCreate, db: AsyncSession = Depe
     db.add(new_surgery)
     await db.commit()
     await db.refresh(new_surgery)
+    
+    # Get doctor to find user_id for alert
+    doc_res = await db.execute(select(Doctor).filter(Doctor.id == data.doctor_id))
+    doc = doc_res.scalar_one_or_none()
+    if doc:
+        alert = SystemAlert(
+            hospital_id=data.hospital_id,
+            from_user_id=1,
+            to_user_id=doc.user_id,
+            to_role="doctor",
+            message=f"Surgical OT Request: {data.procedure_name} scheduled for {data.scheduled_at.strftime('%Y-%m-%d %H:%M')}. Click Approve to confirm.",
+            type="surgery_approval"
+        )
+        db.add(alert)
+        await db.commit()
+        
     return new_surgery
+
+@router.post("/surgical-schedule/{id}/approve")
+async def approve_surgery(id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(SurgicalSchedule).filter(SurgicalSchedule.id == id))
+    surgery = result.scalar_one_or_none()
+    if not surgery:
+        raise HTTPException(status_code=404, detail="Surgery not found")
+    
+    surgery.status = "SCHEDULED"
+    
+    # Add to DoctorSchedule
+    doc_sched = DoctorSchedule(
+        doctor_id=surgery.doctor_id,
+        task_name=f"Surgery: {surgery.procedure_name}",
+        start_time=surgery.scheduled_at,
+        end_time=surgery.scheduled_at,
+        status="CONFIRMED",
+        notes=f"OT Room: {surgery.ot_room_number}"
+    )
+    db.add(doc_sched)
+    
+    # Send Intimation Alert to Patient
+    alert = SystemAlert(
+        hospital_id=surgery.hospital_id,
+        from_user_id=1,
+        to_user_id=surgery.patient_id,
+        to_role="patient",
+        message=f"Your surgery {surgery.procedure_name} has been confirmed by your doctor for {surgery.scheduled_at.strftime('%Y-%m-%d %H:%M')} in OT Room {surgery.ot_room_number}.",
+        type="notification"
+    )
+    db.add(alert)
+    await db.commit()
+    return surgery
+
+@router.delete("/surgical-schedule/{id}")
+async def delete_surgery(id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(SurgicalSchedule).filter(SurgicalSchedule.id == id))
+    surgery = result.scalar_one_or_none()
+    if not surgery:
+        raise HTTPException(status_code=404, detail="Surgery not found")
+    await db.delete(surgery)
+    await db.commit()
+    return {"detail": "Surgery deleted successfully"}
 
 @router.get("/surgical-schedules/{hospital_id}")
 async def get_surgeries(hospital_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(SurgicalSchedule).filter(SurgicalSchedule.hospital_id == hospital_id))
-    return result.scalars().all()
+    surgeries = result.scalars().all()
+    if not surgeries:
+        # Get a patient and doctor for default assignment
+        p_res = await db.execute(select(User).filter(User.role == "patient"))
+        patient = p_res.scalars().first()
+        d_res = await db.execute(select(Doctor))
+        doctor = d_res.scalars().first()
+        
+        p_id = patient.id if patient else 1
+        d_id = doctor.id if doctor else 1
+
+        default_surgeries = [
+            SurgicalSchedule(
+                hospital_id=hospital_id,
+                patient_id=p_id,
+                doctor_id=d_id,
+                ot_room_number="OT-101",
+                procedure_name="CORONARY ARTERY BYPASS GRAFT (CABG)",
+                scheduled_at=datetime.now(),
+                status="IN-PROGRESS",
+                checklist_status={
+                    "Patient Identity Confirmed": True,
+                    "Site Marked": True,
+                    "Anesthesia Safety Check": True,
+                    "Pulse Oximeter On": True,
+                    "Known Allergy Checked": True
+                },
+                notes="High priority cardiac surgery"
+            ),
+            SurgicalSchedule(
+                hospital_id=hospital_id,
+                patient_id=p_id,
+                doctor_id=d_id,
+                ot_room_number="OT-102",
+                procedure_name="TOTAL KNEE REPLACEMENT (ARTHROPLASTY)",
+                scheduled_at=datetime.now(),
+                status="SCHEDULED",
+                checklist_status={
+                    "Patient Identity Confirmed": True,
+                    "Site Marked": True,
+                    "Anesthesia Safety Check": False,
+                    "Pulse Oximeter On": False,
+                    "Known Allergy Checked": True
+                },
+                notes="Standard orthopedic procedure"
+            ),
+            SurgicalSchedule(
+                hospital_id=hospital_id,
+                patient_id=p_id,
+                doctor_id=d_id,
+                ot_room_number="OT-204",
+                procedure_name="CRANIOTOMY FOR TUMOR RESECTION",
+                scheduled_at=datetime.now(),
+                status="SCHEDULED",
+                checklist_status={
+                    "Patient Identity Confirmed": False,
+                    "Site Marked": False,
+                    "Anesthesia Safety Check": False,
+                    "Pulse Oximeter On": False,
+                    "Known Allergy Checked": False
+                },
+                notes="Complex neurosurgical oncology"
+            )
+        ]
+        for s in default_surgeries:
+            db.add(s)
+        await db.commit()
+        
+        result = await db.execute(select(SurgicalSchedule).filter(SurgicalSchedule.hospital_id == hospital_id))
+        surgeries = result.scalars().all()
+    return surgeries
 
 @router.patch("/surgical-schedule/{id}/checklist")
 async def update_checklist(id: int, checklist: dict, db: AsyncSession = Depends(get_db)):
