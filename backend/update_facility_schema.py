@@ -37,9 +37,9 @@ async def update_schema():
             
             # Seed Ambulances
             ambulances = [
-                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-001", driver_name="John Doe", status="READY", location="Hospital Base"),
-                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-002", driver_name="Jane Smith", status="ENGAGED", location="Downtown"),
-                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-003", driver_name="Mike Ross", status="READY", location="North Wing"),
+                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-001", driver_name="John Doe", driver_phone="+91 98765 43210", vehicle_size="MEDIUM", status="READY", location="Hospital Base"),
+                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-002", driver_name="Jane Smith", driver_phone="+91 98765 43211", vehicle_size="LARGE", status="ENGAGED", location="Downtown"),
+                Ambulance(hospital_id=hospital.id, vehicle_number=f"AMB-{hospital.id}-003", driver_name="Mike Ross", driver_phone="+91 98765 43212", vehicle_size="SMALL", status="READY", location="North Wing"),
             ]
             session.add_all(ambulances)
             

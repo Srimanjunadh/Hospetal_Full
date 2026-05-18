@@ -68,7 +68,7 @@ async def get_hospital_appointments(hospital_id: int, db: AsyncSession = Depends
 
 @router.post("/{appointment_id}/approve")
 async def approve_appointment(appointment_id: int, db: AsyncSession = Depends(get_db)):
-    from app.models.models import SystemAlert, DoctorSchedule, User
+    from app.models.models import SystemAlert, User
     from datetime import datetime, timedelta
     
     result = await db.execute(select(Appointment).filter(Appointment.id == appointment_id))
@@ -76,7 +76,7 @@ async def approve_appointment(appointment_id: int, db: AsyncSession = Depends(ge
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
     
-    appointment.status = "scheduled"
+    appointment.status = "admin_approved"
     
     # 1. Create alert for Doctor
     # Need to find doctor's user_id
@@ -90,26 +90,13 @@ async def approve_appointment(appointment_id: int, db: AsyncSession = Depends(ge
             from_user_id=1, # Admin
             to_user_id=doctor.user_id,
             to_role="doctor",
-            message=f"New Scheduled Appointment: Patient {appointment.patient_id} at {appointment.preferred_time}",
+            message=f"New Appointment Request from Patient #{appointment.patient_id} at {appointment.preferred_time}. Please review.",
             type="notification"
         )
         db.add(alert)
-        
-        # 2. Add to Doctor Schedule
-        # If scheduled_at is None, we use current date + preferred_time or just today
-        start_time = appointment.scheduled_at or datetime.now()
-        schedule = DoctorSchedule(
-            doctor_id=appointment.doctor_id,
-            task_name=f"Appointment: {appointment.reason or 'Routine Checkup'}",
-            start_time=start_time,
-            end_time=start_time + timedelta(minutes=30),
-            status="scheduled",
-            notes=f"Patient ID: {appointment.patient_id}"
-        )
-        db.add(schedule)
     
     await db.commit()
-    return {"status": "Appointment Approved and Scheduled"}
+    return {"status": "Appointment Approved by Admin and Sent to Doctor"}
 
 @router.post("/internal/sync")
 async def sync_pms_appointment(data: dict, db: AsyncSession = Depends(get_db)):

@@ -245,6 +245,8 @@ class Ambulance(Base):
     hospital_id = Column(Integer, ForeignKey("hospitals.id"))
     vehicle_number = Column(String, unique=True)
     driver_name = Column(String)
+    driver_phone = Column(String, nullable=True)
+    vehicle_size = Column(String, default="MEDIUM") # SMALL, MEDIUM, LARGE
     status = Column(String, default="READY") # READY, ENGAGED, MAINTENANCE
     location = Column(String, default="BASE")
     last_lat = Column(Float, nullable=True)
