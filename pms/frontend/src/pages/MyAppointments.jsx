@@ -81,7 +81,7 @@ const MyAppointments = () => {
     // Download receipt
     const handleDownloadReceipt = (item) => {
         const receiptText = `
-MediChain Healthcare
+MediClues Healthcare
 Appointment Receipt
 =====================================
 
@@ -103,7 +103,7 @@ Payment Status: ${item.payment ? 'Paid' : 'Pending'}
 Payment Method: ${item.paymentMethod || 'Online'}
 
 =====================================
-Thank you for choosing MediChain Healthcare!
+Thank you for choosing MediClues Healthcare!
         `.trim()
 
         const blob = new Blob([receiptText], { type: 'text/plain' })
@@ -148,7 +148,7 @@ Thank you for choosing MediChain Healthcare!
                 key: data.order.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID,
                 amount: data.order.amount,
                 currency: data.order.currency || 'INR',
-                name: 'MediChain',
+                name: 'MediClues',
                 description: `Appointment with Dr. ${item.docData?.name || 'Doctor'}`,
                 order_id: data.order.id,
                 handler: async function (response) {
@@ -224,7 +224,7 @@ Thank you for choosing MediChain Healthcare!
         setOpFormProgress(prev => ({ ...prev, [item._id]: 1 }))
         try {
             const isPaid = item.payment === true || item.payment === "true" || item.payment === 1
-            const hospitalName = item.hospitalData?.name || item.docData?.hospitalName || 'MediChain Healthcare'
+            const hospitalName = item.hospitalData?.name || item.docData?.hospitalName || 'MediClues Healthcare'
 
             // Convert logo to base64 for PDF
             const logoToBase64 = (src) => {
@@ -520,8 +520,8 @@ Thank you for choosing MediChain Healthcare!
 
         <div class="footer">
             <div>
-                <p>System Generated Document - MediChain Digital Health Platform</p>
-                <p>Support: support@medichain.com | ID: ${String(item._id)}</p>
+                <p>System Generated Document - MediClues Digital Health Platform</p>
+                <p>Support: support@medclues.com | ID: ${String(item._id)}</p>
             </div>
             <div class="stamp-box">Hospital Stamp</div>
             <div style="text-align: center;">
@@ -849,6 +849,9 @@ Thank you for choosing MediChain Healthcare!
 
     // Get status badge
     const getStatusBadge = (item) => {
+        if (item.status === 'time_over') {
+            return <span className="px-2 py-1 text-[10px] sm:text-xs rounded-md bg-red-100 text-red-700 border border-red-200 font-semibold whitespace-nowrap">Time Over</span>
+        }
         if (item.isCompleted) {
             return <span className="badge badge-success">Completed</span>
         }
@@ -1119,7 +1122,7 @@ Thank you for choosing MediChain Healthcare!
                                     )}
 
                                     {/* Queue Tracker - Show for upcoming appointments */}
-                                    {!item.cancelled && !item.isCompleted && isPaid && (
+                                    {!item.cancelled && !item.isCompleted && isPaid && item.status !== 'time_over' && (
                                         <div className="mb-4">
                                             <QueueTracker
                                                 appointmentId={item._id}
@@ -1143,6 +1146,18 @@ Thank you for choosing MediChain Healthcare!
                                         </div>
                                     )}
 
+                                    {/* Queue Tracker for Time Over - Always Show Panel */}
+                                    {item.status === 'time_over' && (
+                                        <div className="mb-4">
+                                            <QueueTracker
+                                                appointmentId={item._id}
+                                                docId={item.docId}
+                                                slotDate={item.slotDate}
+                                                slotTime={item.slotTime}
+                                            />
+                                        </div>
+                                    )}
+
                                     {/* Action Buttons */}
                                     <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
                                         {/* Completed Status */}
@@ -1156,7 +1171,7 @@ Thank you for choosing MediChain Healthcare!
                                         )}
 
                                         {/* Cancelled Status */}
-                                        {item.cancelled && !item.isCompleted && (
+                                        {item.cancelled && !item.isCompleted && item.status !== 'time_over' && (
                                             <button className="btn btn-danger w-full" disabled>
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1165,8 +1180,15 @@ Thank you for choosing MediChain Healthcare!
                                             </button>
                                         )}
 
+                                        {/* Time Over Status */}
+                                        {item.status === 'time_over' && (
+                                            <button className="btn bg-red-50 text-red-700 border border-red-200 w-full hover:bg-red-50 cursor-not-allowed font-medium shadow-none" disabled>
+                                                ⏰ Time Over & Rescheduled
+                                            </button>
+                                        )}
+
                                         {/* Payment Options - Pay Online/Pay on Visit Button (Show for unpaid appointments only) */}
-                                        {!item.cancelled && !isPaid && !item.isCompleted && (
+                                        {!item.cancelled && !isPaid && !item.isCompleted && item.status !== 'time_over' && (
                                             <>
                                                 <button
                                                     onClick={() => handlePayOnline(item)}
@@ -1225,7 +1247,7 @@ Thank you for choosing MediChain Healthcare!
                                         )}
 
                                         {/* Paid Status - Show OP Form and Cancel (Receipt removed) */}
-                                        {!item.cancelled && isPaid && !item.isCompleted && (
+                                        {!item.cancelled && isPaid && !item.isCompleted && item.status !== 'time_over' && (
                                             <>
                                                 <button
                                                     onClick={() => handleDownloadOPForm(item)}

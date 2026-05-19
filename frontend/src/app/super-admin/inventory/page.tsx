@@ -114,8 +114,8 @@ export default function InventoryPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem', outline: 'none' }}
             />
           </div>
-          <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Filter size={18} /> FILTER
+          <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+            <Filter size={18} /> <span>FILTER</span>
           </button>
           <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FileText size={18} /> EXPORT

@@ -20,7 +20,7 @@ const ContactLocation = () => {
                         Health Begins with
                     </h2>
                     <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-500 mb-2 sm:mb-3'>
-                        MediChain+
+                        MediClues+
                     </h2>
                     <p className='text-gray-500 text-sm sm:text-base max-w-xl mx-auto'>
                         Visit us at our location or get in touch with us
@@ -42,17 +42,17 @@ const ContactLocation = () => {
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
-                                title="MediChain+ Location - Vignan University"
+                                title="MediClues+ Location - Vignan University"
                             />
                             {/* Gradient overlay at top for branding */}
                             <div className='absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/20 to-transparent pointer-events-none z-10' />
-                            {/* MediChain+ pill marker overlaid on map */}
+                            {/* MediClues+ pill marker overlaid on map */}
                             <div className='absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none'>
                                 <div className='bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1.5'>
                                     <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
                                         <path d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z' />
                                     </svg>
-                                    MediChain+
+                                    MediClues+
                                 </div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ const ContactLocation = () => {
                                 {/* Email */}
                                 <div className='group'>
                                     <a 
-                                        href='mailto:medichain123@gmail.com'
+                                        href='mailto:medclues123@gmail.com'
                                         className='flex items-start gap-4 cursor-pointer w-full'
                                     >
                                         <div className='w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0 group-hover:bg-blue-500 group-hover:scale-110 shadow-sm transition-all duration-300'>
@@ -102,7 +102,7 @@ const ContactLocation = () => {
                                         <div className='min-w-0'>
                                             <p className='text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-0.5'>Email Us</p>
                                             <p className='text-gray-900 font-black text-sm sm:text-base group-hover:text-blue-600 transition-colors break-all'>
-                                                medichain123@gmail.com
+                                                medclues123@gmail.com
                                             </p>
                                             <p className='text-gray-400 text-[10px] sm:text-xs mt-1 font-bold'>
                                                 Typical response time: <span className="text-blue-400">Within 2 hours</span>
@@ -124,7 +124,7 @@ const ContactLocation = () => {
                                     </div>
                                     <div className='min-w-0'>
                                         <p className='text-xs font-semibold uppercase tracking-widest text-gray-400 mb-0.5'>Address</p>
-                                        <p className='text-gray-900 font-bold text-sm sm:text-base mb-0.5'>MediChain+ Healthcare</p>
+                                        <p className='text-gray-900 font-bold text-sm sm:text-base mb-0.5'>MediClues+ Healthcare</p>
                                         <p className='text-gray-600 text-sm leading-relaxed'>
                                             Vignan University Campus, Vadlamudi,<br />
                                             Guntur District, Andhra Pradesh — 522 213, India

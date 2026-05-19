@@ -45,8 +45,9 @@ export default function Register() {
     <div style={{ minHeight: "100vh", background: "#ffffff", display: "flex", color: "#000000" }}>
       {/* Left Branding Side */}
       <div style={{ flex: 1, background: "#000000", padding: "4rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "#ffffff", fontSize: "1.5rem", fontWeight: 800 }}>
-          <Activity size={32} /> MediChain+
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", color: "#ffffff", fontSize: "1.5rem", fontWeight: 800, whiteSpace: "nowrap" }}>
+          <Activity size={32} style={{ flexShrink: 0, color: '#29ABE2' }} />
+          <span>MediClues+</span>
         </div>
         <div>
           <h1 style={{ color: "#ffffff", fontSize: "3.5rem", fontWeight: 900, lineHeight: 1.1, marginBottom: "2rem" }}>
@@ -57,7 +58,7 @@ export default function Register() {
           </p>
         </div>
         <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem" }}>
-          © 2026 MediChain+ Enterprise. All rights reserved.
+          © 2026 MediClues+ Enterprise. All rights reserved.
         </div>
       </div>
 
@@ -115,7 +116,7 @@ export default function Register() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  placeholder="name@medichain.com" 
+                  placeholder="name@medclues.com" 
                   style={{ width: "100%", border: "none", outline: "none", fontSize: "1.1rem", fontWeight: 500, background: "transparent" }} 
                 />
               </div>

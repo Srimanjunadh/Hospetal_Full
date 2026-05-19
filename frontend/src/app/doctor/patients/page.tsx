@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Users, Search, Filter, Download, Activity, Plus, MessageSquare, Circle, ExternalLink, User } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -26,7 +26,7 @@ export default function DoctorPatientsPage() {
   const fetchPatients = async () => {
     setIsLoading(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session && session.doctor_id) {
         setSessionUser(session.name);
         const data = await apiService.getAssignedPatients(session.doctor_id);
@@ -72,9 +72,8 @@ export default function DoctorPatientsPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>PATIENT REGISTRY</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>STATION ID: MED-ALPHA-09 • {currentDateTime.toUpperCase()}</p>
         </div>
-        <button className="btn-black">
-          <Plus size={18} /> REGISTER PATIENT
-        </button>
+        <button className="btn-black" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Plus size={18} /> <span>REGISTER PATIENT
+        </span></button>
       </div>
 
       <div className="card" style={{ padding: '2rem' }}>
@@ -87,15 +86,14 @@ export default function DoctorPatientsPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline">
-            <Filter size={18} /> TRIAGE
-          </button>
+          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>TRIAGE
+          </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
                 <th style={{ padding: '12px 20px' }}>PATIENT IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>SYSTEM ID</th>

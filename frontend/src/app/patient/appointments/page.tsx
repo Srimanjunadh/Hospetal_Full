@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Clock, User, MessageSquare, ChevronLeft, Send, CheckCircle, Activity, Shield } from "lucide-react";
@@ -28,7 +28,7 @@ export default function PatientAppointmentsPage() {
       const dData = await apiService.getDoctors();
       setDoctors(Array.isArray(dData) ? dData : []);
       
-      const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (s && s.id) {
         const aData = await apiService.getPatientAppointments(s.id);
         setAppointments(Array.isArray(aData) ? aData : []);
@@ -40,7 +40,7 @@ export default function PatientAppointmentsPage() {
 
   useEffect(() => {
     setMounted(true);
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     setSession(s);
     fetchClinicalData();
   }, []);
@@ -49,7 +49,7 @@ export default function PatientAppointmentsPage() {
     e.preventDefault();
     
     // Safety Check for Session Identity
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (!s || !s.id) {
       showToast("Identity Token Expired. Please Logout and Login again.", "error");
       return;
@@ -185,7 +185,7 @@ export default function PatientAppointmentsPage() {
           </div>
 
           <div className="card" style={{ padding: '2.5rem' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '2px solid #000', paddingBottom: '8px' }}>SCHEDULING PROTOCOLS</h3>
+             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>SCHEDULING PROTOCOLS</h3>
              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {[
                   "Request status updates in real-time.",
@@ -203,7 +203,7 @@ export default function PatientAppointmentsPage() {
       </div>
 
       {/* Appointment Status Registry (Moved from Dashboard) */}
-      <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
+      <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
         <div style={{ padding: '1.5rem 2.5rem', background: '#3b82f6', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Calendar size={18} />
@@ -214,7 +214,7 @@ export default function PatientAppointmentsPage() {
         <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
           <table className="data-table" style={{ border: 'none', width: '100%', borderCollapse: 'collapse' }}>
              <thead>
-               <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #000', textAlign: 'left' }}>
+               <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
                  <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
                  <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>VISIT REASON</th>
                  <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>PREFERRED TIME</th>

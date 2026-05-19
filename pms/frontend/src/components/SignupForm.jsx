@@ -8,12 +8,12 @@ import { auth, googleProvider, appleProvider, facebookProvider } from '../fireba
 
 const quotes = [
   {
-    text: "Your health is your greatest wealth. Take care of it with MediChain+.",
+    text: "Your health is your greatest wealth. Take care of it with MediClues+.",
     author: "Health & Wellness"
   },
   {
     text: "Trusted healthcare at your fingertips, anytime, anywhere.",
-    author: "MediChain+ Team"
+    author: "MediClues+ Team"
   },
   {
     text: "Connecting you with the best healthcare professionals.",
@@ -21,7 +21,7 @@ const quotes = [
   },
   {
     text: "Your journey to better health starts here.",
-    author: "MediChain+"
+    author: "MediClues+"
   },
   {
     text: "Quality care, compassionate service, reliable results.",
@@ -98,8 +98,8 @@ export function SignupForm({ className, ...props }) {
     if (!password.trim()) {
       newErrors.password = 'This field is required'
       isValid = false
-    } else if (password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters'
+    } else if (password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters'
       isValid = false
     }
 
@@ -309,7 +309,7 @@ export function SignupForm({ className, ...props }) {
             <div className="flex flex-col items-center gap-1 text-center mb-2 anim-header">
               <h1 className="text-xl font-bold text-gray-900">Create Account</h1>
               <p className="text-gray-600 text-xs">
-                Sign up for your MediChain+ account
+                Sign up for your MediClues+ account
               </p>
             </div>
 

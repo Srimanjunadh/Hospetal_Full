@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { X, Users, Clock, ClipboardList, Heart, Droplets, ChevronRight, Save } from "lucide-react";
@@ -50,7 +50,7 @@ function NurseDashboardContent() {
 
   useEffect(() => {
     setMounted(true);
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (s && s.role === "nurse") {
       setSession(s);
       fetchPatients(s.id);
@@ -158,7 +158,7 @@ function NurseDashboardContent() {
         {/* Patient Roster */}
         <div>
           <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ASSIGNED PATIENTS</h3>
                <Users size={18} />
             </div>
@@ -204,10 +204,10 @@ function NurseDashboardContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 className="card" 
-                style={{ padding: '2.5rem', border: '2px solid #000' }}
+                style={{ padding: '2.5rem', border: '2px solid #29ABE2' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2rem' }}>
-                   <div style={{ width: '40px', height: '40px', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>{selectedPatient.name.charAt(0)}</div>
+                   <div style={{ width: '40px', height: '40px', background: '#29ABE2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>{selectedPatient.name.charAt(0)}</div>
                    <div>
                      <h3 style={{ fontWeight: 900, fontSize: '1.2rem' }}>{selectedPatient.name.toUpperCase()}</h3>
                      <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#666' }}>VITAL SYNCHRONIZATION TERMINAL</p>
@@ -359,7 +359,7 @@ function NurseDashboardContent() {
       {isMedicineModalOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setIsMedicineModalOpen(false)} />
-          <div style={{ width: '600px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2.5rem', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div style={{ width: '600px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem', maxHeight: '90vh', overflowY: 'auto' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>MEDICINE REQUEST TERMINAL</h2>
             
             <div style={{ marginBottom: '2rem' }}>
@@ -379,7 +379,7 @@ function NurseDashboardContent() {
                           setNurseMedicines([...nurseMedicines, { ...m, source: 'doctor' }]);
                         }
                       }}
-                      style={{ background: '#000', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}
+                      style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}
                     >
                       ADD
                     </button>
@@ -392,7 +392,7 @@ function NurseDashboardContent() {
               <h4 style={{ fontSize: '0.65rem', fontWeight: 900, marginBottom: '1rem', opacity: 0.5 }}>REQUEST LIST</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '1.5rem' }}>
                 {nurseMedicines.map((m, i) => (
-                  <div key={i} style={{ padding: '12px', background: m.source === 'doctor' ? '#f4f4f5' : '#000', color: m.source === 'doctor' ? '#000' : '#fff', border: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div key={i} style={{ padding: '12px', background: m.source === 'doctor' ? '#f4f4f5' : '#000', color: m.source === 'doctor' ? '#000' : '#fff', border: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <span style={{ fontWeight: 800, fontSize: '0.85rem' }}>{m.name}</span>
                       <p style={{ fontSize: '0.6rem', fontWeight: 700, opacity: 0.5 }}>{m.source === 'doctor' ? 'DOCTOR PRESCRIBED' : 'NURSE REQUESTED'}</p>
@@ -414,14 +414,14 @@ function NurseDashboardContent() {
                   placeholder="MEDICINE NAME" 
                   value={newMed.name}
                   onChange={e => setNewMed({...newMed, name: e.target.value})}
-                  style={{ padding: '12px', border: '2px solid #000', fontWeight: 800, fontSize: '0.75rem' }} 
+                  style={{ padding: '12px', border: '2px solid #29ABE2', fontWeight: 800, fontSize: '0.75rem' }} 
                 />
                 <input 
                   type="text" 
                   placeholder="QTY" 
                   value={newMed.quantity}
                   onChange={e => setNewMed({...newMed, quantity: e.target.value})}
-                  style={{ padding: '12px', border: '2px solid #000', fontWeight: 800, fontSize: '0.75rem' }} 
+                  style={{ padding: '12px', border: '2px solid #29ABE2', fontWeight: 800, fontSize: '0.75rem' }} 
                 />
                 <button 
                   onClick={() => {
@@ -430,14 +430,14 @@ function NurseDashboardContent() {
                       setNewMed({ name: "", quantity: "" });
                     }
                   }}
-                  style={{ background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}
+                  style={{ background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}
                 >+</button>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-              <button onClick={() => setIsMedicineModalOpen(false)} style={{ flex: 1, padding: '14px', border: '2px solid #000', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleSendMedicineRequest} style={{ flex: 1, padding: '14px', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>SEND TO PHARMACY</button>
+              <button onClick={() => setIsMedicineModalOpen(false)} style={{ flex: 1, padding: '14px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
+              <button onClick={handleSendMedicineRequest} style={{ flex: 1, padding: '14px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>SEND TO PHARMACY</button>
             </div>
           </div>
         </div>
@@ -447,7 +447,7 @@ function NurseDashboardContent() {
       {showRecordModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setShowRecordModal(false)} />
-          <div style={{ width: '450px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2.5rem' }}>
+          <div style={{ width: '450px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
                <h3 style={{ fontSize: '1rem', fontWeight: 900 }}>HISTORICAL HEALTH RECORD</h3>
                <X size={20} onClick={() => setShowRecordModal(false)} style={{ cursor: 'pointer' }} />
@@ -455,11 +455,11 @@ function NurseDashboardContent() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                <div>
                   <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>RECORD TITLE</label>
-                  <input placeholder="E.G., OLD DISCHARGE SUMMARY" value={recordData.title} onChange={e => setRecordData({...recordData, title: e.target.value.toUpperCase()})} style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 800 }} />
+                  <input placeholder="E.G., OLD DISCHARGE SUMMARY" value={recordData.title} onChange={e => setRecordData({...recordData, title: e.target.value.toUpperCase()})} style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 800 }} />
                </div>
                <div>
                   <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>CATEGORY</label>
-                  <select value={recordData.type} onChange={e => setRecordData({...recordData, type: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 800 }}>
+                  <select value={recordData.type} onChange={e => setRecordData({...recordData, type: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 800 }}>
                       <option value="REPORT">DIAGNOSTIC REPORT</option>
                       <option value="SCAN">IMAGING SCAN</option>
                       <option value="PRESCRIPTION">EXTERNAL PRESCRIPTION</option>
@@ -469,7 +469,7 @@ function NurseDashboardContent() {
                   <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>DOCUMENT FILE (PDF/IMG)</label>
                   <input type="file" onChange={e => setRecordData({...recordData, file: e.target.files?.[0] || null})} style={{ fontSize: '0.7rem', fontWeight: 900 }} />
                </div>
-               <button onClick={handleRecordUpload} disabled={!recordData.file || !recordData.title || isSubmittingRecord} style={{ width: '100%', background: '#000', color: '#fff', border: 'none', padding: '15px', fontWeight: 900, cursor: 'pointer', opacity: isSubmittingRecord ? 0.5 : 1 }}>
+               <button onClick={handleRecordUpload} disabled={!recordData.file || !recordData.title || isSubmittingRecord} style={{ width: '100%', background: '#29ABE2', color: '#fff', border: 'none', padding: '15px', fontWeight: 900, cursor: 'pointer', opacity: isSubmittingRecord ? 0.5 : 1 }}>
                  {isSubmittingRecord ? "SYNCHRONIZING..." : "UPLOAD TO EHR CLOUD"}
                </button>
             </div>

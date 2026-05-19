@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,7 +26,7 @@ export default function PatientDashboard() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session && session.role === "patient") {
       setSessionName(session.name);
       fetchPatientHubData(session);
@@ -109,7 +109,7 @@ export default function PatientDashboard() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              border: '2px solid #000'
+              border: '2px solid #29ABE2'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
@@ -152,7 +152,7 @@ export default function PatientDashboard() {
           <h2 className="card-value">{activeMetrics.glucose} <span style={{ fontSize: '1rem' }}>mg/dL</span></h2>
           <p style={{ fontSize: '0.6rem', fontWeight: 800, opacity: 0.5 }}>SYNCHRONIZED: {activeMetrics.lastSync}</p>
         </div>
-        <div className="card" style={{ background: '#000', color: '#fff' }}>
+        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
           <p className="card-title" style={{ color: 'rgba(255,255,255,0.6)' }}>ASSIGNED CLINICIAN</p>
           <h2 className="card-value" style={{ fontSize: '1.2rem', marginTop: '0.5rem' }}>DR. {activeMetrics.doctor.toUpperCase()}</h2>
           <p style={{ fontSize: '0.6rem', fontWeight: 800, opacity: 0.5 }}>PRIMARY CARE NODE</p>
@@ -162,15 +162,15 @@ export default function PatientDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
         
         {/* ACTIVE PRESCRIPTION REGISTRY */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
-          <div style={{ padding: '1.2rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
+          <div style={{ padding: '1.2rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
              <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>ACTIVE PRESCRIPTION REGISTRY</h3>
              <Pill size={16} />
           </div>
           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #000', textAlign: 'left' }}>
+                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>MEDICATION</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DOSAGE</th>
@@ -196,7 +196,7 @@ export default function PatientDashboard() {
         </div>
 
         {/* CONSULTATION REQUEST STATUS */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
           <div style={{ padding: '1.2rem 2rem', background: '#10b981', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
              <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>CONSULTATION REQUEST STATUS</h3>
              <Calendar size={16} />
@@ -204,7 +204,7 @@ export default function PatientDashboard() {
           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #000', textAlign: 'left' }}>
+                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>CONSULTATION</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>SCHEDULE</th>
@@ -230,7 +230,7 @@ export default function PatientDashboard() {
         </div>
 
         {/* ELECTRONIC HEALTH RECORDS (EHR) */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
           <div style={{ padding: '1.2rem 2rem', background: '#3b82f6', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
              <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>ELECTRONIC HEALTH RECORDS</h3>
              <Database size={16} />
@@ -238,7 +238,7 @@ export default function PatientDashboard() {
           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #000', textAlign: 'left' }}>
+                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DIAGNOSTIC REPORT</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DATE</th>
@@ -255,7 +255,7 @@ export default function PatientDashboard() {
                      <td style={{ padding: '15px 20px', fontWeight: 800 }}>{new Date(t.created_at).toLocaleDateString()}</td>
                      <td style={{ padding: '15px 20px', textAlign: 'right' }}>
                         {t.status === 'pending' ? <Clock size={16} style={{ opacity: 0.3 }} /> : (
-                          <button onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} style={{ background: '#000', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}>PDF</button>
+                          <button onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}>PDF</button>
                         )}
                      </td>
                    </tr>
@@ -266,7 +266,7 @@ export default function PatientDashboard() {
         </div>
 
         {/* PRESCRIPTION INVENTORY */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
           <div style={{ padding: '1.2rem 2rem', background: '#f59e0b', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
              <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>PRESCRIPTION INVENTORY</h3>
              <Package size={16} />
@@ -274,7 +274,7 @@ export default function PatientDashboard() {
           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #000', textAlign: 'left' }}>
+                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #29ABE2', textAlign: 'left' }}>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>STOCK ITEM</th>
                    <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>REMAINING</th>

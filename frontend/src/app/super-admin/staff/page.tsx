@@ -24,8 +24,17 @@ export default function GlobalStaffPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>GLOBAL PERSONNEL HUB</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>ROOT DIRECTORY • CROSS-FACILITY WORKFORCE MANAGEMENT</p>
         </div>
-        <button className="btn-black">
-          <UserPlus size={18} /> REGISTER GLOBAL STAFF
+        <button 
+          className="btn-black"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexDirection: 'row',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <UserPlus size={18} /> <span>REGISTER GLOBAL STAFF</span>
         </button>
       </div>
 
@@ -61,15 +70,14 @@ export default function GlobalStaffPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline">
-            <Filter size={18} /> NODE FILTER
-          </button>
+          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>NODE FILTER
+          </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
                 <th style={{ padding: '12px 20px' }}>IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>FACILITY</th>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Clock, Calendar, CheckCircle, AlertCircle, RefreshCcw, ShieldCheck, Activity } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -14,7 +14,7 @@ export default function DoctorSchedulePage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session) {
       setSessionUser(session.name);
       if (session.doctor_id) {
@@ -48,17 +48,17 @@ export default function DoctorSchedulePage() {
         </div>
         <button 
           onClick={() => {
-            const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+            const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
             if (session?.doctor_id) fetchSchedule(session.doctor_id);
           }}
-          style={{ background: 'transparent', border: '2px solid #000', padding: '10px 15px', fontWeight: 900, fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+          style={{ background: 'transparent', border: '2px solid #29ABE2', padding: '10px 15px', fontWeight: 900, fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
           <RefreshCcw size={16} className={isLoading ? "animate-spin" : ""} /> REFRESH FEED
         </button>
       </div>
 
       <div className="grid-stack" style={{ marginBottom: '3rem' }}>
-        <div className="card" style={{ background: '#000', color: '#fff' }}>
+        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
            <p className="card-title" style={{ color: 'rgba(255,255,255,0.5)' }}>NEXT OPERATION</p>
            <h2 className="card-value">
              {schedules.find(s => s.status === 'pending') ? schedules.find(s => s.status === 'pending').task_name : "NONE"}
@@ -80,7 +80,7 @@ export default function DoctorSchedulePage() {
       </div>
 
       <div className="card" style={{ padding: '0' }}>
-        <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #000', background: '#f4f4f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #29ABE2', background: '#f4f4f5', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <ShieldCheck size={20} />
           <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ASSIGNED OPERATIONS & TASKS</h3>
         </div>

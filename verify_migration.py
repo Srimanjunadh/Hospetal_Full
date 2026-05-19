@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect('C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db')
+conn = sqlite3.connect('C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db')
 c = conn.cursor()
 
 print("=== ERP HOSPITALS (from PMS) ===")

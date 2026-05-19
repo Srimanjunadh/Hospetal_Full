@@ -41,12 +41,22 @@
 
 :root {
   --bg-main: #ffffff;
-  --bg-side: #000000;
+  --bg-side: #29ABE2; /* Sky Blue — Module Accent */
   --text-primary: #000000;
   --text-secondary: #71717a;
-  --border-sharp: 1px solid #000000;
+  --border-sharp: 1px solid #29ABE2;
   --border-light: 1px solid #e4e4e7;
   --sidebar-width: 280px;
+}
+
+[data-theme="black"] {
+  --bg-side: #000000;
+  --border-sharp: 1px solid #000000;
+}
+
+[data-theme="teal"] {
+  --bg-side: #29ABE2;
+  --border-sharp: 1px solid #29ABE2;
 }
 
 * {
@@ -95,7 +105,7 @@ body {
 
 /* Professional Cards */
 .card {
-  border: 2px solid #000000;
+  border: 2px solid var(--bg-side);
   padding: 2.5rem;
   margin-bottom: 1.5rem;
   background: #ffffff;
@@ -109,12 +119,11 @@ body {
   margin-bottom: 0.5rem;
 }
 
-/* Responsive Table Wrapper */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border: 2px solid #000;
+  border: 2px solid var(--bg-side);
 }
 
 .data-table {
@@ -126,7 +135,7 @@ body {
 .data-table th {
   text-align: left;
   padding: 1rem;
-  background: #000;
+  background: var(--bg-side);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 900;
@@ -135,12 +144,12 @@ body {
 
 .data-table td {
   padding: 1rem;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #e2e8f0;
   font-size: 0.85rem;
 }
 
 .btn-black {
-  background: #000;
+  background: var(--bg-side);
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -152,8 +161,8 @@ body {
 
 .btn-outline {
   background: transparent;
-  border: 2px solid #000;
-  color: #000;
+  border: 2px solid var(--bg-side);
+  color: var(--bg-side);
   padding: 8px 16px;
   font-weight: 800;
   font-size: 0.75rem;
@@ -162,7 +171,7 @@ body {
 
 /* Sidebar Nav Items */
 .nav-item {
-  color: rgba(255,255,255,0.6);
+  color: #000000;
   text-decoration: none;
   padding: 14px 20px;
   display: flex;
@@ -170,13 +179,14 @@ body {
   gap: 12px;
   font-weight: 700;
   font-size: 0.8rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.15s ease;
 }
 
 .nav-item:hover, .nav-item.active {
-  color: #ffffff;
-  background: rgba(255,255,255,0.1);
-  border-left: 4px solid #ffffff;
+  color: #29ABE2;
+  background: #EFF9FE;
+  border-left: 4px solid #29ABE2;
 }
 
 /* Global Professional Scrollbar Hiding */

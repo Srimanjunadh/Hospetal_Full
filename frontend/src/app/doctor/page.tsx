@@ -38,6 +38,7 @@ export default function DoctorDashboard() {
   const { showToast } = useToast();
 
   const fetchDoctorData = async (doctorId: number) => {
+    if (!doctorId) return;
     try {
       const { apiService } = await import("@/services/api");
 
@@ -89,9 +90,11 @@ export default function DoctorDashboard() {
         scheduled_at: new Date().toISOString(), // Or take from a picker
       });
       const session = JSON.parse(
-        localStorage.getItem("medichain_session") || "null",
+        localStorage.getItem("medclues_session") || "null",
       );
-      fetchDoctorData(session.doctor_id);
+      if (session?.doctor_id) {
+        fetchDoctorData(session.doctor_id);
+      }
     } catch (e) {
       console.error("Approval failed:", e);
     }
@@ -156,7 +159,7 @@ export default function DoctorDashboard() {
     try {
       const { apiService } = await import("@/services/api");
       const session = JSON.parse(
-        localStorage.getItem("medichain_session") || "null",
+        localStorage.getItem("medclues_session") || "null",
       );
       await apiService.requestLabTest({
         patient_id: selectedPatient.dbId,
@@ -193,7 +196,7 @@ export default function DoctorDashboard() {
     try {
       const { apiService } = await import("@/services/api");
       const session = JSON.parse(
-        localStorage.getItem("medichain_session") || "null",
+        localStorage.getItem("medclues_session") || "null",
       );
       await apiService.prescribeMeds({
         patient_id: selectedPatient.dbId,
@@ -216,7 +219,7 @@ export default function DoctorDashboard() {
     try {
       const { apiService } = await import("@/services/api");
       const session = JSON.parse(
-        localStorage.getItem("medichain_session") || "null",
+        localStorage.getItem("medclues_session") || "null",
       );
       await apiService.requestAdmission({
         patient_id: selectedPatient.dbId,
@@ -250,7 +253,7 @@ export default function DoctorDashboard() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session && session.role === "doctor") {
       setSessionUser(session.name);
       if (session.doctor_id) fetchDoctorData(session.doctor_id);
@@ -294,11 +297,29 @@ export default function DoctorDashboard() {
           </p>
         </div>
         <div style={{ display: "flex", gap: "1rem" }}>
-          <button className="btn-outline">
-            <FileText size={18} /> REPORTS
+          <button 
+            className="btn-outline"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <FileText size={18} /> <span>REPORTS</span>
           </button>
-          <button className="btn-black">
-            <Plus size={18} /> NEW ENCOUNTER
+          <button 
+            className="btn-black"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>NEW ENCOUNTER</span>
           </button>
         </div>
       </div>

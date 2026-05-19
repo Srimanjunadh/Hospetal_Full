@@ -145,6 +145,38 @@ const QueueTracker = ({ appointmentId, docId, slotDate, slotTime, onTokenAlert, 
   }
 
   if (!queueStatus) return null
+  
+  if (queueStatus.isTimeOver) {
+    return (
+      <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl border-2 border-red-200 overflow-hidden shadow-sm transition-all duration-300">
+        <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0 animate-bounce">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div className="flex-1 text-center sm:text-left">
+            <h3 className="font-bold text-red-900 text-lg sm:text-xl mb-1">Appointment Time Over!</h3>
+            <p className="text-sm text-red-700 leading-relaxed">
+              Your scheduled appointment slot for today has expired (your time is over). 
+              To ensure you still receive the required care, the hospital has <strong>automatically re-scheduled</strong> your consultation to <strong>tomorrow</strong> for the exact same timing.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2 justify-center sm:justify-start">
+              <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
+                ⚠️ Slot Expired
+              </span>
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                📅 Rescheduled to Tomorrow
+              </span>
+              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                ✉️ Email Notification Sent
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const statusBadge = getStatusBadge(doctorStatus?.status || 'in-clinic')
 

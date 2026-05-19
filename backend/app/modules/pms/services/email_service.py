@@ -8,7 +8,7 @@ import json
 # Placeholder for settings, will use env variables directly
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
-BREVO_APP_NAME = "MediChain+ ERP"
+BREVO_APP_NAME = "MediClues+ ERP"
 
 async def send_email(to: str, subject: str, html_content: str, recipient_name: str = "User", sender_name: str = None):
     try:
@@ -53,7 +53,7 @@ async def send_email(to: str, subject: str, html_content: str, recipient_name: s
                 return {"success": False, "message": "No configured email routes working"}
 
             msg = EmailMessage()
-            msg["From"] = f"{sender_name or 'MediChain+'} <{gmail_user}>"
+            msg["From"] = f"{sender_name or 'MediClues+'} <{gmail_user}>"
             msg["To"] = f"{recipient_name} <{to}>"
             msg["Subject"] = subject
             msg.set_content("HTML content received", subtype="html") # Fallback plain text
@@ -72,7 +72,7 @@ async def send_email(to: str, subject: str, html_content: str, recipient_name: s
             return {"success": False, "message": str(fallback_e)}
 
 async def send_password_reset_otp(email: str, otp: str, user_name: str):
-    subject = "Password Reset OTP - MediChain"
+    subject = "Password Reset OTP - MediClues"
     html_content = f"""
     <html>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -88,7 +88,7 @@ async def send_password_reset_otp(email: str, otp: str, user_name: str):
                 </p>
                 <p>If you didn't request this, please ignore this email.</p>
                 <hr style="border: none; border-top: 1px solid #ddd; margin-top: 30px;">
-                <p style="text-align: center; font-size: 12px; color: #666;">© {datetime.now().year} MediChain. All rights reserved.</p>
+                <p style="text-align: center; font-size: 12px; color: #666;">© {datetime.now().year} MediClues. All rights reserved.</p>
             </div>
         </body>
     </html>
@@ -97,7 +97,7 @@ async def send_password_reset_otp(email: str, otp: str, user_name: str):
 
 async def send_appointment_confirmation(email: str, details: dict):
     patient_name = details.get('patientName', 'Patient')
-    hospital_name = details.get('hospitalName', 'MediChain Hospital')
+    hospital_name = details.get('hospitalName', 'MediClues Hospital')
     
     subject = f"Appointment Confirmed - {hospital_name}"
     
@@ -105,14 +105,14 @@ async def send_appointment_confirmation(email: str, details: dict):
     <html>
         <head>
             <style>
-                .medichain-highlight {{
+                .medclues-highlight {{
                     color: #bfdbfe;
                 }}
             </style>
         </head>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
             <div style="background-color: #5f6fff; color: white; padding: 25px; text-align: center;">
-                <h1 style="margin: 0; font-size: 24px;">🏥 MediChain+</h1>
+                <h1 style="margin: 0; font-size: 24px;">🏥 MediClues+</h1>
                 <p style="margin: 5px 0 0 0; font-size: 14px;">Your Health, Our Priority</p>
             </div>
             
@@ -123,7 +123,7 @@ async def send_appointment_confirmation(email: str, details: dict):
                     ✓ Your Appointment Has Been Confirmed!
                 </div>
                 
-                <p>We're pleased to confirm your appointment at MediChain Hospital. Please find your appointment details below:</p>
+                <p>We're pleased to confirm your appointment at MediClues Hospital. Please find your appointment details below:</p>
                 
                 <div style="background-color: #f8fafc; border-left: 4px solid #5f6fff; padding: 20px; border-radius: 4px; margin-bottom: 25px;">
                     <h2 style="color: #5f6fff; margin: 0 0 15px 0; font-size: 18px;">📋 Appointment Details</h2>
@@ -151,7 +151,7 @@ async def send_appointment_confirmation(email: str, details: dict):
                         </tr>
                         <tr>
                             <td style="padding: 10px 0; color: #64748b;">📍 Location:</td>
-                            <td style="padding: 10px 0; font-weight: 500; line-height: 1.4;">{details.get('hospitalLocation', 'MediChain Hospital')}</td>
+                            <td style="padding: 10px 0; font-weight: 500; line-height: 1.4;">{details.get('hospitalLocation', 'MediClues Hospital')}</td>
                         </tr>
                     </table>
                 </div>
@@ -167,7 +167,69 @@ async def send_appointment_confirmation(email: str, details: dict):
     """
     return await send_email(email, subject, html_content, patient_name)
 
+async def send_appointment_reschedule_notification(email: str, details: dict):
+    patient_name = details.get('patientName', 'Patient')
+    doctor_name = details.get('doctorName', 'Doctor')
+    old_date = details.get('oldDate', 'N/A')
+    new_date = details.get('newDate', 'N/A')
+    time = details.get('time', 'N/A')
+    token_number = details.get('tokenNumber', 'N/A')
+    
+    subject = f"⚠️ Appointment Rescheduled - Missed Slot Notification"
+    
+    html_content = f"""
+    <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
+            <div style="background-color: #ef4444; color: white; padding: 25px; text-align: center;">
+                <h1 style="margin: 0; font-size: 24px;">🏥 MediClues+</h1>
+                <p style="margin: 5px 0 0 0; font-size: 14px;">Appointment Missed & Auto-Rescheduled</p>
+            </div>
+            
+            <div style="padding: 30px;">
+                <p style="margin-top: 0;">Dear {patient_name},</p>
+                
+                <div style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 4px; color: #991b1b; font-weight: bold; margin-bottom: 20px; font-size: 14px;">
+                    ⚠️ Your scheduled appointment slot on {old_date} at {time} has expired (your time is over).
+                </div>
+                
+                <p>To ensure you still receive care, the hospital queue system has automatically re-scheduled your consultation to <strong>tomorrow</strong> for the exact same timing.</p>
+                
+                <div style="background-color: #f8fafc; border-left: 4px solid #5f6fff; padding: 20px; border-radius: 4px; margin-bottom: 25px;">
+                    <h2 style="color: #5f6fff; margin: 0 0 15px 0; font-size: 18px;">📋 New Rescheduled Details</h2>
+                    
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 10px 0; width: 35%; color: #64748b;">👨‍⚕️ Doctor:</td>
+                            <td style="padding: 10px 0; font-weight: 500;">{doctor_name}</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 10px 0; color: #64748b;">📅 Rescheduled Date:</td>
+                            <td style="padding: 10px 0; font-weight: 700; color: #2563eb;">{new_date} (Tomorrow)</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 10px 0; color: #64748b;">🕒 Time Slot:</td>
+                            <td style="padding: 10px 0; font-weight: 500;">{time}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; color: #64748b;">📍 Token Number:</td>
+                            <td style="padding: 10px 0; font-weight: 700; color: #16a34a;">#{token_number}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <p style="font-size: 13px; color: #64748b; font-style: italic;">
+                    Please present your updated digital pass or check-in QR code at the reception desk tomorrow 10 minutes prior to your time.
+                </p>
+                
+                <hr style="border: none; border-top: 1px solid #ddd; margin-top: 30px;">
+                <p style="text-align: center; font-size: 12px; color: #666;">© {datetime.now().year} MediClues. All rights reserved.</p>
+            </div>
+        </body>
+    </html>
+    """
+    return await send_email(email, subject, html_content, patient_name)
+
 async def send_welcome_email(email: str, name: str):
-    subject = "Welcome to MediChain+ ERP"
+    subject = "Welcome to MediClues+ ERP"
     html_content = f"<h1>Welcome {name}!</h1><p>Your account is ready.</p>"
     return await send_email(email, subject, html_content, name)

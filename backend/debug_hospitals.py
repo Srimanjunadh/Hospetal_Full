@@ -5,8 +5,8 @@ import os
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.future import select
 
-# Use the absolute path to medichain.db
-DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db"
+# Use the absolute path to medclues.db
+DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db"
 DATABASE_URL = f"sqlite+aiosqlite:///{DB_PATH}"
 
 # Add the backend path to sys.path so we can import app.models
@@ -19,7 +19,7 @@ async def check_hospitals():
     async with engine.connect() as conn:
         res = await conn.execute(select(Hospital))
         hospitals = res.fetchall()
-        print(f"--- ERP HOSPITALS (medichain.db) ---")
+        print(f"--- ERP HOSPITALS (medclues.db) ---")
         erp_hosp_ids = []
         for h in hospitals:
             print(f"ID: {h.id}, Name: {h.name}, Node: {h.node_code}")

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Hospital, MapPin, ShieldCheck, Key, Server, Activity, CheckCircle, ArrowRight, Zap, Database, Mail, RefreshCcw, User } from "lucide-react";
+import { Plus, Hospital, MapPin, ShieldCheck, Key, Server, Activity, CheckCircle, ArrowRight, Zap, Database, Mail, RefreshCcw, User, Phone } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
 import { motion } from "framer-motion";
@@ -10,7 +10,7 @@ export default function ProvisioningPage() {
   const { showToast } = useToast();
   const [mounted, setMounted] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
-  const [formData, setFormData] = useState({ name: "", adminId: "", password: "", location: "", nodeCode: "", specialization: "Multi-Specialty" });
+  const [formData, setFormData] = useState({ name: "", adminId: "", password: "", phone: "", location: "", nodeCode: "", specialization: "Multi-Specialty" });
   const [activeRegistry, setActiveRegistry] = useState<any[]>([]);
   const [isLoadingRegistry, setIsLoadingRegistry] = useState(true);
 
@@ -63,6 +63,7 @@ export default function ProvisioningPage() {
         name: formData.name,
         username: formData.adminId,
         password: formData.password,
+        phone: formData.phone,
         role: "hospital_admin",
         node_code: formData.nodeCode,
         location: formData.location,
@@ -71,7 +72,7 @@ export default function ProvisioningPage() {
 
       if (data.access_token) {
         showToast(`NODE ${formData.name.toUpperCase()} PROVISIONED SUCCESSFULLY`, "success");
-        setFormData({ name: "", adminId: "", password: "", location: "", nodeCode: "", specialization: "Multi-Specialty" });
+        setFormData({ name: "", adminId: "", password: "", phone: "", location: "", nodeCode: "", specialization: "Multi-Specialty" });
         fetchAdmins();
       } else {
         showToast(data.detail || "Deployment Failed", "error");
@@ -103,7 +104,7 @@ export default function ProvisioningPage() {
         
         {/* Onboarding Form */}
         <div className="card" style={{ padding: '3rem' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '3rem', borderBottom: '2px solid #000', paddingBottom: '10px' }}>FACILITY IDENTITY & ACCESS</h3>
+          <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '3rem', borderBottom: '2px solid #29ABE2', paddingBottom: '10px' }}>FACILITY IDENTITY & ACCESS</h3>
           
           <form onSubmit={handleProvision} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -181,7 +182,7 @@ export default function ProvisioningPage() {
                 type="button"
                 onClick={generateUniqueCode}
                 className="btn-outline" 
-                style={{ height: '50px', padding: '0 20px', fontSize: '0.6rem', background: '#fff', color: '#000', border: '2px solid #000' }}
+                style={{ height: '50px', padding: '0 20px', fontSize: '0.6rem', background: '#fff', color: '#000', border: '2px solid #29ABE2' }}
               >
                 GENERATE UNIQUE CODE
               </button>
@@ -197,6 +198,21 @@ export default function ProvisioningPage() {
                   value={formData.adminId}
                   onChange={(e) => setFormData({...formData, adminId: e.target.value})}
                   placeholder="E.G. ADMIN_METRO_01" 
+                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>ADMIN MOBILE NUMBER</label>
+              <div style={{ position: 'relative' }}>
+                <Phone style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <input 
+                  type="tel" 
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  placeholder="E.G. +91 98765 43210" 
                   style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
                 />
               </div>
@@ -240,21 +256,21 @@ export default function ProvisioningPage() {
 
         {/* Deployment Metrics & Status */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div className="card" style={{ background: '#000', color: '#fff' }}>
+          <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
              <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '2px', marginBottom: '2rem' }}>DEPLOYMENT STATUS</h3>
              {isDeploying ? (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                     <Database size={18} /> <span>INITIALIZING DB NODE...</span>
+                     <Database className="animate-pulse" size={18} /> <span>INITIALIZING DB NODE...</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                     <Server size={18} /> <span>CONFIGURING PMS INTERFACE...</span>
+                     <Server className="animate-bounce" size={18} /> <span>CONFIGURING PMS INTERFACE...</span>
                   </div>
                   <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)' }}>
                      <motion.div 
                        initial={{ width: 0 }}
                        animate={{ width: '100%' }}
-                       transition={{ duration: 2 }}
+                       transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                        style={{ height: '100%', background: '#fff' }}
                      />
                   </div>
@@ -262,9 +278,6 @@ export default function ProvisioningPage() {
              ) : (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: 0.5 }}>
                   <p style={{ fontSize: '0.8rem', fontWeight: 700 }}>AWAITING NEXT FACILITY ONBOARDING REQUEST...</p>
-                  <div style={{ padding: '1rem', border: '1px dashed rgba(255,255,255,0.3)', textAlign: 'center' }}>
-                     <Plus size={24} style={{ margin: 'auto' }} />
-                  </div>
                </div>
              )}
           </div>
@@ -282,8 +295,10 @@ export default function ProvisioningPage() {
                 ) : activeRegistry.length > 0 ? activeRegistry.map((p, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', background: '#f4f4f5', borderLeft: '4px solid #000' }}>
                      <div>
-                        <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>{p.name.toUpperCase()}</p>
-                        <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>EMAIL: <span style={{ color: '#000' }}>{p.email}</span></p>
+                        <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>{(p.name || p.username || 'UNKNOWN').toUpperCase()}</p>
+                        <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>
+                           CONTACT: <span style={{ color: '#000' }}>{p.phone || p.email || 'N/A'}</span>
+                        </p>
                      </div>
                      <span style={{ fontSize: '0.6rem', fontWeight: 900, color: '#10b981' }}>ACTIVE NODE</span>
                   </div>

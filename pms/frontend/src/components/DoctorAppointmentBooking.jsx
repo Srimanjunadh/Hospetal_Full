@@ -421,7 +421,7 @@ const DoctorAppointmentBooking = ({ doctors = [], userData = null }) => {
                         <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
                           Appointment Ticket
                         </h2>
-                        <p className="text-gray-400">MediChain Healthcare</p>
+                        <p className="text-gray-400">MediClues Healthcare</p>
                       </div>
 
                       {/* Ticket Details */}

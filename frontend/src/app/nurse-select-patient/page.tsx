@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Users, ChevronRight, Activity, Search, ShieldCheck, FileText, X, Clock, Heart } from "lucide-react";
@@ -20,7 +20,7 @@ export default function NurseSelectPatientPage() {
 
   useEffect(() => {
     setMounted(true);
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (s && s.role === "nurse") {
       setSession(s);
       if (s.hospital_id) fetchPatients(s.hospital_id);
@@ -86,17 +86,17 @@ export default function NurseSelectPatientPage() {
               padding: '2rem 2rem 2rem 4rem', 
               fontSize: '1.25rem', 
               fontWeight: 800, 
-              border: '4px solid #000',
+              border: '4px solid #29ABE2',
               background: '#fff',
               boxShadow: '10px 10px 0 #000'
             }} 
           />
         </div>
 
-        <div style={{ maxHeight: '70vh', overflowY: 'auto', border: '4px solid #000' }} className="custom-scrollbar">
+        <div style={{ maxHeight: '70vh', overflowY: 'auto', border: '4px solid #29ABE2' }} className="custom-scrollbar">
           <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff' }}>
             <thead>
-              <tr style={{ background: '#f4f4f5', borderBottom: '4px solid #000', textAlign: 'left', position: 'sticky', top: 0, zIndex: 10 }}>
+              <tr style={{ background: '#f4f4f5', borderBottom: '4px solid #29ABE2', textAlign: 'left', position: 'sticky', top: 0, zIndex: 10 }}>
                 <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px', width: '80px' }}>S.NO</th>
                 <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>PATIENT IDENTITY</th>
                 <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>ADMIT DATE</th>
@@ -200,8 +200,8 @@ export default function NurseSelectPatientPage() {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                    {/* Vitals Summary */}
-                   <div style={{ border: '3px solid #000', padding: '1.5rem' }}>
-                     <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #000', paddingBottom: '0.5rem' }}>LATEST VITALS</h4>
+                   <div style={{ border: '2px solid #29ABE2', padding: '1.5rem' }}>
+                     <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '0.5rem' }}>LATEST VITALS</h4>
                      {reportData?.vitals ? (
                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                           <div><p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>BLOOD PRESSURE</p><p style={{ fontWeight: 900 }}>{reportData.vitals.blood_pressure}</p></div>
@@ -228,7 +228,7 @@ export default function NurseSelectPatientPage() {
                    </div>
 
                    {/* Observations */}
-                   <div style={{ border: '3px solid #000', padding: '1.5rem' }}>
+                   <div style={{ border: '2px solid #29ABE2', padding: '1.5rem' }}>
                      <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>NURSING OBSERVATIONS</h4>
                      <p style={{ fontSize: '0.8rem', fontWeight: 700, lineHeight: '1.6' }}>
                        {reportData?.vitals?.nursing_notes || "NO RECENT CLINICAL OBSERVATIONS RECORDED IN SYSTEM."}

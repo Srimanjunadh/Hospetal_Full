@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Pill, Search, Filter, Download, Plus, CheckCircle, Clock, AlertCircle, RefreshCcw, FileText, Send } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -32,9 +32,8 @@ export default function DoctorPrescriptionsPage() {
           <button className="btn-outline" onClick={() => showToast("Syncing with Pharmacy Node...", "info")}>
             <RefreshCcw size={18} /> SYNC PHARMACY
           </button>
-          <button className="btn-black">
-            <Plus size={18} /> NEW PRESCRIPTION
-          </button>
+          <button className="btn-black" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Plus size={18} /> <span>NEW PRESCRIPTION
+          </span></button>
         </div>
       </div>
 
@@ -48,15 +47,14 @@ export default function DoctorPrescriptionsPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline">
-            <Filter size={18} /> STATUS
-          </button>
+          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>STATUS
+          </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px' }}>RX IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>PATIENT</th>
                 <th style={{ padding: '12px 20px' }}>MEDICATION & DOSAGE</th>
@@ -88,7 +86,7 @@ export default function DoctorPrescriptionsPage() {
                   <td style={{ padding: '15px 20px' }}>
                     <div style={{ display: 'flex', gap: '12px' }}>
                       {rx.status === 'PENDING AUTH' ? (
-                        <button style={{ background: '#000', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => showToast(`Authorizing Prescription: ${rx.id}`, "success")}>
+                        <button style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => showToast(`Authorizing Prescription: ${rx.id}`, "success")}>
                           <Send size={14} /> AUTHORIZE
                         </button>
                       ) : (

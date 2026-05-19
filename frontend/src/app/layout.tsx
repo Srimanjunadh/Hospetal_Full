@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MediChain+ | Advanced Healthcare ERP",
+  title: "MediClues+ | Advanced Healthcare ERP",
   description: "A comprehensive, intelligent ecosystem for patients, doctors, and hospitals.",
   icons: {
     icon: "/favicon.png",

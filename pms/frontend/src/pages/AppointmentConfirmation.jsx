@@ -32,7 +32,7 @@ const AppointmentConfirmation = () => {
         service: "General Checkup",
         date: "12 March 2026",
         time: "10:30 AM",
-        location: "MediChain Clinic, Road No. 12, Banjara Hills",
+        location: "MediClues Clinic, Road No. 12, Banjara Hills",
         id: "MCN-483920"
     };
 
@@ -41,7 +41,7 @@ const AppointmentConfirmation = () => {
         const element = cardRef.current;
         const opt = {
             margin: 0.2,
-            filename: `MediChain_AdmitCard_${data.id}.pdf`,
+            filename: `MediClues_AdmitCard_${data.id}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, logging: false },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
@@ -64,7 +64,7 @@ const AppointmentConfirmation = () => {
     // ACTION: Share
     const handleShare = async () => {
         const shareData = {
-            title: 'MediChain+ Appointment Pass',
+            title: 'MediClues+ Appointment Pass',
             text: `My appointment with ${data.providerName} is confirmed for ${data.date} at ${data.time}. ID: ${data.id}`,
             url: window.location.href
         };
@@ -126,7 +126,7 @@ const AppointmentConfirmation = () => {
                         
                         <div className="relative flex flex-col items-center sm:items-start text-center sm:text-left transition-all duration-500">
                             <span className="text-[10px] font-black tracking-[0.4em] text-blue-400 mb-2 uppercase">Verified Ticket</span>
-                            <h1 className="text-2xl font-black tracking-tight text-white mb-1">MediChain+</h1>
+                            <h1 className="text-2xl font-black tracking-tight text-white mb-1">MediClues+</h1>
                             <p className="text-[10px] font-bold text-blue-200/60 uppercase tracking-widest leading-relaxed">Official Appointment Pass</p>
                         </div>
 
@@ -198,14 +198,20 @@ const AppointmentConfirmation = () => {
 
                             {/* Technical Check-in Area */}
                             <div className="w-full md:w-[240px] p-8 flex flex-col items-center justify-center bg-slate-50/20">
-                                <div className="bg-white p-5 rounded-[2.5rem] shadow-xl shadow-blue-900/5 border border-slate-100 mb-6 transform hover:scale-105 transition-all duration-500">
+                                <a 
+                                    href={data.qrData || `${window.location.origin}/verify-appointment?id=${data.id}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    title="Click to open Verification Check-in (Developer Shortcut)"
+                                    className="bg-white p-5 rounded-[2.5rem] shadow-xl shadow-blue-900/5 border border-slate-100 mb-6 transform hover:scale-105 hover:border-cyan-400 transition-all duration-300 cursor-pointer flex items-center justify-center"
+                                >
                                     <QRCode 
-                                        value={data.qrData || `https://medichain.plus/verify/${data.id}`} 
+                                        value={data.qrData || `${window.location.origin}/verify-appointment?id=${data.id}`} 
                                         size={120} 
                                         level="H"
                                         fgColor="#1e293b"
                                     />
-                                </div>
+                                </a>
                                 
                                 <div className="text-center space-y-2">
                                     <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.1em]">Show at Reception</p>

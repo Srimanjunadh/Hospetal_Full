@@ -16,7 +16,7 @@ export default function LabPendingPage() {
 
   useEffect(() => {
     setMounted(true);
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (s && s.role === "lab") {
       setSession(s);
       fetchTests();

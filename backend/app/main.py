@@ -4,7 +4,7 @@ from app.api.routes import router
 from app.modules import clinical_nodes
 
 app = FastAPI(
-    title="MediChain+ ERP",
+    title="MediClues+ ERP",
     description="Comprehensive Healthcare ERP System",
     version="1.0.0"
 )
@@ -37,7 +37,7 @@ async def global_exception_handler(request, exc):
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to MediChain+ ERP API", "status": "running"}
+    return {"message": "Welcome to MediClues+ ERP API", "status": "running"}
 
 from app.modules.pms.router import router as pms_router
 

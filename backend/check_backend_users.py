@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-db_path = r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medichain.db"
+db_path = r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medclues.db"
 if not os.path.exists(db_path):
     print("DB NOT FOUND")
     exit()

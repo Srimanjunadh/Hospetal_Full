@@ -2,8 +2,8 @@ import sqlite3
 import os
 
 db_paths = [
-    r"C:\Users\ASUS\OneDrive\Desktop\ERP\medichain.db",
-    r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medichain.db"
+    r"C:\Users\ASUS\OneDrive\Desktop\ERP\medclues.db",
+    r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medclues.db"
 ]
 
 for path in db_paths:

@@ -15,7 +15,7 @@ export default function PatientBillingPage() {
   useEffect(() => {
     const fetchBills = async () => {
       try {
-        const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+        const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
         if (session && session.role === 'patient') {
           setUserName(session.name);
           const data = await apiService.getPatientBills(session.id);
@@ -54,24 +54,24 @@ export default function PatientBillingPage() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '2.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '2.5rem', alignItems: 'stretch' }}>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
             {/* Active Bills */}
-            <div style={{ background: '#fff', border: '2px solid #000', padding: '2rem' }}>
+            <div className="card" style={{ background: '#fff', padding: '2.5rem', flex: 1, display: 'flex', flexDirection: 'column', marginBottom: 0 }}>
                <h3 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '1px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                  <Receipt size={18} /> INVOICE HISTORY
                </h3>
 
                {isLoading ? (
-                 <div style={{ padding: '4rem', textAlign: 'center', fontWeight: 900, opacity: 0.2 }}>SYNCHRONIZING...</div>
+                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, opacity: 0.2 }}>SYNCHRONIZING...</div>
                ) : bills.length === 0 ? (
-                 <div style={{ padding: '4rem', textAlign: 'center', fontWeight: 900, opacity: 0.2 }}>NO BILLING RECORDS FOUND</div>
+                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, opacity: 0.2 }}>NO BILLING RECORDS FOUND</div>
                ) : (
-                 <div style={{ maxHeight: '500px', overflowY: 'auto', border: '2px solid #000' }} className="custom-scrollbar">
+                 <div style={{ maxHeight: '500px', overflowY: 'auto', border: '2px solid var(--bg-side)', flex: 1 }} className="custom-scrollbar">
                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
-                        <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #000', textAlign: 'left' }}>
+                        <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid var(--bg-side)', textAlign: 'left' }}>
                           <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
                           <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>INVOICE IDENTITY</th>
                           <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>FISCAL AMOUNT</th>
@@ -124,8 +124,8 @@ export default function PatientBillingPage() {
           </div>
 
           {/* Sidebar Actions */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-             <div style={{ background: '#000', color: '#fff', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
+             <div className="card" style={{ background: '#000', color: '#fff', border: '2px solid #000', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <CreditCard size={20} />
                   <h3 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px' }}>QUICK SETTLE</h3>
@@ -155,14 +155,14 @@ export default function PatientBillingPage() {
                 </button>
              </div>
 
-             <div style={{ border: '2px solid #eee', padding: '1.5rem', borderRadius: '4px' }}>
+             <div className="card" style={{ padding: '2rem', marginBottom: 0 }}>
                 <h4 style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '1px', opacity: 0.4, marginBottom: '1rem' }}>REPORTS</h4>
-                <button style={{ width: '100%', padding: '10px', background: 'transparent', border: '1px solid #000', fontSize: '0.65rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
+                <button style={{ width: '100%', padding: '12px', background: 'transparent', border: '2px solid var(--bg-side)', color: 'var(--bg-side)', fontSize: '0.65rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
                   <Download size={14} /> EXPORT FISCAL REPORT
                 </button>
              </div>
 
-             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '1rem', opacity: 0.4 }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '1rem 0', opacity: 0.4, marginTop: 'auto' }}>
                 <ShieldCheck size={16} />
                 <span style={{ fontSize: '0.55rem', fontWeight: 800 }}>AES-256 ENCRYPTED TRANSACTION NODE</span>
              </div>

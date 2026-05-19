@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { User, Mail, Phone, Lock, Save, Shield } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -18,7 +18,7 @@ export default function DoctorSettingsPage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session) {
       setSessionUser(session.name);
       setFormData(prev => ({ ...prev, name: session.name }));
@@ -68,7 +68,7 @@ export default function DoctorSettingsPage() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>SECURITY LEVEL</label>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: '#000', color: '#fff', fontWeight: 900, fontSize: '0.7rem' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', background: '#29ABE2', color: '#fff', fontWeight: 900, fontSize: '0.7rem' }}>
                  <Shield size={14} color="#10b981" /> CLINICAL ACCESS LEVEL 4
                </div>
             </div>

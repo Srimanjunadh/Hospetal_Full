@@ -44,7 +44,7 @@ const SpecialitiesSection = () => {
             25+ Specialities
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Consult with verified MediChain doctors across specialities
+            Consult with verified MediClues doctors across specialities
           </p>
         </div>
 

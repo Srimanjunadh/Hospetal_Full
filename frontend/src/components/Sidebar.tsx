@@ -66,19 +66,19 @@ export default function Sidebar({ role, isOpen, setIsOpen }: { role: string, isO
   const items = menuItems[role] || [];
 
   const sidebarContent = (
-    <aside className="sidebar-element" style={{ width: '280px', background: '#000', color: '#fff', height: '100vh', display: 'flex', flexDirection: 'column', padding: '2.5rem 1.5rem' }}>
+    <aside className="sidebar-element" style={{ width: '280px', background: '#ffffff', color: '#111', height: '100vh', display: 'flex', flexDirection: 'column', padding: '2.5rem 1.5rem', borderRight: '1px solid #e4e4e7', boxShadow: '2px 0 8px rgba(0,0,0,0.06)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.25rem', fontWeight: 900 }}>
-          <Activity size={28} />
-          <span>MEDICHAIN+</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.25rem', fontWeight: 900, whiteSpace: 'nowrap' }}>
+          <Activity size={28} style={{ flexShrink: 0, color: '#29ABE2' }} />
+          <span>MEDCLUES+</span>
         </div>
-        <button className="mobile-only" onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff' }}>
+        <button className="mobile-only" onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: '#111', cursor: 'pointer' }}>
           <X size={24} />
         </button>
       </div>
       
       <nav style={{ flex: 1, overflowY: "auto", paddingRight: "4px" }} className="sidebar-nav">
-        <p style={{ fontSize: '0.65rem', fontWeight: '900', color: 'rgba(255,255,255,0.4)', letterSpacing: '2px', marginBottom: '1.5rem', paddingLeft: '1rem' }}>TERMINAL NAVIGATION</p>
+        <p style={{ fontSize: '0.65rem', fontWeight: '900', color: '#94a3b8', letterSpacing: '2px', marginBottom: '1.5rem', paddingLeft: '1rem' }}>TERMINAL NAVIGATION</p>
         {items.map((item: any) => (
           <Link 
             key={item.path} 
@@ -94,7 +94,7 @@ export default function Sidebar({ role, isOpen, setIsOpen }: { role: string, isO
       </nav>
 
       <div style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', marginTop: 'auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', fontWeight: '700' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700' }}>
           <ShieldAlert size={14} /> SECURE NODE v1.0.4
         </div>
       </div>

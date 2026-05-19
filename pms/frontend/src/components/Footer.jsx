@@ -129,11 +129,11 @@ const Footer = () => {
                 <path d="M20 8 L28 12 L28 22 Q28 28 20 32 Q12 28 12 22 L12 12 Z" fill="currentColor" />
                 <path d="M20 15 L20 25 M15 20 L25 20" stroke="white" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <span className='text-2xl font-bold text-gray-800'>MediChain</span>
+              <span className='text-2xl font-bold text-gray-800'>MediClues</span>
             </div>
 
             <p className='text-sm text-gray-700 leading-relaxed'>
-              MediChain is a secure, transparent, and modern healthcare management system. We connect patients with trusted doctors, ensuring seamless appointments, secure medical records, and comprehensive healthcare solutions.
+              MediClues is a secure, transparent, and modern healthcare management system. We connect patients with trusted doctors, ensuring seamless appointments, secure medical records, and comprehensive healthcare solutions.
             </p>
 
             {/* Social Media Icons */}
@@ -321,7 +321,7 @@ const Footer = () => {
 
                   {/* Email */}
                   <a
-                    href="mailto:medichain123@gmail.com"
+                    href="mailto:medclues123@gmail.com"
                     className='relative z-40 flex items-center gap-4 group cursor-pointer w-full'
                   >
                     <div className='w-12 h-12 rounded-2xl bg-white/50 backdrop-blur-sm border border-white/40 flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-500 group-hover:border-cyan-400 group-hover:scale-110 shadow-sm transition-all duration-300'>
@@ -332,7 +332,7 @@ const Footer = () => {
                     <div className='flex flex-col'>
                       <p className='text-[10px] font-black text-cyan-700/60 uppercase tracking-widest mb-0.5'>Official Inquiries</p>
                       <p className='text-lg sm:text-base text-gray-800 group-hover:text-cyan-700 transition-colors duration-200 font-bold break-all'>
-                        medichain123@gmail.com
+                        medclues123@gmail.com
                       </p>
                     </div>
                   </a>
@@ -344,7 +344,7 @@ const Footer = () => {
             {/* Copyright Line - Centered under everything */}
             <div className='pt-6 border-t border-blue-400/20 text-center w-full mt-auto lg:mt-8'>
               <p className='text-sm sm:text-base text-gray-700 font-medium tracking-tight'>
-                Copyright © 2026 MediChain+. All Rights Reserved
+                Copyright © 2026 MediClues+. All Rights Reserved
               </p>
             </div>
           </div>

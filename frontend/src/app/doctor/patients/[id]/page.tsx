@@ -80,7 +80,7 @@ export default function PatientDetailPage() {
   const fetchFullPatientContext = async () => {
     try {
       const id = params.id as string;
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session && session.doctor_id) {
         const allPatients = await apiService.getAssignedPatients(session.doctor_id);
         const pt = allPatients.find((p: any) => (p.username || `P-${p.id}`) === id);
@@ -155,7 +155,7 @@ export default function PatientDetailPage() {
     if (!patient) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.createAlert({
         hospital_id: session.hospital_id,
         from_user_id: session.id,
@@ -175,7 +175,7 @@ export default function PatientDetailPage() {
     if (!patient) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const msg = `DIET PROTOCOL: ${dietNotes || "AS PER STANDARD"}. AVOID: ${avoidNotes || "NONE"}.`;
       await apiService.createAlert({
         hospital_id: session.hospital_id,
@@ -199,7 +199,7 @@ export default function PatientDetailPage() {
     if (!patient) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.createAlert({
         hospital_id: session.hospital_id,
         from_user_id: session.id,
@@ -220,7 +220,7 @@ export default function PatientDetailPage() {
     if (!patient || !labTestName) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.requestLabTest({
         hospital_id: session.hospital_id,
         patient_id: patient.id,
@@ -242,7 +242,7 @@ export default function PatientDetailPage() {
     if (!patient || newPrescription.length === 0) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.prescribeMedication({
         hospital_id: session.hospital_id,
         patient_id: patient.id,
@@ -264,7 +264,7 @@ export default function PatientDetailPage() {
     if (!patient || !admissionReason) return;
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.requestAdmission({
         hospital_id: session.hospital_id,
         patient_id: patient.id,
@@ -309,7 +309,7 @@ export default function PatientDetailPage() {
           <button 
             onClick={() => router.push("/doctor/patients")}
             style={{ 
-              background: '#000', color: '#fff', border: 'none', padding: '12px', borderRadius: '4px', cursor: 'pointer',
+              background: '#29ABE2', color: '#fff', border: 'none', padding: '12px', borderRadius: '4px', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}
           >
@@ -328,9 +328,9 @@ export default function PatientDetailPage() {
           
           {/* Left Sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-             <div className="card" style={{ padding: '2.5rem', border: '4px solid #000', position: 'relative' }}>
-                <div style={{ position: 'absolute', top: '15px', right: '15px', padding: '4px 8px', background: '#000', color: '#fff', fontSize: '0.55rem', fontWeight: 900 }}>NODE-5500</div>
-                <div style={{ width: '100px', height: '100px', background: '#f4f4f5', border: '2px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
+             <div className="card" style={{ padding: '2.5rem', border: '4px solid #29ABE2', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '15px', right: '15px', padding: '4px 8px', background: '#29ABE2', color: '#fff', fontSize: '0.55rem', fontWeight: 900 }}>NODE-5500</div>
+                <div style={{ width: '100px', height: '100px', background: '#f4f4f5', border: '2px solid #29ABE2', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
                    <User size={50} />
                 </div>
                 
@@ -384,8 +384,8 @@ export default function PatientDetailPage() {
                     onClick={() => setActiveTab(tab)}
                     style={{ 
                       padding: '12px 0', background: 'transparent', border: 'none', cursor: 'pointer',
-                      fontSize: '0.75rem', fontWeight: 900, color: activeTab === tab ? '#000' : '#9ca3af',
-                      borderBottom: activeTab === tab ? '4px solid #000' : '4px solid transparent',
+                      fontSize: '0.75rem', fontWeight: 900, color: activeTab === tab ? '#29ABE2' : '#9ca3af',
+                      borderBottom: activeTab === tab ? '4px solid #29ABE2' : '4px solid transparent',
                       transition: '0.2s all', textTransform: 'uppercase', letterSpacing: '1px'
                     }}
                    >
@@ -422,7 +422,7 @@ export default function PatientDetailPage() {
                            </div>
                         </div>
 
-                        <div className="card" style={{ padding: '2rem', borderLeft: '8px solid #000' }}>
+                        <div className="card" style={{ padding: '2rem', borderLeft: '8px solid #29ABE2' }}>
                            <h3 style={{ fontSize: '0.85rem', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
                               <TrendingUp size={18} /> PERSONALIZED AI RECOMMENDATIONS
                            </h3>
@@ -430,7 +430,7 @@ export default function PatientDetailPage() {
                               <ul style={{ paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                  {aiAnalysis.recommendations.map((rec: string, idx: number) => (
                                     <li key={idx} style={{ fontSize: '0.8rem', fontWeight: 700, color: '#1e293b', display: 'flex', alignItems: 'start', gap: '10px' }}>
-                                       <div style={{ width: '6px', height: '6px', background: '#000', marginTop: '6px', flexShrink: 0 }}></div>
+                                       <div style={{ width: '6px', height: '6px', background: '#29ABE2', marginTop: '6px', flexShrink: 0 }}></div>
                                        {rec}
                                     </li>
                                  ))}
@@ -460,12 +460,12 @@ export default function PatientDetailPage() {
                          ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                {tests.map((test, i) => (
-                                  <div key={i} style={{ padding: '1.5rem', border: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div key={i} style={{ padding: '1.5rem', border: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                      <div>
                                         <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{test.test_name.toUpperCase()}</p>
                                         <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>ID: {test.test_id} • {test.status.toUpperCase()}</p>
                                      </div>
-                                     <button style={{ background: '#000', color: '#fff', border: 'none', padding: '10px 20px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>REPORT</button>
+                                     <button style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '10px 20px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>REPORT</button>
                                   </div>
                                ))}
                             </div>
@@ -510,17 +510,17 @@ export default function PatientDetailPage() {
              </div>
 
              {/* Action Buttons */}
-             <div style={{ marginTop: '2rem', paddingTop: '3rem', borderTop: '2px solid #000', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                <button onClick={() => setShowPrescriptionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #000', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+             <div style={{ marginTop: '2rem', paddingTop: '3rem', borderTop: '2px solid #29ABE2', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                <button onClick={() => setShowPrescriptionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
                   <Pill size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>PRESCRIBE MEDS</span>
                 </button>
-                <button onClick={() => setShowLabModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #000', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                <button onClick={() => setShowLabModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
                   <FlaskConical size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>REQUEST LAB</span>
                 </button>
-                <button onClick={() => setShowAdmissionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #000', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                <button onClick={() => setShowAdmissionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
                   <ShieldAlert size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADMIT PATIENT</span>
                 </button>
-                <button onClick={() => setShowRecordModal(true)} style={{ padding: '1.5rem', background: '#000', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                <button onClick={() => setShowRecordModal(true)} style={{ padding: '1.5rem', background: '#29ABE2', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
                   <FileText size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADD OLD DOCS</span>
                 </button>
              </div>

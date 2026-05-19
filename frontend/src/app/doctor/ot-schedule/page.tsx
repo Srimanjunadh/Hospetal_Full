@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 import { Activity, Clipboard, Clock, Play, Check } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -15,7 +15,7 @@ export default function DoctorOTSchedulePage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session) {
       setSessionUser(session.name);
     }
@@ -24,7 +24,7 @@ export default function DoctorOTSchedulePage() {
 
   const fetchData = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session?.hospital_id) {
         const data = await apiService.getSurgicalSchedules(session.hospital_id);
         setSurgeries(Array.isArray(data) ? data : []);
@@ -61,7 +61,7 @@ export default function DoctorOTSchedulePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           {/* OT Queue */}
           <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>TODAY'S SURGICAL QUEUE</h3>
               <Clock size={18} />
             </div>
@@ -97,7 +97,7 @@ export default function DoctorOTSchedulePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* WHO Checklist */}
           {selectedSurgery ? (
-            <div className="card" style={{ border: '4px solid #000' }}>
+            <div className="card" style={{ border: '4px solid #29ABE2' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.9rem', marginBottom: '0.5rem' }}>WHO SAFETY CHECKLIST</h3>
               <p style={{ fontSize: '0.6rem', fontWeight: 800, color: '#666', marginBottom: '2rem' }}>PROCEDURE: {selectedSurgery.procedure_name.toUpperCase()}</p>
               
@@ -107,7 +107,7 @@ export default function DoctorOTSchedulePage() {
                     onClick={() => toggleChecklist(selectedSurgery.id, item)}
                     style={{ 
                       padding: '12px', 
-                      border: '2px solid #000', 
+                      border: '2px solid #29ABE2', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'space-between',
@@ -116,7 +116,7 @@ export default function DoctorOTSchedulePage() {
                       color: selectedSurgery.checklist_status[item] ? '#fff' : '#000'
                     }}>
                     <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>{item.toUpperCase()}</span>
-                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #000' }} />}
+                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #29ABE2' }} />}
                   </div>
                 ))}
               </div>

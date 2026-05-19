@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: medichain-backend
+    name: medclues-backend
     env: node
     rootDir: backend
     buildCommand: npm ci --prefer-offline --no-audit

@@ -27,7 +27,7 @@ export default function PharmacyPage() {
 
   const fetchOrders = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       if (!hId) return;
 
@@ -62,7 +62,7 @@ export default function PharmacyPage() {
 
   const fetchInventory = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       
       const { apiService } = await import("@/services/api");
@@ -75,7 +75,7 @@ export default function PharmacyPage() {
 
   const fetchNurseRequests = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const { apiService } = await import("@/services/api");
       const data = await apiService.getPharmacyNurseRequests(session.hospital_id);
       setNurseRequests(data);
@@ -112,7 +112,7 @@ export default function PharmacyPage() {
   const handleSaveItem = async () => {
     try {
       const { apiService } = await import("@/services/api");
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       
       if (editingItem) {
         await apiService.updateInventoryItem(editingItem.id, formData);
@@ -152,8 +152,18 @@ export default function PharmacyPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>PHARMACY DISPENSARY</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>STATION: PHARMA-CORE-09 • READY FOR DISPENSING</p>
         </div>
-        <button className="btn-black" onClick={() => setIsAddingNew(true)}>
-          <Plus size={18} /> ADD NEW MEDICINE
+        <button 
+          className="btn-black" 
+          onClick={() => setIsAddingNew(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexDirection: 'row',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <Plus size={18} /> <span>ADD NEW MEDICINE</span>
         </button>
       </div>      
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
@@ -172,7 +182,7 @@ export default function PharmacyPage() {
           <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px' }}>STORAGE LOAD</p>
           <h2 className="card-value" style={{ fontSize: '1.5rem' }}>82.4%</h2>
         </div>
-        <div className="card" style={{ background: '#000', color: '#fff' }}>
+        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
           <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px', color: '#666' }}>TEMP CONTROL</p>
           <h2 className="card-value" style={{ fontSize: '1.5rem', color: '#fff' }}>4.2°C</h2>
         </div>
@@ -180,8 +190,8 @@ export default function PharmacyPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start', marginBottom: '3rem' }}>
         {/* Active Medication Orders Card */}
-        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #000' }}>
-          <div style={{ padding: '1.2rem 1.5rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2' }}>
+          <div style={{ padding: '1.2rem 1.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>DOCTOR ORDERS</h3>
             <span style={{ fontSize: '0.55rem', fontWeight: 900, background: '#dc2626', color: '#fff', padding: '4px 8px', borderRadius: '2px' }}>{orders.length} PENDING</span>
           </div>
@@ -221,8 +231,8 @@ export default function PharmacyPage() {
         </div>
 
         {/* Nurse Medicine Requests Card */}
-        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #000' }}>
-          <div style={{ padding: '1.2rem 1.5rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2' }}>
+          <div style={{ padding: '1.2rem 1.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>NURSE REQUESTS</h3>
             <span style={{ fontSize: '0.55rem', fontWeight: 900, background: '#10b981', color: '#fff', padding: '4px 8px', borderRadius: '2px' }}>{nurseRequests.length} ACTIVE</span>
           </div>
@@ -268,8 +278,8 @@ export default function PharmacyPage() {
       </div>
 
       {/* Stock Management Card - FULL WIDTH */}
-      <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #000', marginBottom: '3rem' }}>
-        <div style={{ padding: '1.5rem 2rem', background: '#fff', borderBottom: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2', marginBottom: '3rem' }}>
+        <div style={{ padding: '1.5rem 2rem', background: '#fff', borderBottom: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>STOCK MANAGEMENT (MASTER INVENTORY)</h3>
           <button className="btn-black" style={{ padding: '8px', borderRadius: '4px' }} onClick={fetchInventory}>
             <RefreshCcw size={14} />
@@ -334,7 +344,7 @@ export default function PharmacyPage() {
                             setFormData({ name: item.name, category: item.category, quantity: item.quantity, min_threshold: item.min_threshold });
                             setIsAddingNew(true);
                           }}
-                          style={{ background: '#000', color: '#fff', border: 'none', padding: '8px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}
+                          style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '8px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}
                         >
                           EDIT
                         </button>
@@ -362,7 +372,7 @@ export default function PharmacyPage() {
       {addingStock && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setAddingStock(null)} />
-          <div style={{ width: '400px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2rem' }}>
+          <div style={{ width: '400px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2rem' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 900, marginBottom: '1rem' }}>REPLENISH STOCK</h2>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, marginBottom: '1.5rem' }}>Item: {addingStock.name}</p>
             
@@ -371,12 +381,12 @@ export default function PharmacyPage() {
               type="number" 
               value={stockAmount} 
               onChange={(e) => setStockAmount(parseInt(e.target.value))}
-              style={{ width: '100%', padding: '12px', border: '2px solid #000', marginBottom: '1.5rem', fontWeight: 900 }}
+              style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', marginBottom: '1.5rem', fontWeight: 900 }}
             />
             
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button onClick={() => setAddingStock(null)} style={{ flex: 1, padding: '12px', border: '2px solid #000', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleAddStock} style={{ flex: 1, padding: '12px', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>CONFIRM</button>
+              <button onClick={() => setAddingStock(null)} style={{ flex: 1, padding: '12px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
+              <button onClick={handleAddStock} style={{ flex: 1, padding: '12px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>CONFIRM</button>
             </div>
           </div>
         </div>
@@ -386,7 +396,7 @@ export default function PharmacyPage() {
       {isAddingNew && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => { setIsAddingNew(false); setEditingItem(null); }} />
-          <div style={{ width: '500px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2.5rem' }}>
+          <div style={{ width: '500px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>{editingItem ? 'EDIT MEDICINE' : 'REGISTER NEW MEDICINE'}</h2>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -397,7 +407,7 @@ export default function PharmacyPage() {
                     value={formData.name} 
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     placeholder="e.g. PARACETAMOL 500MG"
-                    style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 900 }}
+                    style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
                   />
                </div>
                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -407,7 +417,7 @@ export default function PharmacyPage() {
                        type="number" 
                        value={formData.quantity} 
                        onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value)})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
                      />
                   </div>
                   <div>
@@ -416,15 +426,15 @@ export default function PharmacyPage() {
                        type="number" 
                        value={formData.min_threshold} 
                        onChange={(e) => setFormData({...formData, min_threshold: parseInt(e.target.value)})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
                      />
                   </div>
                </div>
             </div>
             
             <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-              <button onClick={() => { setIsAddingNew(false); setEditingItem(null); }} style={{ flex: 1, padding: '15px', border: '2px solid #000', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleSaveItem} style={{ flex: 1, padding: '15px', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>{editingItem ? 'UPDATE RECORD' : 'CREATE RECORD'}</button>
+              <button onClick={() => { setIsAddingNew(false); setEditingItem(null); }} style={{ flex: 1, padding: '15px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
+              <button onClick={handleSaveItem} style={{ flex: 1, padding: '15px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>{editingItem ? 'UPDATE RECORD' : 'CREATE RECORD'}</button>
             </div>
           </div>
         </div>

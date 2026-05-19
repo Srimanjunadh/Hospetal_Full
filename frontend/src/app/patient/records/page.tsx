@@ -12,7 +12,7 @@ export default function MedicalRecordsPage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session?.id) {
       setUserName(session.name || "Patient");
       fetchRecords(session.id);
@@ -46,13 +46,23 @@ export default function MedicalRecordsPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>ELECTRONIC HEALTH RECORDS</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SECURE CLINICAL REPOSITORY • AES-256 ENCRYPTED</p>
         </div>
-        <button className="btn-black" onClick={() => showToast("Preparing full encrypted archive...", "info")}>
-          <Download size={20} /> REQUEST COMPLETE EXPORT
+        <button 
+          className="btn-black" 
+          onClick={() => showToast("Preparing full encrypted archive...", "info")}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexDirection: 'row',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <Download size={20} /> <span>REQUEST COMPLETE EXPORT</span>
         </button>
       </div>
 
-      <div className="card" style={{ marginTop: '3rem', padding: '0', border: '4px solid #000' }}>
-        <div style={{ padding: '2rem 2.5rem', borderBottom: '2px solid #000' }}>
+      <div className="card" style={{ marginTop: '3rem', padding: '0', border: '4px solid #29ABE2' }}>
+        <div style={{ padding: '2rem 2.5rem', borderBottom: '2px solid #29ABE2' }}>
           <div style={{ flex: 1, position: 'relative' }}>
             <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
             <input 
@@ -66,7 +76,7 @@ export default function MedicalRecordsPage() {
         <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="custom-scrollbar">
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #000', textAlign: 'left' }}>
+              <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #29ABE2', textAlign: 'left' }}>
                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>RECORD IDENTITY</th>
                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>RECORD ID</th>

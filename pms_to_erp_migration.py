@@ -19,7 +19,7 @@ import json
 # ============================================================
 # CONFIGURATION
 # ============================================================
-ERP_DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db"
+ERP_DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db"
 PMS_DATABASE_URL = "postgresql://neondb_owner:npg_yoN80LlTYPEF@ep-fragrant-wildflower-amav9yzw-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 
 def hash_password(password: str) -> str:
@@ -179,7 +179,7 @@ def erp_migrate(pms_hospitals, doctors_by_hosp):
         c.execute("""
             INSERT INTO users (username, name, email, role, hashed_password, cleartext_password, phone, created_at)
             VALUES (?, ?, ?, 'hospital_admin', ?, ?, ?, datetime('now'))
-        """, (admin_username, admin_name, f"admin{pms_id}@medichain.local", 
+        """, (admin_username, admin_name, f"admin{pms_id}@medclues.local", 
               f"hashed_{admin_password}", admin_password, f"90000{pms_id:05d}"))
         admin_id = c.lastrowid
         

@@ -12,7 +12,7 @@ const HowItWorksSection = () => {
     {
       number: '2',
       title: 'Book Appointment',
-      description: 'Schedule an appointment with a verified MediChain doctor',
+      description: 'Schedule an appointment with a verified MediClues doctor',
       icon: '📅',
       color: 'from-cyan-500 to-teal-500'
     },

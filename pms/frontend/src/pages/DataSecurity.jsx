@@ -11,34 +11,34 @@ const DataSecurity = () => {
 
   const faqs = [
     {
-      question: "What is MediChain+'s view on data security and Privacy?",
+      question: "What is MediClues+'s view on data security and Privacy?",
       answer: (
         <>
-          At MediChain+ we take data security and privacy extremely seriously. It is one of the foundational pillars of our company and is implemented at the core of every product.
+          At MediClues+ we take data security and privacy extremely seriously. It is one of the foundational pillars of our company and is implemented at the core of every product.
           <br /><br />
-          We believe that healthcare data is the most sensitive information about you and must receive appropriate protection. MediChain+ collects or uses any personal or sensitive personal information belonging to you only after receiving appropriate and clear consent from you. Further, we understand that people change their minds, so no consent is permanent and our systems are built with the flexibility so that any consent given can later be revoked.
+          We believe that healthcare data is the most sensitive information about you and must receive appropriate protection. MediClues+ collects or uses any personal or sensitive personal information belonging to you only after receiving appropriate and clear consent from you. Further, we understand that people change their minds, so no consent is permanent and our systems are built with the flexibility so that any consent given can later be revoked.
           <br /><br />
           This is why all our products have features where patients and providers are in control and can decide what they want to share and what they prefer to keep private.
         </>
       )
     },
     {
-      question: "What data does MediChain+ have?",
+      question: "What data does MediClues+ have?",
       answer: (
         <>
           At the outset, our data is stored with 256 bit encryption on HIPAA compliant servers. Further, we are an ISO27001:2013 certified company. This certification is one of the most recognized and stringent information security certification that validates a company's efforts on protecting data and all kinds of information assets.
           <br /><br />
-          We have two distinct data sets. First is when health care providers use our software to store information regarding the patients they are treating. This can include information about the patient, their diagnosis, treatment plan, any clinical notes, communication and other details. All of this is stored on behalf of the provider and MediChain+ cannot access this. It is stored privately and securely for every provider who uses our software.
+          We have two distinct data sets. First is when health care providers use our software to store information regarding the patients they are treating. This can include information about the patient, their diagnosis, treatment plan, any clinical notes, communication and other details. All of this is stored on behalf of the provider and MediClues+ cannot access this. It is stored privately and securely for every provider who uses our software.
           <br /><br />
-          The other data set is when patients directly visit MediChain+ and use MediChain+ to store their health history or undertake a healthcare transaction, such as booking an appointment, online consultation and more. We store all this data on behalf of the patient and this too is stored with 256 bit encryption and HIPAA compliant servers.
+          The other data set is when patients directly visit MediClues+ and use MediClues+ to store their health history or undertake a healthcare transaction, such as booking an appointment, online consultation and more. We store all this data on behalf of the patient and this too is stored with 256 bit encryption and HIPAA compliant servers.
         </>
       )
     },
     {
-      question: "Is my data really safe with MediChain+?",
+      question: "Is my data really safe with MediClues+?",
       answer: (
         <>
-          Absolutely. MediChain+ is amongst the safest places for you to store your healthcare information and that of your patients.
+          Absolutely. MediClues+ is amongst the safest places for you to store your healthcare information and that of your patients.
           <br /><br />
           We have a variety of measures that protect your data, some of which are:
           <br /><br />
@@ -60,17 +60,17 @@ const DataSecurity = () => {
     },
     {
       question: "Have you ever faced a data breach?",
-      answer: "No we have not. We will continue to work very hard to make sure that data stored with MediChain+ remains secure."
+      answer: "No we have not. We will continue to work very hard to make sure that data stored with MediClues+ remains secure."
     },
     {
-      question: "Is MediChain+ compliant with the data security and privacy laws in India?",
-      answer: "Of Course, MediChain+ complies with all applicable laws in every country it operates in."
+      question: "Is MediClues+ compliant with the data security and privacy laws in India?",
+      answer: "Of Course, MediClues+ complies with all applicable laws in every country it operates in."
     },
     {
       question: "What if I find a security vulnerability in any of your applications?",
       answer: (
         <>
-          In the unlikely event that you discover a vulnerability, we do have a responsible security disclosure program that prescribes next course of action and we would love to hear from you and fix it at the earliest. Please report them to us at <a href="mailto:security@medichain.com" className="text-cyan-600 hover:underline">security@medichain.com</a>.
+          In the unlikely event that you discover a vulnerability, we do have a responsible security disclosure program that prescribes next course of action and we would love to hear from you and fix it at the earliest. Please report them to us at <a href="mailto:security@medclues.com" className="text-cyan-600 hover:underline">security@medclues.com</a>.
         </>
       )
     }
@@ -92,7 +92,7 @@ const DataSecurity = () => {
               Data <span className="text-cyan-600">&amp;</span> Security
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold max-w-3xl mx-auto mt-4 md:mt-6 px-2">
-              Trust: the foundation on which MediChain+ is built
+              Trust: the foundation on which MediClues+ is built
             </p>
           </div>
 
@@ -111,19 +111,19 @@ const DataSecurity = () => {
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-orange-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediChain+ does not have access to your data</p>
+                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediClues+ does not have access to your data</p>
                 </div>
                 <div className="flex items-start gap-3 md:gap-4">
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-orange-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediChain+ does not sell or share your data with any third party</p>
+                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediClues+ does not sell or share your data with any third party</p>
                 </div>
                 <div className="flex items-start gap-3 md:gap-4">
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-orange-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediChain+ follows stringent policies so that data isn't compromised at any step</p>
+                  <p className="text-gray-800 font-semibold text-sm sm:text-base md:text-lg leading-relaxed">MediClues+ follows stringent policies so that data isn't compromised at any step</p>
                 </div>
               </div>
               
@@ -206,7 +206,7 @@ const DataSecurity = () => {
                 We are ISO 27001 certified
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-4 md:mb-6 leading-relaxed px-2">
-                <span className="text-orange-600 font-bold">BSI</span> — a global authority in information security standards — has <span className="text-orange-600 font-bold">certified</span> that MediChain+ ensures confidentiality, availability, and integrity of its information assets
+                <span className="text-orange-600 font-bold">BSI</span> — a global authority in information security standards — has <span className="text-orange-600 font-bold">certified</span> that MediClues+ ensures confidentiality, availability, and integrity of its information assets
               </p>
               
               {/* Bullet Points with Orange Checkmarks */}
@@ -249,7 +249,7 @@ const DataSecurity = () => {
                 </div>
                 <div className="flex items-start gap-2 md:gap-3">
                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-600 rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-800 text-xs sm:text-sm md:text-base leading-relaxed">No one at MediChain+ can view your data</p>
+                  <p className="text-gray-800 text-xs sm:text-sm md:text-base leading-relaxed">No one at MediClues+ can view your data</p>
                 </div>
                 <div className="flex items-start gap-2 md:gap-3">
                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-600 rounded-full mt-2 flex-shrink-0"></div>
@@ -300,7 +300,7 @@ const DataSecurity = () => {
               Secure platform for healthcare providers
             </h2>
             <p className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold max-w-3xl mx-auto mb-6 md:mb-8 px-2">
-              Each MediChain+ product is designed to protect data security and privacy
+              Each MediClues+ product is designed to protect data security and privacy
             </p>
             
             {/* Illustration - Doctor with Folder */}
@@ -328,7 +328,7 @@ const DataSecurity = () => {
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm sm:text-base md:text-lg">We never send promotions to your walk-in patients</h3>
                   <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed">
-                    As per our privacy policy, we never reach out to your walk-in patients or send any promotional communication to them. The only way for any patient to receive any promotion from us is if they visit MediChain+ independently and give us permission to contact them.
+                    As per our privacy policy, we never reach out to your walk-in patients or send any promotional communication to them. The only way for any patient to receive any promotion from us is if they visit MediClues+ independently and give us permission to contact them.
                   </p>
                 </div>
               </div>
@@ -398,7 +398,7 @@ const DataSecurity = () => {
                 Secure place for your health data
               </h2>
               <p className="text-sm sm:text-base md:text-lg text-gray-700 font-semibold mb-4 md:mb-6 px-2">
-                Keeping your data safe is the core of every decision we make at MediChain+
+                Keeping your data safe is the core of every decision we make at MediClues+
               </p>
             </div>
             
@@ -425,7 +425,7 @@ const DataSecurity = () => {
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm sm:text-base md:text-lg">Your data is for your eyes only</h3>
                   <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed">
-                    Anything that you share on MediChain+ is completely private. No one else can access it. We give an unprecedented level of control so that only you can decide who sees what.
+                    Anything that you share on MediClues+ is completely private. No one else can access it. We give an unprecedented level of control so that only you can decide who sees what.
                   </p>
                 </div>
               </div>
@@ -443,7 +443,7 @@ const DataSecurity = () => {
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm sm:text-base md:text-lg">Everything is protected with 256-bit encryption</h3>
                   <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed">
-                    MediChain+ uses world-class standards to shield your data from unauthorized intrusion. It is always protected with multiple layers of encryption (256-bit encryption over the network).
+                    MediClues+ uses world-class standards to shield your data from unauthorized intrusion. It is always protected with multiple layers of encryption (256-bit encryption over the network).
                   </p>
                 </div>
               </div>
@@ -479,7 +479,7 @@ const DataSecurity = () => {
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm sm:text-base md:text-lg">Remote logout fends off suspicious logins</h3>
                   <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed">
-                    Whenever a new device logs into your account, MediChain+ notifies you immediately, so that you can review the activity and log out if needed.
+                    Whenever a new device logs into your account, MediClues+ notifies you immediately, so that you can review the activity and log out if needed.
                   </p>
                 </div>
               </div>

@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
                 Introduction
               </h2>
               <p className="text-gray-600 leading-relaxed">
-                Welcome to MediChain Healthcare ("we," "our," or "us"). We are committed to protecting your personal information 
+                Welcome to MediClues Healthcare ("we," "our," or "us"). We are committed to protecting your personal information 
                 and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your 
                 information when you use our healthcare management platform.
               </p>
@@ -150,9 +150,9 @@ const PrivacyPolicy = () => {
                 If you have any questions about this Privacy Policy or our data practices, please contact us at:
               </p>
               <div className="mt-3 p-4 bg-gray-50 rounded-lg">
-                <p className="text-gray-700"><strong>Email:</strong> privacy@medichain.com</p>
+                <p className="text-gray-700"><strong>Email:</strong> privacy@medclues.com</p>
                 <p className="text-gray-700"><strong>Phone:</strong> +91 6309497466</p>
-                <p className="text-gray-700"><strong>Address:</strong> MediChain Healthcare, India</p>
+                <p className="text-gray-700"><strong>Address:</strong> MediClues Healthcare, India</p>
               </div>
             </section>
 

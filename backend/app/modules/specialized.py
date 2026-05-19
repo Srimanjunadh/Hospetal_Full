@@ -47,6 +47,29 @@ async def get_blood_stock(hospital_id: int, db: AsyncSession = Depends(get_db)):
         stock = result.scalars().all()
     return stock
 
+@router.patch("/blood-stock/{hospital_id}")
+async def update_blood_stock(hospital_id: int, data: dict, db: AsyncSession = Depends(get_db)):
+    blood_group = data.get("blood_group")
+    units = data.get("units")
+    
+    if not blood_group:
+        raise HTTPException(status_code=400, detail="blood_group is required")
+        
+    result = await db.execute(
+        select(BloodBank)
+        .filter(BloodBank.hospital_id == hospital_id, BloodBank.blood_group == blood_group)
+    )
+    stock = result.scalars().first()
+    if not stock:
+        stock = BloodBank(hospital_id=hospital_id, blood_group=blood_group, units_available=float(units or 0.0))
+        db.add(stock)
+    else:
+        if units is not None:
+            stock.units_available = float(units)
+            
+    await db.commit()
+    return {"message": "Blood stock updated successfully", "blood_group": blood_group, "units_available": stock.units_available}
+
 @router.post("/blood-request")
 async def create_blood_request(req: BloodRequestCreate, db: AsyncSession = Depends(get_db)):
     new_req = BloodRequest(**req.dict())

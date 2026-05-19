@@ -2,7 +2,7 @@
 import sqlite3
 import os
 
-DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db"
+DB_PATH = "C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db"
 
 def add_column():
     if not os.path.exists(DB_PATH):

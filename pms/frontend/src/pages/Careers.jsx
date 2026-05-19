@@ -145,7 +145,7 @@ const Careers = () => {
             Careers – <span className="text-cyan-500">Job Application</span>
           </h1>
           <p className="section-subtitle max-w-2xl mx-auto">
-            Join MediChain+ and help us build the future of connected healthcare.
+            Join MediClues+ and help us build the future of connected healthcare.
             Fill out the form below and our team will review your application.
           </p>
         </div>
@@ -244,7 +244,7 @@ const Careers = () => {
                 )}
                 {form.role_applied === 'Nurse' && (
                   <p className="mt-2 text-xs text-gray-500">
-                    MediChain+ nurses support both in-clinic and remote care workflows, coordinate with doctors,
+                    MediClues+ nurses support both in-clinic and remote care workflows, coordinate with doctors,
                     and help patients navigate their ongoing treatment plans.
                   </p>
                 )}
@@ -292,7 +292,7 @@ const Careers = () => {
                   name="coverLetter"
                   rows="3"
                   className="w-full resize-none"
-                  placeholder="You can briefly share why you’d like to join MediChain+."
+                  placeholder="You can briefly share why you’d like to join MediClues+."
                   value={form.coverLetter}
                   onChange={handleChange}
                 ></textarea>

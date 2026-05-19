@@ -4,7 +4,7 @@ import { assets } from '../assets/assets'
 
 /**
  * BrandLogo Component
- * Reusable component for displaying the official MediChain logo
+ * Reusable component for displaying the official MediClues logo
  * 
  * @param {Object} props
  * @param {string} props.size - Size variant: 'small' (32px), 'medium' (42px), 'large' (48px), or custom height
@@ -55,7 +55,7 @@ const BrandLogo = ({
   return (
     <img
       src={assets.logo}
-      alt="MediChain Logo"
+      alt="MediClues Logo"
       className={`${heightClass} ${baseClasses}`}
       onClick={handleClick}
       style={{

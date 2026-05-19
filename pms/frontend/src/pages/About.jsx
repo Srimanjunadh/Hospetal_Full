@@ -40,7 +40,7 @@ const About = () => {
         {/* Header Section */}
         <div className='text-center mb-8 sm:mb-12 px-4 anim-header'>
           <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3'>
-            About <span className='text-cyan-500'>MediChain+</span>
+            About <span className='text-cyan-500'>MediClues+</span>
           </h1>
           <p className='text-sm sm:text-base text-gray-600 max-w-2xl mx-auto'>
             Revolutionizing healthcare through modern technology and patient-centric solutions
@@ -61,7 +61,7 @@ const About = () => {
                 <img
                   className='w-full h-auto object-cover'
                   src={assets.about_image}
-                  alt="MediChain+ Healthcare"
+                  alt="MediClues+ Healthcare"
                 />
               </div>
             </div>
@@ -69,12 +69,12 @@ const About = () => {
             {/* Content Section */}
             <div className='flex-1 space-y-3 sm:space-y-4 text-gray-600'>
               <p className='text-sm sm:text-base leading-relaxed text-justify'>
-                Welcome to MediChain+, where we're transforming healthcare through innovation and technology.
+                Welcome to MediClues+, where we're transforming healthcare through innovation and technology.
                 We understand the critical importance of secure, accessible, and seamless healthcare services in today's digital world.
               </p>
 
               <p className='text-sm sm:text-base leading-relaxed text-justify'>
-                MediChain+ is committed to revolutionizing healthcare by putting patients first.
+                MediClues+ is committed to revolutionizing healthcare by putting patients first.
                 Our platform ensures your health data remains secure, your appointments are hassle-free,
                 and you have easy access to trusted healthcare providers when you need them most.
               </p>
@@ -127,7 +127,7 @@ const About = () => {
         {/* Why Choose Us */}
         <div className='text-center mb-6 sm:mb-8 px-4 anim-header'>
           <h2 className='text-lg sm:text-xl font-bold text-gray-800 mb-1 sm:mb-2'>
-            Why Choose <span className='text-cyan-500'>MediChain+</span>
+            Why Choose <span className='text-cyan-500'>MediClues+</span>
           </h2>
           <p className='text-sm sm:text-base text-gray-600'>Experience the future of healthcare management</p>
         </div>

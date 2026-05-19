@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FlaskConical, Upload, FileText, CheckCircle, Clock, Search, ExternalLink, Shield } from "lucide-react";
@@ -16,7 +16,7 @@ export default function LabDashboard() {
 
   useEffect(() => {
     setMounted(true);
-    const s = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const s = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (s && s.role === "lab") {
       setSession(s);
       fetchTests();
@@ -52,17 +52,17 @@ export default function LabDashboard() {
       </div>
 
       <div className="card" style={{ padding: '0' }}>
-        <div style={{ padding: '1.5rem 2.5rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ padding: '1.5rem 2.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <FlaskConical size={20} />
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>PENDING DIAGNOSTIC REQUESTS</h3>
            </div>
            <span style={{ fontSize: '0.6rem', fontWeight: 900 }}>PRIORITY: HIGH</span>
         </div>
-        <div style={{ maxHeight: '600px', overflowY: 'auto', border: '4px solid #000' }} className="custom-scrollbar">
+        <div style={{ maxHeight: '600px', overflowY: 'auto', border: '4px solid #29ABE2' }} className="custom-scrollbar">
           <table className="data-table" style={{ border: 'none', width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #000' }}>
+              <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #29ABE2' }}>
                 <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
                 <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>TEST REFERENCE</th>
                 <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>PATIENT NAME</th>
@@ -84,7 +84,7 @@ export default function LabDashboard() {
                   </td>
                   <td style={{ padding: '15px 20px', fontSize: '0.75rem', fontWeight: 700, opacity: 0.6 }}>DR. {t.doctor?.user?.name.toUpperCase()}</td>
                   <td style={{ padding: '15px 20px' }}>
-                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 15px', background: '#000', color: '#fff', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 15px', background: '#29ABE2', color: '#fff', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
                       <Upload size={14} /> UPLOAD PDF
                       <input 
                         type="file" 

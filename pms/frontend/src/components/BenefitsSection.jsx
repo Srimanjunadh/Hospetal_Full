@@ -37,7 +37,7 @@ const BenefitsSection = () => {
             Benefits of Online Consultation
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Why choose MediChain for your healthcare needs
+            Why choose MediClues for your healthcare needs
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Hospital, Plus, Search, Filter, MoreVertical, ShieldCheck, Activity, BarChart3, Settings, Trash2, Globe, Server, Users, X, TrendingUp, Zap, Bed, Pause, Power, Lock, Clock, Calendar, Download, Eye, EyeOff } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -73,8 +73,18 @@ export default function GlobalHospitalsPage() {
               </button>
             ))}
           </div>
-          <Link href="/super-admin/onboarding" className="btn-black">
-            <Plus size={18} /> PROVISION NEW FACILITY
+          <Link 
+            href="/super-admin/onboarding" 
+            className="btn-black"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>PROVISION NEW FACILITY</span>
           </Link>
         </div>
       </div>
@@ -87,9 +97,9 @@ export default function GlobalHospitalsPage() {
           { label: "TOTAL NETWORK STAFF", value: hospitals.reduce((acc, h) => acc + (h.staff_count || 0), 0), icon: <Activity size={18} />, trend: "+16" },
           { label: "NETWORK REVENUE", value: `$${hospitals.reduce((acc, h) => acc + (h.total_revenue || 0), 0).toLocaleString()}`, icon: <TrendingUp size={18} />, trend: "+8.4%" },
         ].map((stat, i) => (
-          <div key={i} className="card" style={{ padding: '1.5rem', border: '2px solid #000' }}>
+          <div key={i} className="card" style={{ padding: '1.5rem', border: '2px solid #29ABE2' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <div style={{ background: '#000', color: '#fff', padding: '8px' }}>{stat.icon}</div>
+              <div style={{ background: '#29ABE2', color: '#fff', padding: '8px' }}>{stat.icon}</div>
               <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981' }}>{stat.trend}</span>
             </div>
             <p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>{stat.label}</p>
@@ -110,15 +120,14 @@ export default function GlobalHospitalsPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline">
-            <Filter size={18} /> NETWORK FILTER
-          </button>
+          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>NETWORK FILTER
+          </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px' }}>S.NO</th>
                 <th style={{ padding: '12px 20px' }}>FACILITY IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>NODE ID</th>
@@ -138,7 +147,7 @@ export default function GlobalHospitalsPage() {
                   <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.8rem', opacity: 0.5 }}>{i + 1}</td>
                   <td style={{ padding: '15px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                       <div style={{ width: '35px', height: '35px', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}><Hospital size={18} /></div>
+                       <div style={{ width: '35px', height: '35px', background: '#29ABE2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}><Hospital size={18} /></div>
                        <div>
                          <p style={{ fontWeight: '900', fontSize: '0.85rem' }}>{h.displayName}</p>
                          <p style={{ fontSize: '0.65rem', color: '#999', fontWeight: 700 }}>{h.location}</p>
@@ -225,7 +234,7 @@ export default function GlobalHospitalsPage() {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3rem' }}>
-                 <div className="card" style={{ padding: '1.5rem', background: '#000', color: '#fff' }}>
+                 <div className="card" style={{ padding: '1.5rem', background: '#29ABE2', color: '#fff' }}>
                     <p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>TOTAL REVENUE ({timeRange})</p>
                     <p style={{ fontSize: '1.5rem', fontWeight: 900 }}>{selectedHospital.revenueDisplay}</p>
                  </div>
@@ -237,7 +246,7 @@ export default function GlobalHospitalsPage() {
 
               {/* Growth Visualization */}
               <div style={{ marginBottom: '3rem' }}>
-                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #000', paddingBottom: '8px' }}>GROWTH ANALYTICS</h3>
+                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>GROWTH ANALYTICS</h3>
                  <div style={{ height: '150px', display: 'flex', alignItems: 'flex-end', gap: '10px', padding: '20px', background: '#f4f4f5', border: '1px solid #000' }}>
                     {[40, 60, 45, 80, 55, 90, 75, 85, 65, 95].map((h, i) => (
                       <div key={i} style={{ flex: 1, height: `${h}%`, background: '#000', position: 'relative' }}>
@@ -252,7 +261,7 @@ export default function GlobalHospitalsPage() {
               </div>
 
               <div style={{ marginBottom: '3rem' }}>
-                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #000', paddingBottom: '8px' }}>ADMINISTRATIVE IDENTITY</h3>
+                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>ADMINISTRATIVE IDENTITY</h3>
                  <div style={{ background: '#f4f4f5', padding: '1.5rem', border: '1px solid #000' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                        <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADMIN NAME</span>

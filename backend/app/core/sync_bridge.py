@@ -58,7 +58,7 @@ async def sync_hospital_to_pms(hospital_data: dict):
         
         # We need the secret from PMS .env, but for now we'll use the one we know
         PMS_JWT_SECRET = "greatstack" 
-        ADMIN_EMAIL = "medichain123@gmail.com"
+        ADMIN_EMAIL = "medclues123@gmail.com"
         
         token = jwt.encode({
             "email": ADMIN_EMAIL,
@@ -120,7 +120,7 @@ async def sync_user_to_pms(user_data: dict):
             # Map ERP user data to PMS format
             pms_data = {
                 "name": user_data.get("name"),
-                "email": user_data.get("email") or f"{user_data.get('username')}@medichain.local",
+                "email": user_data.get("email") or f"{user_data.get('username')}@medclues.local",
                 "password": user_data.get("password"),
                 "phone": user_data.get("phone", "0000000000"),
                 "role": user_data.get("role"),
@@ -152,7 +152,7 @@ async def sync_doctor_to_pms(doctor_data: dict):
         async with httpx.AsyncClient() as client:
             pms_data = {
                 "name": doctor_data.get("name"),
-                "email": f"{doctor_data.get('username')}@medichain.local",
+                "email": f"{doctor_data.get('username')}@medclues.local",
                 "password": doctor_data.get("password"),
                 "speciality": doctor_data.get("specialization"),
                 "degree": "MBBS",

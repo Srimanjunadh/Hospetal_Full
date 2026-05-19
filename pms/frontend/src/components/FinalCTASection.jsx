@@ -11,7 +11,7 @@ const FinalCTASection = () => {
           Still delaying your health concerns?
         </h2>
         <p className="text-xl md:text-2xl text-white/90 mb-8">
-          Connect with India's top doctors online — only on MediChain
+          Connect with India's top doctors online — only on MediClues
         </p>
         <button
           onClick={() => navigate('/hospitals')}

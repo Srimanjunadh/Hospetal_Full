@@ -20,7 +20,7 @@ export default function AdmissionsManagementPage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session && session.hospital_id) {
       setHospitalId(session.hospital_id);
       fetchData(session.hospital_id);
@@ -72,16 +72,26 @@ export default function AdmissionsManagementPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>ADMISSION CONTROL</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>WARD MANAGEMENT & ROOM ASSIGNMENT HUB</p>
         </div>
-        <button onClick={() => hospitalId && fetchData(hospitalId)} className="btn-outline">
-           <RefreshCcw size={18} className={isLoading ? "animate-spin" : ""} /> REFRESH
+        <button 
+          onClick={() => hospitalId && fetchData(hospitalId)} 
+          className="btn-outline"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexDirection: 'row',
+            whiteSpace: 'nowrap'
+          }}
+        >
+           <RefreshCcw size={18} className={isLoading ? "animate-spin" : ""} /> <span>REFRESH</span>
         </button>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
         
         {/* Pending Requests */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
-           <div style={{ padding: '1.5rem 2.5rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
+           <div style={{ padding: '1.5rem 2.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>PENDING ADMISSION REQUESTS</h3>
               <Clock size={18} />
            </div>
@@ -112,8 +122,8 @@ export default function AdmissionsManagementPage() {
         </div>
 
         {/* Active Admissions */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
-           <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
+           <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ACTIVE WARD OCCUPANCY</h3>
               <Bed size={18} />
            </div>

@@ -81,7 +81,7 @@ const Contact = () => {
         {/* Header Section */}
         <div className='text-center mb-8 sm:mb-12 px-4 anim-header'>
           <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3'>
-            Contact <span className='text-cyan-500'>MediChain+</span>
+            Contact <span className='text-cyan-500'>MediClues+</span>
           </h1>
           <p className='text-sm sm:text-base text-gray-600'>Get in touch with our team</p>
         </div>
@@ -93,7 +93,7 @@ const Contact = () => {
             <img
               className='w-full h-full object-cover min-h-[300px]'
               src={assets.contact_image}
-              alt="MediChain Office"
+              alt="MediClues Office"
             />
           </div>
 
@@ -124,7 +124,7 @@ const Contact = () => {
 
               {/* Email Row */}
               <a 
-                href="mailto:medichain123@gmail.com" 
+                href="mailto:medclues123@gmail.com" 
                 className='flex items-start sm:items-center gap-3 sm:gap-4 group cursor-pointer'
               >
                 <div className='w-10 h-10 bg-cyan-50 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-cyan-500 transition-all duration-300 shadow-sm'>
@@ -135,7 +135,7 @@ const Contact = () => {
                 <div className='flex-1 min-w-0'>
                   <span className='block text-xs sm:text-sm text-gray-500 mb-1 group-hover:text-cyan-700 font-bold uppercase tracking-widest'>Inquiry Email</span>
                   <span className='block text-sm sm:text-base text-gray-900 font-bold group-hover:text-cyan-600 transition-colors break-all'>
-                    medichain123@gmail.com
+                    medclues123@gmail.com
                   </span>
                 </div>
               </a>
@@ -143,10 +143,10 @@ const Contact = () => {
 
             {/* Careers Section */}
             <div className='mt-8 pt-6 border-t border-gray-200'>
-              <h3 className='text-lg font-bold text-gray-800 mb-2'>Careers at MediChain+</h3>
+              <h3 className='text-lg font-bold text-gray-800 mb-2'>Careers at MediClues+</h3>
               <p className='text-gray-600 text-sm mb-4'>
                 Join our mission to make quality healthcare more accessible, intelligent, and human.
-                At MediChain+ you&apos;ll work with doctors, engineers, and operations experts who care deeply
+                At MediClues+ you&apos;ll work with doctors, engineers, and operations experts who care deeply
                 about patient impact, data privacy, and long-term innovation. Whether you&apos;re early in your
                 career or an experienced professional, we offer opportunities to grow, learn, and lead.
               </p>
@@ -155,7 +155,7 @@ const Contact = () => {
                 className='btn btn-primary'
                 onClick={() => window.open('/careers', '_blank', 'noopener,noreferrer')}
               >
-                Explore Careers at MediChain+
+                Explore Careers at MediClues+
                 <svg className='w-4 h-4' fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -306,7 +306,7 @@ const Contact = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                     <div className='flex-1'>
-                      <p className='text-gray-900 font-semibold text-sm mb-1'>MediChain+ Healthcare</p>
+                      <p className='text-gray-900 font-semibold text-sm mb-1'>MediClues+ Healthcare</p>
                       <p className='text-gray-600 text-sm leading-relaxed'>Vignan University Campus, Vadlamudi, Guntur District, Andhra Pradesh - 522 213, India</p>
                     </div>
                   </div>

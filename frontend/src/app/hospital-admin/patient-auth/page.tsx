@@ -39,7 +39,7 @@ export default function PatientAuthPage() {
 
   const fetchClinicians = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       const [docs, users] = await Promise.all([
         apiService.getDoctors(hId),
@@ -56,7 +56,7 @@ export default function PatientAuthPage() {
   const fetchPatients = async () => {
     setIsLoading(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       const data = await apiService.getPatients(hId);
       if (Array.isArray(data)) {
@@ -90,7 +90,7 @@ export default function PatientAuthPage() {
     
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const node_code = session?.node_code;
 
       const data = await apiService.register({

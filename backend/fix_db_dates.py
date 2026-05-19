@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "medichain.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "medclues.db")
 
 def fix_status():
     if not os.path.exists(DB_PATH):
@@ -16,7 +16,7 @@ def fix_status():
 
     conn.commit()
     conn.close()
-    print(f"Successfully updated {count} appointments to 'pending' status in medichain.db")
+    print(f"Successfully updated {count} appointments to 'pending' status in medclues.db")
 
 if __name__ == "__main__":
     fix_status()

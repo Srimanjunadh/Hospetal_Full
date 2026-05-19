@@ -14,14 +14,14 @@ const TestimonialsSection = () => {
     {
       name: 'Rajesh Kumar',
       rating: 5,
-      feedback: 'MediChain saved me a lot of time. The doctor understood my problem quickly and provided the right treatment. Highly recommended!',
+      feedback: 'MediClues saved me a lot of time. The doctor understood my problem quickly and provided the right treatment. Highly recommended!',
       location: 'Delhi',
       date: '5 days ago'
     },
     {
       name: 'Anita Patel',
       rating: 5,
-      feedback: 'Best platform for online consultation. The follow-up consultation was free and helped me recover faster. Thank you MediChain!',
+      feedback: 'Best platform for online consultation. The follow-up consultation was free and helped me recover faster. Thank you MediClues!',
       location: 'Bangalore',
       date: '1 week ago'
     },

@@ -19,7 +19,7 @@ export default function InventoryPage() {
   const fetchInventory = async () => {
     setIsLoading(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       if (!hId) return;
 
@@ -61,11 +61,30 @@ export default function InventoryPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>FACILITY ID: METRO-CORE-01 • GLOBAL SUPPLY REGISTRY</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-outline" onClick={() => showToast("Downloading Manifest...", "info")}>
-             <Download size={18} /> EXPORT MANIFEST
+          <button 
+            className="btn-outline" 
+            onClick={() => showToast("Downloading Manifest...", "info")}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+             <Download size={18} /> <span>EXPORT MANIFEST</span>
           </button>
-          <button className="btn-black">
-            <Plus size={18} /> ADD NEW ASSET
+          <button 
+            className="btn-black"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>ADD NEW ASSET</span>
           </button>
         </div>
       </div>
@@ -100,16 +119,26 @@ export default function InventoryPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline" onClick={fetchInventory}>
-            <RefreshCcw size={18} className={isLoading ? "animate-spin" : ""} /> REFRESH
+          <button 
+            className="btn-outline" 
+            onClick={fetchInventory}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <RefreshCcw size={18} className={isLoading ? "animate-spin" : ""} /> <span>REFRESH</span>
           </button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <div style={{ maxHeight: '500px', overflowY: 'auto' }} className="custom-scrollbar">
             <table className="data-table" style={{ border: 'none' }}>
               <thead>
-                <tr style={{ background: '#000', color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
+                <tr style={{ background: '#29ABE2', color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
                   <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
                   <th style={{ padding: '12px 20px' }}>ASSET IDENTITY</th>
                   <th style={{ padding: '12px 20px' }}>SYSTEM ID</th>
@@ -130,7 +159,7 @@ export default function InventoryPage() {
                     <td style={{ padding: '12px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
                     <td style={{ padding: '12px 20px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                         <div style={{ width: '32px', height: '32px', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.7rem' }}>{item.name.charAt(0)}</div>
+                         <div style={{ width: '32px', height: '32px', background: '#29ABE2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.7rem' }}>{item.name.charAt(0)}</div>
                          <span style={{ fontWeight: '900', fontSize: '0.85rem' }}>{item.name}</span>
                       </div>
                     </td>

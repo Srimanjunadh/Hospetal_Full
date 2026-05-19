@@ -20,6 +20,11 @@ export const apiService = {
     return handleResponse(response);
   },
 
+  getAdmins: async () => {
+    const response = await fetch(`${API_BASE_URL}/auth/admins`);
+    return handleResponse(response);
+  },
+
   registerHospital: async (hospitalData: any) => {
     const response = await fetch(`${API_BASE_URL}/auth/register/hospital`, {
       method: 'POST',
@@ -92,6 +97,27 @@ export const apiService = {
 
   updateAppointment: async (appointmentId: number, data: any) => {
     const response = await fetch(`${API_BASE_URL}/doctors/appointments/${appointmentId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return handleResponse(response);
+  },
+
+  getHospitalAppointments: async (hospitalId: number) => {
+    const response = await fetch(`${API_BASE_URL}/appointments/hospital/${hospitalId}`);
+    return handleResponse(response);
+  },
+
+  approveAppointment: async (appointmentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/approve`, {
+      method: 'POST'
+    });
+    return handleResponse(response);
+  },
+
+  patchAppointment: async (appointmentId: number, data: any) => {
+    const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -421,6 +447,15 @@ export const apiService = {
   // --- SPECIALIZED CLINICAL MODULES ---
   getBloodStock: async (hospitalId: number) => {
     const response = await fetch(`${API_BASE_URL}/specialized/blood-stock/${hospitalId}`);
+    return handleResponse(response);
+  },
+
+  updateBloodStock: async (hospitalId: number, data: { blood_group: string; units: number }) => {
+    const response = await fetch(`${API_BASE_URL}/specialized/blood-stock/${hospitalId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
     return handleResponse(response);
   },
 

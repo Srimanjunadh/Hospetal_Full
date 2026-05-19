@@ -50,7 +50,7 @@ export default function SuperAdminDashboard() {
   
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session && session.role === "super_admin") {
       fetchGlobalData();
     }
@@ -91,24 +91,44 @@ export default function SuperAdminDashboard() {
         <div style={{ display: 'flex', gap: '1rem' }}>
           <button 
             className="btn-black" 
-            style={{ background: isLocked ? '#dc2626' : '#000', transition: '0.3s' }}
+            style={{ 
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap',
+              background: isLocked ? '#dc2626' : '#000', 
+              transition: '0.3s' 
+            }}
             onClick={() => {
               setIsLocked(!isLocked);
               showToast(isLocked ? "Network Unlocked" : "GLOBAL LOCKDOWN INITIATED", isLocked ? "success" : "error");
             }}
           >
             {isLocked ? <Lock size={18} /> : <Unlock size={18} />} 
-            {isLocked ? "RELEASE NETWORK" : "LOCK NETWORK"}
+            <span>{isLocked ? "RELEASE NETWORK" : "LOCK NETWORK"}</span>
           </button>
-          <button className="btn-outline" style={{ background: '#dc2626', color: '#fff', border: 'none' }}>
-            <AlertCircle size={18} /> EMERGENCY BROADCAST
+          <button 
+            className="btn-outline" 
+            style={{ 
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap',
+              background: '#dc2626', 
+              color: '#fff', 
+              border: 'none' 
+            }}
+          >
+            <AlertCircle size={18} /> <span>EMERGENCY BROADCAST</span>
           </button>
         </div>
       </div>
 
       {/* Real-time Vital Monitors */}
       <div className="grid-stack" style={{ marginBottom: '3rem' }}>
-        <div className="card" style={{ background: '#000', color: '#fff' }}>
+        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
              <p className="card-title" style={{ color: 'rgba(255,255,255,0.5)' }}>GLOBAL HOSPITALS</p>
              <Hospital size={16} />
@@ -145,7 +165,7 @@ export default function SuperAdminDashboard() {
            </div>
         </div>
 
-        <div className="card" style={{ padding: '2rem', background: '#000', color: '#fff' }}>
+        <div className="card" style={{ padding: '2rem', background: '#29ABE2', color: '#fff' }}>
            <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '2px', marginBottom: '2rem' }}>FACILITY PERFORMANCE MATRIX</h3>
            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {networkNodes.slice(0, 4).map((node, i) => (
@@ -167,15 +187,25 @@ export default function SuperAdminDashboard() {
       <div className="card" style={{ padding: '2rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
            <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>NETWORK NODE REGISTRY • SUBSCRIPTION MONITORING</h3>
-           <button className="btn-black" onClick={() => setShowRegModal(true)}>
-              <Plus size={16} /> PROVISION NODE
+           <button 
+             className="btn-black" 
+             onClick={() => setShowRegModal(true)}
+             style={{
+               display: 'inline-flex',
+               alignItems: 'center',
+               gap: '8px',
+               flexDirection: 'row',
+               whiteSpace: 'nowrap'
+             }}
+           >
+              <Plus size={16} /> <span>PROVISION NODE</span>
            </button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
                 <th style={{ padding: '12px 20px' }}>FACILITY IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>LOCATION</th>

@@ -44,10 +44,10 @@ async def reset_system():
     # 3. Seed Essential Data
     async with AsyncSessionLocal() as db:
         # Check if Hospital exists
-        result = await db.execute(select(Hospital).filter(Hospital.name == "MEDICHAIN GENERAL"))
+        result = await db.execute(select(Hospital).filter(Hospital.name == "MEDCLUES GENERAL"))
         hosp = result.scalars().first()
         if not hosp:
-            hosp = Hospital(name="MEDICHAIN GENERAL", location="CENTRAL HUB", node_code="9001", subscription_status="active")
+            hosp = Hospital(name="MEDCLUES GENERAL", location="CENTRAL HUB", node_code="9001", subscription_status="active")
             db.add(hosp)
             await db.flush()
 

@@ -36,8 +36,18 @@ export default function DoctorConsultationsPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>STATION ID: MED-ALPHA-09 • ACTIVE SESSION: {currentPatient.id}</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-outline" onClick={() => showToast("Reviewing History...", "info")}>
-             <FileText size={18} /> FULL EHR
+          <button 
+            className="btn-outline" 
+            onClick={() => showToast("Reviewing History...", "info")}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+             <FileText size={18} /> <span>FULL EHR</span>
           </button>
           <button className="btn-black" style={{ background: '#dc2626' }} onClick={() => showToast("Session Terminated.", "success")}>
              TERMINATE SESSION
@@ -49,7 +59,7 @@ export default function DoctorConsultationsPage() {
         {/* Main Consultation Area */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Video Feed Placeholder */}
-          <div className="card" style={{ height: '450px', background: '#000', color: '#fff', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none' }}>
+          <div className="card" style={{ height: '450px', background: '#29ABE2', color: '#fff', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none' }}>
              <div style={{ textAlign: 'center' }}>
                 <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
                    <User size={64} style={{ opacity: 0.4 }} />
@@ -68,7 +78,7 @@ export default function DoctorConsultationsPage() {
 
           {/* Clinical Workstation (Tabs) */}
           <div className="card" style={{ minHeight: '400px', display: 'flex', flexDirection: 'column', padding: '0' }}>
-             <div style={{ display: 'flex', borderBottom: '2px solid #000' }}>
+             <div style={{ display: 'flex', borderBottom: '2px solid #29ABE2' }}>
                 {['NOTES', 'PRESCRIPTION', 'LAB ORDERS'].map((tab) => (
                   <button 
                     key={tab}
@@ -104,14 +114,14 @@ export default function DoctorConsultationsPage() {
                 {activeTab === 'PRESCRIPTION' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                      <div style={{ display: 'flex', gap: '1rem' }}>
-                        <input type="text" placeholder="MEDICINE NAME" style={{ flex: 2, padding: '15px', border: '2px solid #000', fontWeight: 900 }} />
-                        <input type="text" placeholder="DOSAGE" style={{ flex: 1, padding: '15px', border: '2px solid #000', fontWeight: 900 }} />
+                        <input type="text" placeholder="MEDICINE NAME" style={{ flex: 2, padding: '15px', border: '2px solid #29ABE2', fontWeight: 900 }} />
+                        <input type="text" placeholder="DOSAGE" style={{ flex: 1, padding: '15px', border: '2px solid #29ABE2', fontWeight: 900 }} />
                         <button className="btn-black" onClick={() => showToast("Prescription Added", "success")}><Plus size={24} /></button>
                      </div>
                      <div style={{ padding: '1.5rem', background: '#f4f4f5', borderLeft: '4px solid #000' }}>
                         <p style={{ fontSize: '0.8rem', fontWeight: 900 }}>NO ACTIVE PRESCRIPTIONS ADDED TO CURRENT SESSION.</p>
                      </div>
-                     <button className="btn-outline" style={{ width: '100%', padding: '15px', border: '2px solid #000' }} onClick={() => showToast("Final Prescription Generated & Sent to Pharmacy", "success")}>
+                     <button className="btn-outline" style={{ width: '100%', padding: '15px', border: '2px solid #29ABE2' }} onClick={() => showToast("Final Prescription Generated & Sent to Pharmacy", "success")}>
                         GENERATE FINAL RX
                      </button>
                   </div>
@@ -152,7 +162,7 @@ export default function DoctorConsultationsPage() {
              </div>
           </div>
 
-          <div className="card" style={{ background: '#000', color: '#fff' }}>
+          <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2rem' }}>
                 <ShieldCheck size={20} />
                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>CLINICAL HISTORY</h3>

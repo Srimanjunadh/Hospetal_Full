@@ -10,7 +10,7 @@ export default function PharmacyPage() {
 
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session?.username) {
       setSessionUser(session.name);
       fetchPrescriptions(session.username);
@@ -53,8 +53,17 @@ export default function PharmacyPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>E-PHARMACY</h1>
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SECURE DISPENSARY • LINE-WISE REGISTRY</p>
         </div>
-        <button className="btn-black">
-          <ShoppingCart size={18} /> CART (0)
+        <button 
+          className="btn-black"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexDirection: 'row',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <ShoppingCart size={18} /> <span>CART (0)</span>
         </button>
       </div>
 

@@ -20,8 +20,9 @@ export default function Home() {
 
       {/* Navigation */}
       <nav style={{ padding: '2rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #000' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.5rem', fontWeight: 900 }}>
-          <Activity size={32} /> MEDICHAIN+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.5rem', fontWeight: 900, whiteSpace: 'nowrap' }}>
+          <Activity size={32} style={{ flexShrink: 0, color: '#29ABE2' }} />
+          <span>MEDCLUES+</span>
         </div>
         <div style={{ display: 'flex', gap: '3rem', alignItems: 'center' }}>
           <Link href="/pms" style={{ color: '#000', textDecoration: 'none', fontWeight: 800, fontSize: '0.8rem' }}>PMS PORTAL</Link>
@@ -69,7 +70,7 @@ export default function Home() {
           ].map((node, i) => (
             <Link key={i} href={node.path} style={{ textDecoration: 'none', color: 'inherit' }}>
               <motion.div
-                whileHover={{ background: '#000', color: '#fff' }}
+                whileHover={{ background: '#29ABE2', color: '#fff', borderColor: '#29ABE2' }}
                 style={{ 
                   padding: '3rem', 
                   borderRight: (i + 1) % 3 !== 0 ? '2px solid #000' : 'none', 
@@ -91,7 +92,7 @@ export default function Home() {
       <footer style={{ padding: '6rem 3rem', background: '#000', color: '#fff' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '4rem' }}>
           <div>
-             <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2rem' }}>MEDICHAIN+ <br /> ENTERPRISE</h2>
+             <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2rem' }}>MEDCLUES+ <br /> ENTERPRISE</h2>
              <p style={{ opacity: 0.4, fontSize: '0.8rem', maxWidth: '300px' }}>
                A secure, decentralized healthcare infrastructure built for the next generation of medical excellence.
              </p>
@@ -109,7 +110,7 @@ export default function Home() {
              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                 <Lock size={20} /> <Globe size={20} />
              </div>
-             <p style={{ marginTop: '2rem', fontSize: '0.7rem', opacity: 0.4 }}>© 2026 MEDICHAIN INC.</p>
+             <p style={{ marginTop: '2rem', fontSize: '0.7rem', opacity: 0.4 }}>© 2026 MEDCLUES INC.</p>
           </div>
         </div>
       </footer>

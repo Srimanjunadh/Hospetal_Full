@@ -102,8 +102,8 @@ function LoginContent() {
           doctor: data.user.doctor,
           nurse: data.user.nurse
         };
-        localStorage.setItem("medichain_session", JSON.stringify(sessionData));
-        localStorage.setItem(`medichain_session_${data.user.role}`, JSON.stringify(sessionData));
+        localStorage.setItem("medclues_session", JSON.stringify(sessionData));
+        localStorage.setItem(`medclues_session_${data.user.role}`, JSON.stringify(sessionData));
         showToast(`Authorized: ${data.user.name}`, "success");
 
         setTimeout(() => {
@@ -154,12 +154,12 @@ function LoginContent() {
           alignItems: 'center', 
           gap: '8px', 
           textDecoration: 'none', 
-          color: '#000', 
+          color: '#29ABE2', 
           fontSize: '0.7rem', 
           fontWeight: 900,
           background: '#fff',
           padding: '10px 18px',
-          border: '1px solid #000',
+          border: '2px solid #29ABE2',
           borderRadius: '4px',
           transition: 'all 0.2s ease'
         }}>
@@ -193,7 +193,7 @@ function LoginContent() {
                 border: 'none', 
                 cursor: 'pointer',
                 borderRadius: '8px',
-                background: role === r ? '#000' : 'transparent',
+                background: role === r ? '#29ABE2' : 'transparent',
                 color: role === r ? '#fff' : '#6b7280',
                 transition: '0.3s all cubic-bezier(0.4, 0, 0.2, 1)',
                 letterSpacing: '0.5px'
@@ -214,18 +214,18 @@ function LoginContent() {
           width: '360px', 
           background: '#fff', 
           padding: '3rem 2.5rem', 
-          border: '1px solid #000', 
+          border: '2px solid #29ABE2', 
           position: 'relative',
           boxShadow: '0 4px 30px rgba(0, 0, 0, 0.05)',
         }}
       >
         <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
-             <Command size={18} />
-             <span style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '2px', opacity: 0.5 }}>{theme.badge}</span>
+             <Command size={18} style={{ color: '#29ABE2' }} />
+             <span style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '2px', color: '#29ABE2' }}>{theme.badge}</span>
            </div>
-           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.4rem' }}>{theme.label}</h1>
-           <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500 }}>Sign in to MediChain+</p>
+           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.4rem', color: '#000' }}>{theme.label}</h1>
+           <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500 }}>Sign in to MediClues+</p>
         </div>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
@@ -244,7 +244,7 @@ function LoginContent() {
                     width: '100%', padding: '12px 0', background: 'transparent', border: 'none', borderBottom: '1px solid #e5e7eb',
                     fontWeight: 900, outline: 'none', color: '#000', fontSize: '1rem', letterSpacing: '8px', transition: 'border-color 0.3s ease'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderBottomColor = '#000'}
+                  onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
                   onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
                 />
               </div>
@@ -272,7 +272,7 @@ function LoginContent() {
                   fontSize: '0.9rem',
                   transition: 'border-color 0.3s ease'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#000'}
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
                 onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
               />
             </div>
@@ -299,7 +299,7 @@ function LoginContent() {
                   fontSize: '0.9rem',
                   transition: 'border-color 0.3s ease'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#000'}
+                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
                 onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
               />
             </div>
@@ -315,7 +315,7 @@ function LoginContent() {
               alignItems: 'center',
               justifyContent: 'center', 
               gap: '10px',
-              background: '#000',
+              background: '#29ABE2',
               color: '#fff',
               border: 'none',
               borderRadius: '4px',
@@ -332,10 +332,10 @@ function LoginContent() {
 
         <div style={{ marginTop: '3rem', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <p style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '1px', opacity: 0.3 }}>
-            © 2026 MEDICHAIN+ ERP • GLOBAL HEALTH NETWORK
+            © 2026 MEDCLUES+ ERP • GLOBAL HEALTH NETWORK
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
-             <Link href="/pms" style={{ fontSize: '0.55rem', fontWeight: 900, color: '#000', textDecoration: 'none', borderBottom: '1px solid #000' }}>GO TO PMS PORTAL</Link>
+             <Link href="/pms" style={{ fontSize: '0.55rem', fontWeight: 900, color: '#29ABE2', textDecoration: 'none', borderBottom: '2px solid #29ABE2' }}>GO TO PMS PORTAL</Link>
           </div>
         </div>
       </motion.div>

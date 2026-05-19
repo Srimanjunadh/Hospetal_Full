@@ -4,9 +4,9 @@ Fix: Update ERP passwords using bcrypt directly (bypass passlib).
 import sqlite3
 import bcrypt
 
-STANDARD_PASSWORD = "MediChain123"
+STANDARD_PASSWORD = "MediClues123"
 
-conn = sqlite3.connect('C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db')
+conn = sqlite3.connect('C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db')
 c = conn.cursor()
 
 # Get all users
@@ -34,7 +34,7 @@ c.execute("""
     WHERE u.role = 'hospital_admin'
     LIMIT 10
 """)
-print("\nHospital Admins (login with 'MediChain123'):")
+print("\nHospital Admins (login with 'MediClues123'):")
 for row in c.fetchall():
     print(f"  {row[1]} -> {row[3]}")
 
@@ -45,4 +45,4 @@ for row in c.fetchall():
     print(f"  {row[0]}: {row[1]}")
 
 conn.close()
-print(f"\nAll {len(users)} ERP users now use password: MediChain123")
+print(f"\nAll {len(users)} ERP users now use password: MediClues123")

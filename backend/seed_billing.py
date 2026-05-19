@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('medichain.db')
+conn = sqlite3.connect('medclues.db')
 c = conn.cursor()
 
 # Create Billing table

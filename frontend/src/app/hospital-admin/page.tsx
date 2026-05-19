@@ -13,7 +13,7 @@ export default function HospitalAdminDashboard() {
   
   useEffect(() => {
     setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     if (session && (session.role === "hospital_admin" || session.role === "super_admin")) {
       setHospitalCode(session.username?.toUpperCase() || "");
       fetchAdmissionsAndAlerts(session.id);
@@ -45,7 +45,7 @@ export default function HospitalAdminDashboard() {
 
   const fetchAdmissionsAndAlerts = async (userId: number) => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const { apiService } = await import("@/services/api");
       const data = await apiService.getAdmissions();
       setAdmissions(data);
@@ -98,7 +98,7 @@ export default function HospitalAdminDashboard() {
   }, [activeFloor, rooms]);
 
   useEffect(() => {
-    const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
     const userId = session?.id || 0;
     
     fetchAdmissionsAndAlerts(userId);
@@ -123,7 +123,7 @@ export default function HospitalAdminDashboard() {
   const handleAddBed = async () => {
     try {
       const { apiService } = await import("@/services/api");
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       await apiService.addBed({
         ...newBedData,
         hospital_id: session.hospital_id
@@ -146,7 +146,7 @@ export default function HospitalAdminDashboard() {
       setSelectedRoom(null);
       setSelectedPendingAdmission("");
       
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session && (session.role === "hospital_admin" || session.role === "super_admin")) {
       fetchAdmissionsAndAlerts(session.id);
     } else {
@@ -162,7 +162,7 @@ export default function HospitalAdminDashboard() {
       const { apiService } = await import("@/services/api");
       await apiService.approveAppointment(apptId);
       showToast("Appointment Approved & Synced to Doctor", "success");
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       fetchAdmissionsAndAlerts(session?.id);
     } catch (e) { showToast("Approval failed", "error"); }
   };
@@ -177,8 +177,18 @@ export default function HospitalAdminDashboard() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>FACILITY ID: {hospitalCode} • {currentDateTime.toUpperCase()}</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-black" onClick={() => showToast("Initializing New Admission Sequence", "info")}>
-            <Plus size={18} /> NEW ADMISSION
+          <button 
+            className="btn-black" 
+            onClick={() => showToast("Initializing New Admission Sequence", "info")}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>NEW ADMISSION</span>
           </button>
         </div>
       </div>
@@ -187,8 +197,8 @@ export default function HospitalAdminDashboard() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           
           {/* Main Content Area - Appointment Queue */}
-          <div className="card" style={{ padding: '0', border: '2px solid #000', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="card" style={{ padding: '0', border: '2px solid #29ABE2', minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <TrendingUp size={20} />
                   <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>LIVE APPOINTMENT QUEUE</h3>
@@ -199,7 +209,7 @@ export default function HospitalAdminDashboard() {
             <div style={{ flex: 1, overflowY: 'auto', maxHeight: '500px' }} className="custom-scrollbar">
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: '#f9fafb', borderBottom: '2px solid #000' }}>
+                  <tr style={{ background: '#f9fafb', borderBottom: '2px solid #29ABE2' }}>
                     <th style={{ padding: '1.25rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, letterSpacing: '1px' }}>S.NO</th>
                     <th style={{ padding: '1.25rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, letterSpacing: '1px' }}>PATIENT IDENTITY</th>
                     <th style={{ padding: '1.25rem 1.5rem', fontSize: '0.65rem', fontWeight: 900, letterSpacing: '1px' }}>CLINICAL EXPERT</th>
@@ -233,7 +243,7 @@ export default function HospitalAdminDashboard() {
                         <button 
                           onClick={() => handleApproveAppointment(appt.id)}
                           style={{ 
-                            background: '#000', 
+                            background: '#29ABE2', 
                             color: '#fff', 
                             border: 'none', 
                             padding: '8px 16px', 
@@ -289,9 +299,9 @@ export default function HospitalAdminDashboard() {
                   onClick={() => setActiveFloor(f.level)}
                   style={{
                     padding: '8px 16px',
-                    background: activeFloor === f.level ? '#000' : 'transparent',
+                    background: activeFloor === f.level ? '#29ABE2' : 'transparent',
                     color: activeFloor === f.level ? '#fff' : '#000',
-                    border: activeFloor === f.level ? '2px solid #000' : '2px solid transparent',
+                    border: activeFloor === f.level ? '2px solid #29ABE2' : '2px solid transparent',
                     fontWeight: 900,
                     fontSize: '0.7rem',
                     cursor: 'pointer',
@@ -309,7 +319,7 @@ export default function HospitalAdminDashboard() {
                 <div key={room.dbId} 
                   onClick={() => handleRoomClick(room)}
                   style={{ 
-                    border: '2px solid #000',
+                    border: '2px solid #29ABE2',
                     padding: '1rem',
                     background: room.status === 'OCCUPIED' ? '#dc2626' : '#10b981',
                     color: '#fff',
@@ -334,12 +344,12 @@ export default function HospitalAdminDashboard() {
             <p className="card-title">FACILITY BED LOAD</p>
             <h2 className="card-value">{bedLoad}%</h2>
             <div style={{ height: '8px', background: '#f4f4f5', marginTop: '1.5rem', border: '1px solid #000' }}>
-               <div style={{ width: `${bedLoad}%`, height: '100%', background: '#000' }}></div>
+               <div style={{ width: `${bedLoad}%`, height: '100%', background: '#29ABE2' }}></div>
             </div>
           </div>
 
           <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.25rem 1.5rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.25rem 1.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                <h3 style={{ fontWeight: 900, fontSize: '0.7rem', letterSpacing: '1px' }}>RECENT ADMISSIONS</h3>
                <Bed size={14} />
             </div>
@@ -364,11 +374,11 @@ export default function HospitalAdminDashboard() {
             <p className="card-title">FACILITY BED LOAD</p>
             <h2 className="card-value">{bedLoad}%</h2>
             <div style={{ height: '8px', background: '#f4f4f5', marginTop: '1.5rem', border: '1px solid #000' }}>
-               <div style={{ width: `${bedLoad}%`, height: '100%', background: '#000' }}></div>
+               <div style={{ width: `${bedLoad}%`, height: '100%', background: '#29ABE2' }}></div>
             </div>
           </div>
 
-          <div className="card" style={{ background: '#000', color: '#fff' }}>
+          <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
                <TrendingUp size={20} />
                <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>REVENUE FLOW</h3>
@@ -396,7 +406,7 @@ export default function HospitalAdminDashboard() {
              </div>
            </div>
 
-          <div className="card" style={{ background: '#000', color: '#fff', border: '2px solid #3b82f6' }}>
+          <div className="card" style={{ background: '#29ABE2', color: '#fff', border: '2px solid #3b82f6' }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
                <Zap size={20} color="#3b82f6" />
                <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>AI RISK MONITOR</h3>
@@ -431,7 +441,7 @@ export default function HospitalAdminDashboard() {
       {selectedRoom && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setSelectedRoom(null)} />
-          <div style={{ width: '500px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2.5rem' }}>
+          <div style={{ width: '500px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>ALLOT BED {selectedRoom}</h2>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '2.5rem' }}>SELECT A PENDING ADMISSION REQUEST TO ASSIGN TO THIS BED.</p>
 
@@ -440,7 +450,7 @@ export default function HospitalAdminDashboard() {
               <select 
                 value={selectedPendingAdmission} 
                 onChange={(e) => setSelectedPendingAdmission(e.target.value)}
-                style={{ width: '100%', padding: '14px', border: '2px solid #000', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', outline: 'none' }}
+                style={{ width: '100%', padding: '14px', border: '2px solid #29ABE2', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', outline: 'none' }}
               >
                 <option value="">-- SELECT PENDING REQUEST --</option>
                 {admissions.filter(a => a.status === 'requested').map(a => (
@@ -457,7 +467,7 @@ export default function HospitalAdminDashboard() {
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button 
                 onClick={() => setSelectedRoom(null)}
-                style={{ flex: 1, padding: '14px', background: '#fff', color: '#000', border: '2px solid #000', fontWeight: 900, cursor: 'pointer' }}
+                style={{ flex: 1, padding: '14px', background: '#fff', color: '#000', border: '2px solid #29ABE2', fontWeight: 900, cursor: 'pointer' }}
               >
                 CANCEL
               </button>
@@ -477,7 +487,7 @@ export default function HospitalAdminDashboard() {
       {isAddingBed && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setIsAddingBed(false)} />
-          <div style={{ width: '450px', background: '#fff', position: 'relative', border: '4px solid #000', padding: '2.5rem' }}>
+          <div style={{ width: '450px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>REGISTER NEW BED</h2>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -486,7 +496,7 @@ export default function HospitalAdminDashboard() {
                   <select 
                     value={newBedData.floor} 
                     onChange={(e) => setNewBedData({...newBedData, floor: parseInt(e.target.value)})}
-                    style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 800 }}
+                    style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 800 }}
                   >
                     <option value={1}>FL 1 - GENERAL WARD</option>
                     <option value={2}>FL 2 - ICU</option>
@@ -501,7 +511,7 @@ export default function HospitalAdminDashboard() {
                        placeholder="e.g. 105"
                        value={newBedData.room_number} 
                        onChange={(e) => setNewBedData({...newBedData, room_number: e.target.value})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
                      />
                   </div>
                   <div>
@@ -511,15 +521,15 @@ export default function HospitalAdminDashboard() {
                        placeholder="e.g. A"
                        value={newBedData.bed_number} 
                        onChange={(e) => setNewBedData({...newBedData, bed_number: e.target.value})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
                      />
                   </div>
                </div>
             </div>
             
             <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-              <button onClick={() => setIsAddingBed(false)} style={{ flex: 1, padding: '14px', border: '2px solid #000', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleAddBed} style={{ flex: 1, padding: '14px', background: '#000', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>ADD TO INVENTORY</button>
+              <button onClick={() => setIsAddingBed(false)} style={{ flex: 1, padding: '14px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
+              <button onClick={handleAddBed} style={{ flex: 1, padding: '14px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>ADD TO INVENTORY</button>
             </div>
           </div>
         </div>

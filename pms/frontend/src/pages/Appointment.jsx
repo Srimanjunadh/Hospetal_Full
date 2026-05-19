@@ -31,6 +31,7 @@ const Appointment = () => {
     const [bookingSuccess, setBookingSuccess] = useState(false)
     const [showUploadModal, setShowUploadModal] = useState(false)
     const [selectedSymptoms, setSelectedSymptoms] = useState([])
+    const [customSymptomsDescription, setCustomSymptomsDescription] = useState('')
     const [symptomError, setSymptomError] = useState(false)
     const [patientData, setPatientData] = useState(null) // Patient data from booking modal
     const [paymentMethod, setPaymentMethod] = useState('payOnVisit') // 'payOnVisit' or 'onlinePayment'
@@ -312,7 +313,7 @@ const Appointment = () => {
     }
 
     const getDoctorLocation = (doc) => {
-        if (!doc) return { hospitalName: 'MediChain+ Care Center', location: 'Remote Consultation' }
+        if (!doc) return { hospitalName: 'MediClues+ Care Center', location: 'Remote Consultation' }
         
         // Embedded in a hospital
         if (doc.hospital_name || doc.hospitalName) {
@@ -347,7 +348,7 @@ const Appointment = () => {
         
         // Fallback
         return {
-            hospitalName: 'MediChain+ Care Center',
+            hospitalName: 'MediClues+ Care Center',
             location: 'Remote Consultation'
         }
     }
@@ -371,7 +372,7 @@ const Appointment = () => {
                         key: data.order.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID,
                         amount: data.order.amount,
                         currency: data.order.currency,
-                        name: "MediChain",
+                        name: "MediClues",
                         description: `Appointment with ${docInfo?.name || 'Doctor'}`,
                         order_id: data.order.id,
                         handler: async function (response) {
@@ -492,10 +493,10 @@ const Appointment = () => {
             return
         }
 
-        // Validate symptoms selection (Mandatory)
-        if (selectedSymptoms.length === 0) {
+        // Validate symptoms selection (Mandatory - either tags or custom description must be provided!)
+        if (selectedSymptoms.length === 0 && !customSymptomsDescription.trim()) {
             setSymptomError(true)
-            toast.error('Please select at least one symptom to proceed.')
+            toast.error('Please select at least one symptom or describe your condition to proceed.')
             return
         } else {
             setSymptomError(false)
@@ -547,7 +548,13 @@ const Appointment = () => {
             formData.append('docId', docId)
             formData.append('slotDate', slotDate)
             formData.append('slotTime', slotTime)
-            formData.append('symptoms', JSON.stringify(selectedSymptoms))
+            
+            // Build the unified symptoms list including tags and custom description details
+            const finalSymptoms = [...selectedSymptoms]
+            if (customSymptomsDescription.trim()) {
+                finalSymptoms.push(`Additional Details: ${customSymptomsDescription.trim()}`)
+            }
+            formData.append('symptoms', JSON.stringify(finalSymptoms))
             formData.append('paymentMethod', paymentMethod || 'payOnVisit') // Send payment method to backend
 
             // Add actualPatient data if available
@@ -580,7 +587,7 @@ const Appointment = () => {
                     return
                 }
 
-                const appointmentId = generateAppointmentId()
+                const appointmentId = data.appointmentId ? `APT-${String(data.appointmentId).padStart(6, '0')}` : generateAppointmentId()
 
                 // Use actual patient name if booking for someone else
                 const displayPatientName = patientData && !patientData.isSelf
@@ -931,31 +938,7 @@ const Appointment = () => {
                         </div>
                     </div>
 
-                    {/* Symptoms Based on Doctor Specialization (between Date & Available Times) */}
-                    <div className='mb-6 p-4 sm:p-5 bg-white rounded-lg border border-gray-200 shadow-sm'>
-                        <SymptomsBySpecialization
-                            doctorSpecialization={docInfo?.speciality}
-                            doctorName={docInfo?.name || ''}
-                            onSymptomsChange={(symptoms) => {
-                                setSelectedSymptoms(symptoms)
-                                if (symptoms.length > 0) setSymptomError(false)
-                            }}
-                            selectedSymptoms={selectedSymptoms}
-                            isLoading={false}
-                        />
-                        {symptomError && (
-                            <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <p className="text-sm text-red-600 flex items-center gap-2">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Please select at least one symptom
-                                </p>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Time Slots - Two Button Selection Only */}
+                    {/* Time Slots - BookMyShow Premium Style */}
                     <div className='mb-6'>
                         <h3 className='text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2'>
                             <svg className='w-4 h-4 text-cyan-500' fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -965,7 +948,6 @@ const Appointment = () => {
                         </h3>
                         {docSlots.length > 0 && docSlots[slotIndex]?.length > 0 ? (
                             (() => {
-                                // Calculate remaining bookings for each slot type
                                 const slots = docSlots[slotIndex]
                                 const morningSlots = slots.filter(s => {
                                     const timeStr = s.time.toLowerCase()
@@ -982,103 +964,157 @@ const Appointment = () => {
                                     return adjustedHour >= 16 && adjustedHour < 21
                                 })
 
-                                // Calculate remaining bookings - use bookingsRemaining if available, otherwise calculate from slots
-                                const morningRemaining = morningSlots.length > 0
-                                    ? (morningSlots[0].bookingsRemaining ?? morningSlots.length)
-                                    : 0
-                                const eveningRemaining = eveningSlots.length > 0
-                                    ? (eveningSlots[0].bookingsRemaining ?? eveningSlots.length)
-                                    : 0
-
-                                // Determine which slot type is selected based on current slotTime
-                                const selectedTimeStr = slotTime ? slotTime.toLowerCase() : ''
-                                const selectedHour = slotTime ? parseInt(selectedTimeStr.split(':')[0]) : null
-                                const selectedIsPM = selectedTimeStr.includes('pm')
-                                const selectedAdjustedHour = selectedHour && selectedIsPM && selectedHour !== 12
-                                    ? selectedHour + 12
-                                    : (selectedHour && !selectedIsPM && selectedHour === 12
-                                        ? 0
-                                        : selectedHour)
-                                const isMorningSelected = selectedAdjustedHour >= 10 && selectedAdjustedHour < 13
-                                const isEveningSelected = selectedAdjustedHour >= 16 && selectedAdjustedHour < 21
-
                                 return (
-                                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                                        {/* Morning Slot Button */}
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                // If morning is already selected, deselect. Otherwise, select first available morning slot
-                                                if (isMorningSelected) {
-                                                    setSlotTime('')
-                                                } else if (morningSlots.length > 0 && morningRemaining > 0) {
-                                                    setSlotTime(morningSlots[0].time)
-                                                }
-                                            }}
-                                            disabled={morningSlots.length === 0 || morningRemaining === 0}
-                                            className={`flex items-center justify-between px-6 py-4 rounded-xl border-2 transition-all duration-200 ${isMorningSelected
-                                                ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
-                                                : morningSlots.length === 0 || morningRemaining === 0
-                                                    ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed opacity-60'
-                                                    : 'bg-white border-blue-300 text-blue-700 hover:bg-blue-50 cursor-pointer'
-                                                }`}
-                                        >
-                                            <div className='flex items-center gap-3'>
-                                                <svg className='w-5 h-5' fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                                <div className='text-left'>
-                                                    <div className='font-bold text-base'>Morning Slots</div>
-                                                    <div className='text-sm opacity-90'>10 AM - 1 PM</div>
+                                    <div className='space-y-6'>
+                                        {/* Morning Slots */}
+                                        {morningSlots.length > 0 && (
+                                            <div>
+                                                <div className='flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-3'>
+                                                    <span>☀️ Morning Slots</span>
+                                                    <span className='px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px]'>10:00 AM - 01:00 PM</span>
                                                 </div>
-                                            </div>
-                                            <div className='text-right'>
-                                                <div className='font-bold text-lg'>{morningRemaining}</div>
-                                                <div className='text-xs opacity-75'>available</div>
-                                            </div>
-                                        </button>
+                                                <div className='flex flex-wrap gap-2.5'>
+                                                    {morningSlots.map((item, idx) => {
+                                                        const isSelected = slotTime === item.time
+                                                        const isBooked = item.bookingsRemaining === 0
 
-                                        {/* Evening Slot Button */}
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                // If evening is already selected, deselect. Otherwise, select first available evening slot
-                                                if (isEveningSelected) {
-                                                    setSlotTime('')
-                                                } else if (eveningSlots.length > 0 && eveningRemaining > 0) {
-                                                    setSlotTime(eveningSlots[0].time)
-                                                }
-                                            }}
-                                            disabled={eveningSlots.length === 0 || eveningRemaining === 0}
-                                            className={`flex items-center justify-between px-6 py-4 rounded-xl border-2 transition-all duration-200 ${isEveningSelected
-                                                ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
-                                                : eveningSlots.length === 0 || eveningRemaining === 0
-                                                    ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed opacity-60'
-                                                    : 'bg-white border-purple-300 text-purple-700 hover:bg-purple-50 cursor-pointer'
-                                                }`}
-                                        >
-                                            <div className='flex items-center gap-3'>
-                                                <svg className='w-5 h-5' fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                                <div className='text-left'>
-                                                    <div className='font-bold text-base'>Evening Slots</div>
-                                                    <div className='text-sm opacity-90'>4 PM - 9 PM</div>
+                                                        return (
+                                                            <button
+                                                                key={idx}
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    if (isSelected) {
+                                                                        setSlotTime('');
+                                                                    } else {
+                                                                        setSlotTime(item.time);
+                                                                    }
+                                                                }}
+                                                                disabled={isBooked}
+                                                                className={`px-4 py-2.5 text-xs font-bold rounded-lg border-2 transition-all duration-150 flex flex-col items-center justify-center min-w-[100px] cursor-pointer ${
+                                                                    isSelected
+                                                                        ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white border-cyan-500 shadow-md scale-105'
+                                                                        : isBooked
+                                                                            ? 'bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed opacity-50'
+                                                                            : 'bg-white border-gray-200 text-cyan-700 hover:border-cyan-400 hover:bg-cyan-50'
+                                                                }`}
+                                                            >
+                                                                <span>{item.time.toUpperCase()}</span>
+                                                                <span className={`text-[8px] font-bold mt-0.5 ${isSelected ? 'text-cyan-100' : isBooked ? 'text-gray-400' : 'text-emerald-600'}`}>
+                                                                    {isBooked ? 'SOLD OUT' : `${item.bookingsRemaining} LEFT`}
+                                                                </span>
+                                                            </button>
+                                                        )
+                                                    })}
                                                 </div>
                                             </div>
-                                            <div className='text-right'>
-                                                <div className='font-bold text-lg'>{eveningRemaining}</div>
-                                                <div className='text-xs opacity-75'>available</div>
+                                        )}
+
+                                        {/* Evening Slots */}
+                                        {eveningSlots.length > 0 && (
+                                            <div>
+                                                <div className='flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-wider mb-3'>
+                                                    <span>🌙 Evening Slots</span>
+                                                    <span className='px-1.5 py-0.5 rounded bg-purple-50 text-purple-600 text-[10px]'>04:00 PM - 09:00 PM</span>
+                                                </div>
+                                                <div className='flex flex-wrap gap-2.5'>
+                                                    {eveningSlots.map((item, idx) => {
+                                                        const isSelected = slotTime === item.time
+                                                        const isBooked = item.bookingsRemaining === 0
+
+                                                        return (
+                                                            <button
+                                                                key={idx}
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    if (isSelected) {
+                                                                        setSlotTime('');
+                                                                    } else {
+                                                                        setSlotTime(item.time);
+                                                                    }
+                                                                }}
+                                                                disabled={isBooked}
+                                                                className={`px-4 py-2.5 text-xs font-bold rounded-lg border-2 transition-all duration-150 flex flex-col items-center justify-center min-w-[100px] cursor-pointer ${
+                                                                    isSelected
+                                                                        ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white border-cyan-500 shadow-md scale-105'
+                                                                        : isBooked
+                                                                            ? 'bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed opacity-50'
+                                                                            : 'bg-white border-gray-200 text-cyan-700 hover:border-cyan-400 hover:bg-cyan-50'
+                                                                }`}
+                                                            >
+                                                                <span>{item.time.toUpperCase()}</span>
+                                                                <span className={`text-[8px] font-bold mt-0.5 ${isSelected ? 'text-cyan-100' : isBooked ? 'text-gray-400' : 'text-emerald-600'}`}>
+                                                                    {isBooked ? 'SOLD OUT' : `${item.bookingsRemaining} LEFT`}
+                                                                </span>
+                                                            </button>
+                                                        )
+                                                    })}
+                                                </div>
                                             </div>
-                                        </button>
+                                        )}
                                     </div>
                                 )
                             })()
                         ) : (
                             <p className='text-gray-500 text-sm py-4'>No available slots for this date</p>
                         )}
+                    </div>
+
+                    {/* Symptoms Based on Doctor Specialization (between Date & Available Times) */}
+                    <div className='mb-6 p-4 sm:p-5 bg-white rounded-lg border border-gray-200 shadow-sm'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 items-start'>
+                            {/* Left Column: Preset Bubble Selector */}
+                            <div className='space-y-4 w-full'>
+                                <SymptomsBySpecialization
+                                    doctorSpecialization={docInfo?.speciality}
+                                    doctorName={docInfo?.name || ''}
+                                    onSymptomsChange={(symptoms) => {
+                                        setSelectedSymptoms(symptoms)
+                                        if (symptoms.length > 0) setSymptomError(false)
+                                    }}
+                                    selectedSymptoms={selectedSymptoms}
+                                    isLoading={false}
+                                />
+                                {symptomError && (
+                                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                        <p className="text-sm text-red-600 flex items-center gap-2">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Please select at least one symptom or describe your condition
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Right Column: Custom Description Bar */}
+                            <div className='w-full md:border-l md:border-gray-100 md:pl-6 flex flex-col h-full'>
+                                <label className='block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
+                                    <svg className="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Describe your condition or add other symptoms (Optional)
+                                </label>
+                                <textarea
+                                    value={customSymptomsDescription}
+                                    onChange={(e) => {
+                                        setCustomSymptomsDescription(e.target.value);
+                                        if (e.target.value.trim().length > 0) setSymptomError(false);
+                                    }}
+                                    placeholder="E.g., High fever since yesterday morning, moderate throat pain while swallowing, minor headache..."
+                                    maxLength={300}
+                                    rows={4}
+                                    className='w-full flex-1 px-4 py-3 text-xs sm:text-sm rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-500 transition-all duration-200 placeholder-gray-400 resize-none font-medium text-gray-700 min-h-[120px]'
+                                />
+                                <div className='flex justify-between items-center mt-2 text-[10px] sm:text-xs text-gray-400'>
+                                    <span>Be as specific as possible to help your doctor</span>
+                                    <span className={customSymptomsDescription.length >= 280 ? 'text-red-500 font-bold' : ''}>
+                                        {customSymptomsDescription.length}/300 chars
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Upload Reports Section */}
@@ -1361,7 +1397,7 @@ const Appointment = () => {
                                         </motion.div>
                                         <div>
                                             <h3 className='text-white text-xl sm:text-2xl font-bold leading-tight'>Booking Confirmed</h3>
-                                            <p className='text-white/90 text-xs sm:text-sm font-medium mt-1 uppercase tracking-wide'>MediChain Digital Pass</p>
+                                            <p className='text-white/90 text-xs sm:text-sm font-medium mt-1 uppercase tracking-wide'>MediClues Digital Pass</p>
                                         </div>
                                     </div>
                                     <button
@@ -1437,9 +1473,15 @@ const Appointment = () => {
                                         <div className='flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start'>
                                             {/* QR Section */}
                                             <div className='w-full lg:w-auto flex flex-col items-center gap-3 lg:border-r lg:border-dashed lg:border-gray-300 lg:pr-8'>
-                                                <div className='p-3 bg-white rounded-xl border border-gray-200'>
+                                                <a 
+                                                    href={appointmentData.qrData} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer" 
+                                                    title="Click to open Verification Check-in (Developer Shortcut)"
+                                                    className="p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:border-cyan-400 hover:shadow-md transition-all duration-200 flex items-center justify-center"
+                                                >
                                                     <QRCode value={appointmentData.qrData} size={120} level="H" />
-                                                </div>
+                                                </a>
                                                 <p className='text-xs font-semibold text-gray-500 uppercase tracking-wide'>Scan to Check-in</p>
                                             </div>
 

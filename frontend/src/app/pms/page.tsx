@@ -9,7 +9,7 @@ export default function PMSPortal() {
       {/* Navigation */}
       <nav style={{ padding: '1.5rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #000' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.2rem', fontWeight: 900, textDecoration: 'none', color: '#000' }}>
-          <ChevronLeft size={24} /> BACK TO MEDICHAIN+
+          <ChevronLeft size={24} /> BACK TO MEDCLUES+
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.5rem', fontWeight: 900 }}>
           <Activity size={32} /> PMS ECOSYSTEM
@@ -69,7 +69,7 @@ export default function PMSPortal() {
         <ShieldCheck size={40} />
         <div>
           <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '1px' }}>SECURE INTEGRATION</h4>
-          <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>The PMS Ecosystem is fully integrated with MediChain+ security protocols and database infrastructure.</p>
+          <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>The PMS Ecosystem is fully integrated with MediClues+ security protocols and database infrastructure.</p>
         </div>
       </div>
     </div>

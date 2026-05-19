@@ -10,7 +10,7 @@ export default function LogoutPage() {
     // Terminate Active Session
     // Terminate All Active Sessions
     Object.keys(localStorage).forEach(key => {
-      if (key.startsWith("medichain_session")) {
+      if (key.startsWith("medclues_session")) {
         localStorage.removeItem(key);
       }
     });

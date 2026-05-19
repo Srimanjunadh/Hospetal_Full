@@ -39,6 +39,31 @@ async def update_appointment_status(appointment_id: int, status: str, db: AsyncS
     await db.commit()
     return {"message": "Status updated successfully"}
 
+@router.patch("/{appointment_id}")
+async def update_appointment_details(appointment_id: int, data: dict, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Appointment).filter(Appointment.id == appointment_id))
+    appointment = result.scalars().first()
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    if "doctor_id" in data:
+        appointment.doctor_id = data["doctor_id"]
+    if "scheduled_at" in data:
+        from datetime import datetime
+        try:
+            sched_str = data["scheduled_at"]
+            if sched_str:
+                appointment.scheduled_at = datetime.fromisoformat(sched_str.replace("Z", "+00:00"))
+        except Exception as e:
+            pass
+    if "preferred_time" in data:
+        appointment.preferred_time = data["preferred_time"]
+    if "status" in data:
+        appointment.status = data["status"]
+        
+    await db.commit()
+    return {"message": "Appointment updated successfully"}
+
 @router.get("/hospital/{hospital_id}")
 async def get_hospital_appointments(hospital_id: int, db: AsyncSession = Depends(get_db)):
     from sqlalchemy.orm import joinedload

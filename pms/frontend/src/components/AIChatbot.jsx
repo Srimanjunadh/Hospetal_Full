@@ -10,7 +10,7 @@ const AIChatbot = ({ onClose }) => {
     const [messages, setMessages] = useState([
         {
             role: 'assistant',
-            content: "Hello! I'm MediChain+ AI. How can I help you today?"
+            content: "Hello! I'm MediClues+ AI. How can I help you today?"
         }
     ]);
     const [inputMessage, setInputMessage] = useState('');
@@ -93,7 +93,7 @@ const AIChatbot = ({ onClose }) => {
             const errorMessage = {
                 role: 'assistant',
                 content: error.response?.data?.fallbackResponse ||
-                    "We apologize for the inconvenience. Our AI assistant is temporarily unavailable. Please try again in a moment or contact our support team at medichain123@gmail.com for immediate assistance."
+                    "We apologize for the inconvenience. Our AI assistant is temporarily unavailable. Please try again in a moment or contact our support team at medclues123@gmail.com for immediate assistance."
             };
             setMessages(prev => [...prev, errorMessage]);
             toast.error('Failed to get AI response');
@@ -231,7 +231,7 @@ const AIChatbot = ({ onClose }) => {
             console.error('Chat error:', error);
             const errorMessage = {
                 role: 'assistant',
-                content: "We apologize for the inconvenience. Our AI assistant is temporarily unavailable. Please try again in a moment or contact our support team at medichain123@gmail.com for immediate assistance."
+                content: "We apologize for the inconvenience. Our AI assistant is temporarily unavailable. Please try again in a moment or contact our support team at medclues123@gmail.com for immediate assistance."
             };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
@@ -288,7 +288,7 @@ const AIChatbot = ({ onClose }) => {
                             </svg>
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold leading-tight tracking-tight">MediChain+ AI</h3>
+                            <h3 className="text-lg font-bold leading-tight tracking-tight">MediClues+ AI</h3>
                             <p className="text-sm text-white font-medium leading-tight mt-0.5">Your healthcare assistant</p>
                         </div>
                     </div>
@@ -647,7 +647,7 @@ const AIChatbot = ({ onClose }) => {
                         </button>
                     </div>
                     <p className="text-xs text-gray-600 mt-2 text-center font-medium">
-                        Powered by MediChain+ AI • For informational purposes only • Not a substitute for professional medical advice
+                        Powered by MediClues+ AI • For informational purposes only • Not a substitute for professional medical advice
                     </p>
                 </form>
             </div>

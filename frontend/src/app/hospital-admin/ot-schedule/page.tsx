@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useEffect, useState } from "react";
 import { Activity, Clipboard, Clock, CheckCircle2, AlertTriangle, Play, Check, Plus, Trash2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -32,7 +32,7 @@ export default function OTSchedulePage() {
 
   const fetchData = async () => {
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session?.hospital_id) {
         const data = await apiService.getSurgicalSchedules(session.hospital_id);
         setSurgeries(Array.isArray(data) ? data : []);
@@ -70,7 +70,7 @@ export default function OTSchedulePage() {
     }
 
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const payload = {
         hospital_id: session?.hospital_id || 1,
         patient_id: Number(newSurgery.patient_id),
@@ -134,7 +134,7 @@ export default function OTSchedulePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           {/* OT Queue */}
           <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>TODAY'S SURGICAL QUEUE</h3>
               <Clock size={18} />
             </div>
@@ -177,7 +177,7 @@ export default function OTSchedulePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* WHO Checklist */}
           {selectedSurgery ? (
-            <div className="card" style={{ border: '4px solid #000' }}>
+            <div className="card" style={{ border: '4px solid #29ABE2' }}>
               <h3 style={{ fontWeight: 900, fontSize: '0.9rem', marginBottom: '0.5rem' }}>WHO SAFETY CHECKLIST</h3>
               <p style={{ fontSize: '0.6rem', fontWeight: 800, color: '#666', marginBottom: '2rem' }}>PROCEDURE: {selectedSurgery.procedure_name.toUpperCase()}</p>
               
@@ -187,7 +187,7 @@ export default function OTSchedulePage() {
                     onClick={() => toggleChecklist(selectedSurgery.id, item)}
                     style={{ 
                       padding: '12px', 
-                      border: '2px solid #000', 
+                      border: '2px solid #29ABE2', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'space-between',
@@ -196,7 +196,7 @@ export default function OTSchedulePage() {
                       color: selectedSurgery.checklist_status[item] ? '#fff' : '#000'
                     }}>
                     <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>{item.toUpperCase()}</span>
-                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #000' }} />}
+                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #29ABE2' }} />}
                   </div>
                 ))}
               </div>
@@ -221,7 +221,7 @@ export default function OTSchedulePage() {
           background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
         }}>
-          <div className="card" style={{ width: '100%', maxWidth: '600px', background: '#fff', border: '4px solid #000', padding: '2.5rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '600px', background: '#fff', border: '4px solid #29ABE2', padding: '2.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>SCHEDULE NEW SURGERY</h2>
               <button onClick={() => setIsAddModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', fontWeight: 900 }}>✕</button>
@@ -236,7 +236,7 @@ export default function OTSchedulePage() {
                   placeholder="e.g. APPENDECTOMY, CABG, KNEE REPLACEMENT"
                   value={newSurgery.procedure_name}
                   onChange={e => setNewSurgery({...newSurgery, procedure_name: e.target.value})}
-                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700 }}
+                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700 }}
                 />
               </div>
 
@@ -247,7 +247,7 @@ export default function OTSchedulePage() {
                     required
                     value={newSurgery.doctor_id} 
                     onChange={e => setNewSurgery({...newSurgery, doctor_id: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
                   >
                     <option value="">-- Select Doctor --</option>
                     {doctors.map(d => (
@@ -262,7 +262,7 @@ export default function OTSchedulePage() {
                     required
                     value={newSurgery.patient_id} 
                     onChange={e => setNewSurgery({...newSurgery, patient_id: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
                   >
                     <option value="">-- Select Patient --</option>
                     {patients.map(p => (
@@ -278,7 +278,7 @@ export default function OTSchedulePage() {
                   <select 
                     value={newSurgery.ot_room_number} 
                     onChange={e => setNewSurgery({...newSurgery, ot_room_number: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
                   >
                     <option value="OT-101">OT ROOM 101 (CARDIAC / MAJOR)</option>
                     <option value="OT-102">OT ROOM 102 (ORTHO / GENERAL)</option>
@@ -294,7 +294,7 @@ export default function OTSchedulePage() {
                     required
                     value={newSurgery.scheduled_at}
                     onChange={e => setNewSurgery({...newSurgery, scheduled_at: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700 }}
+                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700 }}
                   />
                 </div>
               </div>
@@ -305,12 +305,12 @@ export default function OTSchedulePage() {
                   placeholder="Enter any pre-op notes or equipment requirements..."
                   value={newSurgery.notes}
                   onChange={e => setNewSurgery({...newSurgery, notes: e.target.value})}
-                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #000', fontWeight: 700, minHeight: '80px' }}
+                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, minHeight: '80px' }}
                 />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" onClick={() => setIsAddModalOpen(false)} style={{ padding: '0.8rem 2rem', border: '2px solid #000', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsAddModalOpen(false)} style={{ padding: '0.8rem 2rem', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>
                   CANCEL
                 </button>
                 <button type="submit" className="btn-black" style={{ padding: '0.8rem 2.5rem', fontWeight: 900 }}>

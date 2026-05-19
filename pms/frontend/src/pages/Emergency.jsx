@@ -225,7 +225,7 @@ const Emergency = () => {
     }
   }
 
-  // Fetch nearby verified MediChain+ Partner hospitals
+  // Fetch nearby verified MediClues+ Partner hospitals
   const getPartnerHospitals = async (lat, lon) => {
     try {
       setLoadingPartnerHospitals(true)
@@ -687,7 +687,7 @@ const Emergency = () => {
         <p className="text-gray-600 text-xs sm:text-sm">Quick access to emergency services and contacts</p>
       </div>
 
-      {/* MediChain+ Official Support - NEW */}
+      {/* MediClues+ Official Support - NEW */}
       <div className="mb-4 bg-gradient-to-r from-cyan-600 to-blue-700 rounded-xl p-0.5 shadow-lg overflow-hidden group">
         <div className="bg-white rounded-[10px] p-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -697,7 +697,7 @@ const Emergency = () => {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-black text-cyan-900 uppercase tracking-tighter">Official MediChain+ Support</p>
+              <p className="text-sm font-black text-cyan-900 uppercase tracking-tighter">Official MediClues+ Support</p>
               <p className="text-[10px] font-bold text-cyan-600 uppercase">24/7 Platform Assistance</p>
             </div>
           </div>
@@ -1007,7 +1007,7 @@ const Emergency = () => {
               {partnerHospitals.map((hospital, index) => (
                 <div key={`partner-${index}`} className="p-3 bg-gradient-to-br from-red-50 to-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border-2 border-red-500/30 flex flex-col h-full relative overflow-hidden">
                   <div className="absolute top-0 right-0 px-2 py-0.5 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-bl-lg animate-pulse">
-                    MediChain+ Partner
+                    MediClues+ Partner
                   </div>
                   <div className="flex items-start gap-2 mb-2">
                     <div className="w-7 h-7 bg-red-600 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-md">

@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-DB_PATH = "c:/Users/ASUS/OneDrive/Desktop/ERP/backend/medichain.db"
+DB_PATH = "c:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db"
 
 def clear_data():
     if not os.path.exists(DB_PATH):

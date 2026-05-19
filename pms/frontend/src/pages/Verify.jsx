@@ -94,7 +94,7 @@ const Verify = () => {
         if (!paymentDetails) return
         
         const receiptText = `
-MediChain Healthcare
+MediClues Healthcare
 Payment Receipt
 =====================================
 
@@ -116,7 +116,7 @@ Payment Method: ${paymentDetails.paymentMethod}
 Status: ${paymentDetails.paymentStatus}
 
 =====================================
-Thank you for choosing MediChain Healthcare!
+Thank you for choosing MediClues Healthcare!
         `.trim()
 
         const blob = new Blob([receiptText], { type: 'text/plain' })
@@ -194,7 +194,7 @@ Thank you for choosing MediChain Healthcare!
                                 <BrandLogo size="small" variant="header" clickable={false} className="brightness-0 invert" />
                             </div>
                             <div>
-                                <p className='text-white text-sm md:text-base font-bold tracking-wide'>MediChain</p>
+                                <p className='text-white text-sm md:text-base font-bold tracking-wide'>MediClues</p>
                                 <p className='text-white/70 text-[10px] md:text-xs'>Payment Receipt</p>
                             </div>
                         </div>

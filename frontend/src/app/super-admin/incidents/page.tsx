@@ -20,7 +20,7 @@ export default function IncidentHubPage() {
   const getPriorityStyle = (p: string) => {
     switch(p) {
       case 'CRITICAL': return { color: '#dc2626', bg: '#fef2f2', border: '1px solid #dc2626' };
-      case 'SECURITY': return { color: '#000', bg: '#f4f4f5', border: '2px solid #000' };
+      case 'SECURITY': return { color: '#000', bg: '#f4f4f5', border: '2px solid #29ABE2' };
       case 'FACILITY': return { color: '#f59e0b', bg: '#fff7ed', border: '1px solid #f59e0b' };
       default: return { color: '#999', bg: '#f4f4f5', border: '1px solid #eee' };
     }
@@ -34,11 +34,30 @@ export default function IncidentHubPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>ROOT RESOLUTION TERMINAL • NETWORK-WIDE ADMINISTRATIVE ISSUES</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-outline" onClick={() => showToast("Auditing Incident Archives...", "info")}>
-             <RefreshCcw size={18} /> REFRESH FEED
+          <button 
+            className="btn-outline" 
+            onClick={() => showToast("Auditing Incident Archives...", "info")}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+             <RefreshCcw size={18} /> <span>REFRESH FEED</span>
           </button>
-          <button className="btn-black">
-            <Plus size={18} /> LOG MANUAL INCIDENT
+          <button 
+            className="btn-black"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>LOG MANUAL INCIDENT</span>
           </button>
         </div>
       </div>
@@ -58,7 +77,7 @@ export default function IncidentHubPage() {
           <h2 className="card-value">0.0H</h2>
           <p style={{ fontSize: '0.75rem', fontWeight: 800, marginTop: '1rem', color: '#10b981' }}>SYSTEM OPTIMIZED</p>
         </div>
-        <div className="card" style={{ background: '#000', color: '#fff' }}>
+        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
           <p className="card-title" style={{ color: 'rgba(255,255,255,0.5)' }}>MOST ACTIVE NODE</p>
           <h2 className="card-value">NONE</h2>
           <p style={{ fontSize: '0.75rem', fontWeight: 800, marginTop: '1rem', color: '#10b981' }}>STABLE NETWORK OPS</p>
@@ -88,15 +107,14 @@ export default function IncidentHubPage() {
               style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
             />
           </div>
-          <button className="btn-outline">
-            <Filter size={18} /> PRIORITY
-          </button>
+          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>PRIORITY
+          </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
           <table className="data-table">
             <thead>
-              <tr style={{ background: '#000', color: '#fff' }}>
+              <tr style={{ background: '#29ABE2', color: '#fff' }}>
                 <th style={{ padding: '12px 20px' }}>INCIDENT IDENTITY</th>
                 <th style={{ padding: '12px 20px' }}>SOURCE NODE</th>
                 <th style={{ padding: '12px 20px' }}>RAISED BY</th>

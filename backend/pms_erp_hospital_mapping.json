@@ -176,30 +176,37 @@
   },
   "3": {
     "erp_id": 3,
-    "name": "Test Hospital Facility",
-    "node_code": "TEST01",
-    "admin_username": "hadmin_test",
-    "admin_password": "password123"
+    "name": "Test Apollo Hospital Facility",
+    "node_code": "8144",
+    "admin_username": "apollo_admin_1",
+    "admin_password": "adminpassword123"
   },
   "4": {
     "erp_id": 4,
-    "name": "Sync Test Hospital Facility",
-    "node_code": "SYNC99",
-    "admin_username": "hadmin_sync_99",
-    "admin_password": "password123"
+    "name": "Ramesh Facility",
+    "node_code": "1005",
+    "admin_username": "Ram1",
+    "admin_password": "1122"
   },
   "5": {
     "erp_id": 5,
-    "name": "Final Test Hospital Facility",
-    "node_code": "FINAL1",
-    "admin_username": "hadmin_final_1",
-    "admin_password": "password123"
+    "name": "shankar Facility",
+    "node_code": "5530",
+    "admin_username": "Sha1",
+    "admin_password": "1122"
   },
   "6": {
     "erp_id": 6,
-    "name": "SMNMV Facility",
-    "node_code": "5676",
-    "admin_username": "Javed123",
-    "admin_password": "Javali@786"
+    "name": "Sri Care Hospital Facility",
+    "node_code": "1948",
+    "admin_username": "Sric1",
+    "admin_password": "Sri12"
+  },
+  "2": {
+    "erp_id": 2,
+    "name": "LALITHA  Facility",
+    "node_code": "1348",
+    "admin_username": "Lal1",
+    "admin_password": "1122"
   }
 }

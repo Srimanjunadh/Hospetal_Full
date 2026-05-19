@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-db_path = r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medichain.db"
+db_path = r"C:\Users\ASUS\OneDrive\Desktop\ERP\backend\medclues.db"
 
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()

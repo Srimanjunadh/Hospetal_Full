@@ -34,7 +34,7 @@ export default function DoctorAuthPage() {
   const fetchDoctors = async () => {
     setIsLoading(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       
       const data = await apiService.getDoctors(hId);
@@ -62,7 +62,7 @@ export default function DoctorAuthPage() {
     
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "{}");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "{}");
       const data = await apiService.registerDoctor({
         username: formData.docId.startsWith("DOC") ? formData.docId.toUpperCase() : `DOC-${formData.docId.toUpperCase()}`,
         password: formData.password,

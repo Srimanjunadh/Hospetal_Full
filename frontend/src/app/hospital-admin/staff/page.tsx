@@ -79,7 +79,7 @@ export default function StaffManagementPage() {
   const fetchPersonnel = async () => {
     setIsLoading(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const hId = session?.hospital_id;
       const data = await apiService.getUsers(undefined, hId);
       if (Array.isArray(data)) {
@@ -153,7 +153,7 @@ export default function StaffManagementPage() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const session = JSON.parse(localStorage.getItem("medichain_session") || "null");
+      const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       const node_code = session?.node_code;
 
       let response;
@@ -261,14 +261,44 @@ export default function StaffManagementPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>FACILITY WORKFORCE MANAGEMENT HUB</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-black" onClick={() => { setRegType("doctor"); setShowRegModal(true); }}>
-            <Plus size={18} /> REGISTER CLINICIAN
+          <button 
+            className="btn-black" 
+            onClick={() => { setRegType("doctor"); setShowRegModal(true); }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>REGISTER CLINICIAN</span>
           </button>
-          <button className="btn-outline" onClick={() => { setRegType("nurse"); setShowRegModal(true); }}>
-            <UserPlus size={18} /> REGISTER NURSE
+          <button 
+            className="btn-outline" 
+            onClick={() => { setRegType("nurse"); setShowRegModal(true); }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <UserPlus size={18} /> <span>REGISTER NURSE</span>
           </button>
-          <button className="btn-outline" onClick={() => { setRegType("lab"); setShowRegModal(true); }}>
-            <Plus size={18} /> REGISTER LAB STAFF
+          <button 
+            className="btn-outline" 
+            onClick={() => { setRegType("lab"); setShowRegModal(true); }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexDirection: 'row',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <Plus size={18} /> <span>REGISTER LAB STAFF</span>
           </button>
         </div>
       </div>
@@ -276,8 +306,8 @@ export default function StaffManagementPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
         
         {/* Clinicians Table */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
-          <div style={{ padding: '1.25rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
+          <div style={{ padding: '1.25rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <ShieldCheck size={20} />
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>CLINICAL COMMAND</h3>
@@ -343,8 +373,20 @@ export default function StaffManagementPage() {
                     <td style={{ padding: '12px 20px', textAlign: 'right' }}>
                       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                         {p.role === "DOCTOR" && (
-                          <button className="btn-black" style={{ padding: '6px 10px', fontSize: '0.6rem' }} onClick={() => { setSelectedStaff(p); setShowSchedModal(true); }}>
-                            <Calendar size={14} /> SHIFT
+                          <button 
+                            className="btn-black" 
+                            style={{ 
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              flexDirection: 'row',
+                              whiteSpace: 'nowrap',
+                              padding: '6px 10px', 
+                              fontSize: '0.6rem' 
+                            }} 
+                            onClick={() => { setSelectedStaff(p); setShowSchedModal(true); }}
+                          >
+                            <Calendar size={14} /> <span>SHIFT</span>
                           </button>
                         )}
                         <button disabled style={{ opacity: 0.3, background: 'transparent', border: 'none' }}><Edit3 size={14} /></button>
@@ -361,8 +403,8 @@ export default function StaffManagementPage() {
         </div>
 
         {/* Support Table */}
-        <div className="card" style={{ padding: '0', border: '2px solid #000' }}>
-          <div style={{ padding: '1.25rem 2rem', background: '#000', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
+          <div style={{ padding: '1.25rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Users size={20} />
               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>SUPPORT & NURSING FORCE</h3>
@@ -418,15 +460,39 @@ export default function StaffManagementPage() {
                     </td>
                     <td style={{ padding: '12px 20px', textAlign: 'right' }}>
                       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button className="btn-black" style={{ padding: '6px 10px', fontSize: '0.6rem' }} onClick={() => { 
-                          setSelectedStaff(p); 
-                          setEditData({ name: p.name, username: p.id, password: "", assigned_nurse_id: "" });
-                          setShowEditModal(true); 
-                        }}>
-                          <Edit3 size={14} /> EDIT
+                        <button 
+                          className="btn-black" 
+                          style={{ 
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            flexDirection: 'row',
+                            whiteSpace: 'nowrap',
+                            padding: '6px 10px', 
+                            fontSize: '0.6rem'
+                          }} 
+                          onClick={() => { 
+                            setSelectedStaff(p); 
+                            setEditData({ name: p.name, username: p.id, password: "", assigned_nurse_id: "" });
+                            setShowEditModal(true); 
+                          }}
+                        >
+                          <Edit3 size={14} /> <span>EDIT</span>
                         </button>
-                        <button className="btn-outline" style={{ padding: '6px 10px', fontSize: '0.6rem' }} onClick={() => { setSelectedStaff(p); setShowSchedModal(true); }}>
-                          <Calendar size={14} /> WORK
+                        <button 
+                          className="btn-outline" 
+                          style={{ 
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            flexDirection: 'row',
+                            whiteSpace: 'nowrap',
+                            padding: '6px 10px', 
+                            fontSize: '0.6rem' 
+                          }} 
+                          onClick={() => { setSelectedStaff(p); setShowSchedModal(true); }}
+                        >
+                          <Calendar size={14} /> <span>WORK</span>
                         </button>
                       </div>
                     </td>
@@ -484,21 +550,33 @@ export default function StaffManagementPage() {
       {/* Scheduling Modal */}
       {showSchedModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="card" style={{ width: '450px', padding: '3rem', background: '#fff' }}>
+          <div className="card" style={{ width: '500px', padding: '2.5rem', background: '#fff' }}>
              <h2 style={{ fontWeight: 900, fontSize: '1.25rem', marginBottom: '2rem' }}>ASSIGN WORK: {selectedStaff?.name}</h2>
              <form onSubmit={handleScheduleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
                    <label style={{ fontSize: '0.6rem', fontWeight: 900 }}>TASK NAME</label>
-                   <input type="text" required value={schedData.task_name} onChange={e => setSchedData({...schedData, task_name: e.target.value})} placeholder="E.G. WARD ROUNDS" style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                   <input type="text" required value={schedData.task_name} onChange={e => setSchedData({...schedData, task_name: e.target.value})} placeholder="E.G. WARD ROUNDS" style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800, boxSizing: 'border-box' }} />
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                   <div>
+                   <div style={{ minWidth: 0 }}>
                       <label style={{ fontSize: '0.6rem', fontWeight: 900 }}>START</label>
-                      <input type="datetime-local" required value={schedData.start_time} onChange={e => setSchedData({...schedData, start_time: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                      <input 
+                        type="datetime-local" 
+                        required 
+                        value={schedData.start_time} 
+                        onChange={e => setSchedData({...schedData, start_time: e.target.value})} 
+                        style={{ width: '100%', padding: '12px 8px', background: '#f4f4f5', border: 'none', fontWeight: 800, fontSize: '0.75rem', boxSizing: 'border-box' }} 
+                      />
                    </div>
-                   <div>
+                   <div style={{ minWidth: 0 }}>
                       <label style={{ fontSize: '0.6rem', fontWeight: 900 }}>END</label>
-                      <input type="datetime-local" required value={schedData.end_time} onChange={e => setSchedData({...schedData, end_time: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                      <input 
+                        type="datetime-local" 
+                        required 
+                        value={schedData.end_time} 
+                        onChange={e => setSchedData({...schedData, end_time: e.target.value})} 
+                        style={{ width: '100%', padding: '12px 8px', background: '#f4f4f5', border: 'none', fontWeight: 800, fontSize: '0.75rem', boxSizing: 'border-box' }} 
+                      />
                    </div>
                 </div>
                 <button type="submit" className="btn-black" style={{ marginTop: '1rem' }}>FINALIZE ASSIGNMENT</button>

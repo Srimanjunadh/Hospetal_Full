@@ -9,12 +9,12 @@ const FAQsSection = () => {
       answer: 'Online doctor consultation allows you to book appointments with verified doctors and consult from the comfort of your home. You can discuss your health concerns, get medical advice, and receive digital prescriptions without visiting a clinic.'
     },
     {
-      question: 'Are MediChain doctors verified?',
-      answer: 'Yes, all doctors on MediChain are verified medical professionals with valid licenses. We verify their qualifications, experience, and credentials before they can provide consultations on our platform.'
+      question: 'Are MediClues doctors verified?',
+      answer: 'Yes, all doctors on MediClues are verified medical professionals with valid licenses. We verify their qualifications, experience, and credentials before they can provide consultations on our platform.'
     },
     {
       question: 'Is online consultation safe?',
-      answer: 'Absolutely! MediChain follows HIPAA compliance standards and uses end-to-end encryption for all consultations. Your medical information is kept confidential and secure. All video calls are conducted through secure, encrypted channels.'
+      answer: 'Absolutely! MediClues follows HIPAA compliance standards and uses end-to-end encryption for all consultations. Your medical information is kept confidential and secure. All video calls are conducted through secure, encrypted channels.'
     },
     {
       question: 'What if the doctor doesn\'t respond?',
@@ -26,7 +26,7 @@ const FAQsSection = () => {
     },
     {
       question: 'How are prescriptions provided?',
-      answer: 'After your consultation, the doctor will provide a digital prescription that you can download as a PDF. The prescription includes all medications, dosages, and instructions. You can also access it anytime from your MediChain account.'
+      answer: 'After your consultation, the doctor will provide a digital prescription that you can download as a PDF. The prescription includes all medications, dosages, and instructions. You can also access it anytime from your MediClues account.'
     },
     {
       question: 'Can I consult with doctors from other cities?',
