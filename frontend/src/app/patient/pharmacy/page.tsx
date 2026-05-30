@@ -48,20 +48,14 @@ export default function PharmacyPage() {
 
   return (
     <DashboardLayout role="patient" userName={sessionUser}>
-      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>E-PHARMACY</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SECURE DISPENSARY • LINE-WISE REGISTRY</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)' }}>E-Pharmacy</h1>
+          <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '4px' }}>SECURE DISPENSARY • LINE-WISE REGISTRY</p>
         </div>
         <button 
-          className="btn-black"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            flexDirection: 'row',
-            whiteSpace: 'nowrap'
-          }}
+          className="btn-primary-premium"
+          style={{ padding: '12px 20px', gap: '8px' }}
         >
           <ShoppingCart size={18} /> <span>CART (0)</span>
         </button>
@@ -69,91 +63,89 @@ export default function PharmacyPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem', marginTop: '3rem' }}>
         <div>
-          <div className="card" style={{ padding: '2rem' }}>
-            <h3 style={{ fontWeight: 900, marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>PRESCRIPTION INVENTORY</h3>
-            
-            <div style={{ border: '2px solid #000', maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-              {/* Table Header */}
-              <div style={{ display: 'flex', background: '#000', color: '#fff', padding: '12px 20px', fontSize: '0.65rem', fontWeight: 900, letterSpacing: '1px', position: 'sticky', top: 0, zIndex: 10 }}>
-                <div style={{ width: '60px' }}>S.NO</div>
-                <div style={{ flex: 2 }}>MEDICATION IDENTITY</div>
-                <div style={{ flex: 1 }}>LAST REFILL</div>
-                <div style={{ flex: 1 }}>UNITS</div>
-                <div style={{ flex: 1, textAlign: 'right' }}>AVAILABILITY</div>
-              </div>
-
-              {/* Line-wise Items */}
-              {prescriptions.length === 0 ? (
-                <div style={{ padding: '4rem', textAlign: 'center', fontWeight: 900, opacity: 0.2 }}>INVENTORY EMPTY</div>
-              ) : prescriptions.map((med, i) => (
-                <div key={i} style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  padding: '15px 20px', 
-                  borderBottom: '1px solid #eee',
-                  fontSize: '0.85rem'
-                }}>
-                  <div style={{ width: '60px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</div>
-                  <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Pill size={16} />
-                    <span style={{ fontWeight: 900 }}>{med.name.toUpperCase()}</span>
-                    <span style={{ fontSize: '0.7rem', opacity: 0.5 }}>{med.dosage}</span>
-                  </div>
-                  <div style={{ flex: 1, fontWeight: 700, fontSize: '0.75rem', opacity: 0.6 }}>{med.refilled}</div>
-                  <div style={{ flex: 1, fontWeight: 900 }}>{med.remaining} U</div>
-                  <div style={{ flex: 1, textAlign: 'right' }}>
-                    <div style={{ 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
-                      gap: '6px', 
-                      padding: '4px 10px', 
-                      background: med.status === 'IN STOCK' ? '#ecfdf5' : med.status === 'CRITICAL' ? '#fef2f2' : '#fff7ed',
-                      color: med.status === 'IN STOCK' ? '#059669' : med.status === 'CRITICAL' ? '#dc2626' : '#c2410c',
-                      border: '1px solid currentColor',
-                      fontSize: '0.6rem',
-                      fontWeight: 900
-                    }}>
-                      <Circle size={6} fill="currentColor" />
-                      {med.status}
-                    </div>
-                  </div>
-                </div>
-              ))}
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid #f1f5f9', background: '#f8fafc' }}>
+               <h3 style={{ fontWeight: 800, fontSize: '0.9rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>PRESCRIPTION INVENTORY</h3>
             </div>
-            <style jsx global>{`
-              .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-              .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-              .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
-            `}</style>
+            
+            <div className="table-responsive">
+              <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: '60px' }}>S.NO</th>
+                    <th>MEDICATION IDENTITY</th>
+                    <th>LAST REFILL</th>
+                    <th>UNITS</th>
+                    <th style={{ textAlign: 'right' }}>AVAILABILITY</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {prescriptions.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: '4rem', textAlign: 'center', fontWeight: 700, color: 'var(--text-secondary)' }}>INVENTORY EMPTY</td></tr>
+                  ) : prescriptions.map((med, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <Pill size={16} color="var(--color-accent)" />
+                          <span style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{med.name.toUpperCase()}</span>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{med.dosage}</span>
+                        </div>
+                      </td>
+                      <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>{med.refilled}</td>
+                      <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{med.remaining} U</td>
+                      <td style={{ textAlign: 'right' }}>
+                        <div style={{ 
+                          display: 'inline-flex', 
+                          alignItems: 'center', 
+                          gap: '6px', 
+                          padding: '4px 10px', 
+                          borderRadius: '12px',
+                          background: med.status === 'IN STOCK' ? '#d1fae5' : med.status === 'CRITICAL' ? '#fee2e2' : '#ffedd5',
+                          color: med.status === 'IN STOCK' ? '#059669' : med.status === 'CRITICAL' ? '#dc2626' : '#ea580c',
+                          fontSize: '0.7rem',
+                          fontWeight: 800
+                        }}>
+                          <Circle size={8} fill="currentColor" />
+                          {med.status}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div className="card" style={{ marginTop: '2.5rem' }}>
-            <h3 style={{ fontWeight: 900, marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>OTC SUPPLY CATALOG</h3>
+          <div className="card-premium" style={{ marginTop: '2.5rem', padding: '2rem' }}>
+            <h3 style={{ fontWeight: 800, marginBottom: '1.5rem', fontSize: '0.9rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>OTC SUPPLY CATALOG</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
               {['VITAMIN C', 'PARACETAMOL', 'OMEGA-3', 'INSULIN SYRINGE', 'GAUZE PADS', 'ANTISEPTIC'].map((item) => (
-                <div key={item} style={{ padding: '15px', border: '1px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   <span style={{ fontWeight: 900, fontSize: '0.75rem' }}>{item}</span>
-                   <button className="btn-black" style={{ padding: '4px 8px', fontSize: '0.6rem' }}>ADD</button>
+                <div key={item} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s ease', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.borderColor = '#f1f5f9'}>
+                   <span style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--text-primary)' }}>{item}</span>
+                   <button className="btn-outline-premium" style={{ padding: '6px 12px', fontSize: '0.7rem' }}>ADD</button>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="card">
-          <h3 style={{ fontWeight: 900, marginBottom: '2rem', fontSize: '0.8rem', letterSpacing: '2px' }}>ORDER ARCHIVE</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="card-premium" style={{ padding: '2rem' }}>
+          <h3 style={{ fontWeight: 800, marginBottom: '2rem', fontSize: '0.9rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>ORDER ARCHIVE</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', paddingBottom: '10px', borderBottom: '1px solid #eee' }}>
-                 <Clock size={16} style={{ marginTop: '2px' }} />
-                 <div>
-                   <p style={{ fontSize: '0.8rem', fontWeight: 900 }}>REF-ORD-{9020 + i}</p>
-                   <p style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.4 }}>DELIVERED • APR {20 - i}</p>
+              <div key={i} style={{ display: 'flex', gap: '12px', paddingBottom: '12px', borderBottom: '1px solid #f1f5f9' }}>
+                 <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '8px', color: 'var(--text-secondary)' }}>
+                   <Clock size={16} />
+                 </div>
+                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                   <p style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)' }}>REF-ORD-{9020 + i}</p>
+                   <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>DELIVERED • APR {20 - i}</p>
                  </div>
               </div>
             ))}
           </div>
-          <button className="btn-outline" style={{ width: '100%', marginTop: '2.5rem', fontSize: '0.7rem' }}>
+          <button className="btn-outline-premium" style={{ width: '100%', marginTop: '2.5rem', padding: '12px' }}>
              LOAD FULL HISTORY
           </button>
         </div>

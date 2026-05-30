@@ -8,9 +8,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 from app.db.session import engine, Base, AsyncSessionLocal
 from app.models.models import User, Doctor, Hospital, InventoryItem
 from sqlalchemy import text, select
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from app.core.security import get_password_hash
 
 async def reset_system():
     # 1. Kill old DB
@@ -59,7 +57,7 @@ async def reset_system():
                 username="Manju",
                 name="MANJU MASTER",
                 role="super_admin",
-                hashed_password=pwd_context.hash("1122"),
+                hashed_password=get_password_hash("1122"),
                 cleartext_password="1122",
                 hospital_id=hosp.id
             )
@@ -73,7 +71,7 @@ async def reset_system():
                 username="GOVARDHAN",
                 name="DR. GOVARDHAN",
                 role="doctor",
-                hashed_password=pwd_context.hash("1122"),
+                hashed_password=get_password_hash("1122"),
                 cleartext_password="1122",
                 hospital_id=hosp.id
             )
@@ -94,7 +92,7 @@ async def reset_system():
                 username="PAT-001",
                 name="MANJU (PATIENT)",
                 role="patient",
-                hashed_password=pwd_context.hash("1122"),
+                hashed_password=get_password_hash("1122"),
                 cleartext_password="1122",
                 assigned_doctor_id=doc_profile.id,
                 hospital_id=hosp.id

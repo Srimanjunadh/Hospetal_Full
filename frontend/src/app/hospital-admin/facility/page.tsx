@@ -1,14 +1,32 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Hospital, Truck, Bed, Zap, Wind, Plus, MoreVertical, Search, Filter, ShieldCheck, Activity, MapPin, RefreshCcw } from "lucide-react";
+import { Truck, Bed, Zap, Wind, Plus, Activity, MapPin, Search, Filter } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
+
+interface Ambulance {
+  dbId: number;
+  id: string;
+  crew: string;
+  phone: string;
+  size: string;
+  location: string;
+  status: string;
+}
+
+interface RoomControlItem {
+  dbId: number;
+  id: string;
+  dept: string;
+  o2: string;
+  status: string;
+}
 
 export default function FacilityControlPage() {
   const { showToast } = useToast();
   const [mounted, setMounted] = useState(false);
-  const [ambulances, setAmbulances] = useState<any[]>([]);
-  const [roomControl, setRoomControl] = useState<any[]>([]);
+  const [ambulances, setAmbulances] = useState<Ambulance[]>([]);
+  const [roomControl, setRoomControl] = useState<RoomControlItem[]>([]);
   const [utilityStatus, setUtilityStatus] = useState({
     power: "OPTIMAL",
     oxygen: "OPTIMAL",
@@ -24,21 +42,11 @@ export default function FacilityControlPage() {
     location: "BASE 1 - MAIN WING"
   });
 
-  useEffect(() => {
-    setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
-    if (session?.hospital_id) {
-      fetchFacilityData(session.hospital_id);
-      const interval = setInterval(() => fetchFacilityData(session.hospital_id), 10000);
-      return () => clearInterval(interval);
-    }
-  }, []);
-
   const fetchFacilityData = async (hospitalId: number) => {
     try {
       const { apiService } = await import("@/services/api");
       const ambData = await apiService.getAmbulances(hospitalId);
-      setAmbulances(ambData.map((a: any) => ({
+      setAmbulances(ambData.map((a: { id: number; vehicle_number: string; driver_name: string; driver_phone?: string; vehicle_size?: string; location: string; status: string; }) => ({
         dbId: a.id,
         id: a.vehicle_number,
         crew: a.driver_name,
@@ -49,7 +57,7 @@ export default function FacilityControlPage() {
       })));
 
       const bedData = await apiService.getBeds(hospitalId);
-      setRoomControl(bedData.map((b: any) => ({
+      setRoomControl(bedData.map((b: { id: number; room_number: string; bed_number: string; dept?: string; o2_lvl?: string; status: string; }) => ({
         dbId: b.id,
         id: `${b.room_number}-${b.bed_number}`,
         dept: b.dept || "GENERAL",
@@ -63,29 +71,39 @@ export default function FacilityControlPage() {
         oxygen: Math.random() > 0.9 ? "STABLE" : "OPTIMAL",
         hvac: utilityStatus.hvac
       });
-    } catch (e) {
+    } catch {
       showToast("Facility sync error", "error");
     }
   };
 
-  const handleDispatch = async (amb: any) => {
+  useEffect(() => {
+    setMounted(true);
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
+    if (session?.hospital_id) {
+      fetchFacilityData(session.hospital_id);
+      const interval = setInterval(() => fetchFacilityData(session.hospital_id), 10000);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  const handleDispatch = async (amb: Ambulance) => {
     try {
       const { apiService } = await import("@/services/api");
       await apiService.updateAmbulanceStatus(amb.dbId, "ENGAGED");
       showToast(`Dispatching ${amb.id} to Emergency Node`, "success");
       const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       fetchFacilityData(session.hospital_id);
-    } catch (e) { showToast("Dispatch failed", "error"); }
+    } catch { showToast("Dispatch failed", "error"); }
   };
 
-  const handleService = async (room: any) => {
+  const handleService = async (room: RoomControlItem) => {
     try {
       const { apiService } = await import("@/services/api");
       await apiService.updateBedStatus(room.dbId, "maintenance");
       showToast(`Room ${room.id} marked for maintenance`, "info");
       const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       fetchFacilityData(session.hospital_id);
-    } catch (e) { showToast("Service update failed", "error"); }
+    } catch { showToast("Service update failed", "error"); }
   };
 
   const handleAddAmbulanceSubmit = async () => {
@@ -120,8 +138,8 @@ export default function FacilityControlPage() {
         location: "BASE 1 - MAIN WING"
       });
       fetchFacilityData(session.hospital_id);
-    } catch (e: any) {
-      showToast(e.message || "Failed to add ambulance", "error");
+    } catch (e) {
+      showToast((e as Error).message || "Failed to add ambulance", "error");
     }
   };
 
@@ -129,92 +147,81 @@ export default function FacilityControlPage() {
 
   return (
     <DashboardLayout role="hospital_admin" userName="Admin Manju">
-      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>FACILITY CONTROL TERMINAL</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>INFRASTRUCTURE MONITORING • AMBULANCE DISPATCH</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Facility Control Terminal</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Infrastructure Monitoring & Ambulance Dispatch Control</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div style={{ display: 'flex', gap: '12px' }}>
           <button 
-            className="btn-black" 
+            className="btn-outline-premium" 
             onClick={() => setShowAddAmbulance(true)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              flexDirection: 'row',
-              whiteSpace: 'nowrap'
-            }}
+            style={{ height: '42px', padding: '0 1.25rem' }}
           >
-            <Plus size={18} /> <span>ADD AMBULANCE</span>
+            <Plus size={16} /> <span>Add Ambulance Unit</span>
           </button>
           <button 
-            className="btn-black" 
+            className="btn-primary-premium" 
             onClick={() => showToast("Deploying Global Emergency Fleet", "success")}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              flexDirection: 'row',
-              whiteSpace: 'nowrap'
-            }}
+            style={{ height: '42px', padding: '0 1.25rem' }}
           >
-            <Truck size={18} /> <span>DISPATCH EMERGENCY</span>
+            <Truck size={16} /> <span>Dispatch Emergency</span>
           </button>
         </div>
       </div>
 
       {showAddAmbulance && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="card" style={{ width: '500px', background: '#fff', color: '#000', border: '2px solid #29ABE2', padding: '2.5rem', boxShadow: '10px 10px 0px #000' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid #29ABE2', paddingBottom: '1rem' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '1rem' }}>
+          <div className="card-premium" style={{ width: '100%', maxWidth: '480px', background: '#fff', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Truck size={24} />
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '1px' }}>ADD AMBULANCE UNIT</h2>
+                <Truck size={20} style={{ color: 'var(--bg-side)' }} />
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)' }}>Add Ambulance Unit</h2>
               </div>
-              <button style={{ background: 'transparent', border: 'none', fontSize: '1.5rem', fontWeight: 900, cursor: 'pointer' }} onClick={() => setShowAddAmbulance(false)}>×</button>
+              <button style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => setShowAddAmbulance(false)}>✕</button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>VEHICLE REGISTRATION NUMBER *</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Vehicle Registration Number *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. KA-04-EM-2026" 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   value={newAmbulance.vehicle_number}
                   onChange={(e) => setNewAmbulance({...newAmbulance, vehicle_number: e.target.value})}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>ASSIGNED CREW / EMT LEAD *</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Assigned Crew / EMT Lead *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. Ramesh Kumar (EMT-P)" 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   value={newAmbulance.driver_name}
                   onChange={(e) => setNewAmbulance({...newAmbulance, driver_name: e.target.value})}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>CREW MOBILE NUMBER *</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Crew Mobile Number *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. +91 98765 43210" 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   value={newAmbulance.driver_phone}
                   onChange={(e) => setNewAmbulance({...newAmbulance, driver_phone: e.target.value})}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>VEHICLE SIZE</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Vehicle Size</label>
                 <select 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none', background: '#fff' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none', cursor: 'pointer' }}
                   value={newAmbulance.vehicle_size}
                   onChange={(e) => setNewAmbulance({...newAmbulance, vehicle_size: e.target.value})}
+                  title="Vehicle Size"
                 >
                   <option value="SMALL">SMALL (BASIC LIFE SUPPORT)</option>
                   <option value="MEDIUM">MEDIUM (ADVANCED LIFE SUPPORT)</option>
@@ -223,11 +230,12 @@ export default function FacilityControlPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>OPERATIONAL STATUS</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Operational Status</label>
                 <select 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none', background: '#fff' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none', cursor: 'pointer' }}
                   value={newAmbulance.status}
                   onChange={(e) => setNewAmbulance({...newAmbulance, status: e.target.value})}
+                  title="Operational Status"
                 >
                   <option value="READY">READY (STANDBY)</option>
                   <option value="ENGAGED">ENGAGED (DISPATCHED)</option>
@@ -236,29 +244,30 @@ export default function FacilityControlPage() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '1px' }}>STATION / BASE LOCATION</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Station / Base Location</label>
                 <input 
                   type="text" 
                   placeholder="e.g. BASE 1 - MAIN WING" 
-                  style={{ width: '100%', padding: '12px 16px', border: '2px solid #29ABE2', fontSize: '0.9rem', fontWeight: 700, outline: 'none' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   value={newAmbulance.location}
                   onChange={(e) => setNewAmbulance({...newAmbulance, location: e.target.value})}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '1rem' }}>
                 <button 
-                  style={{ flex: 1, padding: '12px', background: 'transparent', border: '2px solid #29ABE2', fontWeight: 900, cursor: 'pointer' }}
+                  className="btn-outline-premium"
+                  style={{ flex: 1, justifyContent: 'center' }}
                   onClick={() => setShowAddAmbulance(false)}
                 >
-                  CANCEL
+                  Cancel
                 </button>
                 <button 
-                  className="btn-black"
-                  style={{ flex: 1, padding: '12px', fontWeight: 900, textAlign: 'center', justifyContent: 'center' }}
+                  className="btn-primary-premium"
+                  style={{ flex: 2, justifyContent: 'center' }}
                   onClick={handleAddAmbulanceSubmit}
                 >
-                  DEPLOY UNIT
+                  Deploy Unit
                 </button>
               </div>
             </div>
@@ -266,88 +275,142 @@ export default function FacilityControlPage() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '3rem', marginTop: '3rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
           
           {/* Ambulance Fleet Monitor */}
-          <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.25rem 2rem', background: 'rgba(14, 165, 233, 0.06)', borderBottom: '1px solid rgba(14, 165, 233, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Truck size={20} />
-                <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>AMBULANCE FLEET REGISTRY</h3>
+                <Truck size={18} style={{ color: '#0ea5e9' }} />
+                <h3 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0ea5e9', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Ambulance Fleet Registry</h3>
               </div>
-              <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>GPS SYNC ACTIVE</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ position: 'relative' }}>
+                  <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                  <input type="text" placeholder="Search fleet..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+                </div>
+                <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <Filter size={14} /> FILTER
+                </button>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '12px' }}>
+                  GPS Sync Active
+                </span>
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', height: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-              {ambulances.map((amb, i) => (
-                <div key={i} style={{ padding: '1.25rem 2rem', borderBottom: '1px solid #eee', display: 'flex', gap: '20px', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</span>
-                  <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                      <div style={{ padding: '10px', background: '#f4f4f5', border: '1px solid #000' }}>
-                        <Truck size={18} />
-                      </div>
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{amb.id}</p>
-                          <span className="badge" style={{ fontSize: '0.55rem', background: '#e4e4e7', color: '#000' }}>{amb.size}</span>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
+              {ambulances.map((amb, i) => {
+                let statusBg = '#ecfdf5';
+                let statusColor = '#059669';
+                if (amb.status === 'ENGAGED') {
+                  statusBg = '#e0f2fe';
+                  statusColor = '#0284c7';
+                } else if (amb.status === 'MAINTENANCE') {
+                  statusBg = '#fffbeb';
+                  statusColor = '#d97706';
+                }
+                                return (
+                  <div key={i} style={{ padding: '1.25rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-secondary)', opacity: 0.4 }}>{(i + 1).toString().padStart(2, '0')}</span>
+                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <div style={{ padding: '10px', background: '#f1f5f9', borderRadius: '8px', color: 'var(--text-secondary)' }}>
+                          <Truck size={18} />
                         </div>
-                        <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#666' }}>{amb.crew} • <span style={{ color: '#999' }}>{amb.phone}</span></p>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                            <h4 style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{amb.id}</h4>
+                            <span style={{ fontSize: '0.65rem', fontWeight: 700, background: '#f1f5f9', color: 'var(--text-secondary)', padding: '2px 6px', borderRadius: '4px' }}>{amb.size}</span>
+                          </div>
+                          <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-secondary)' }}>{amb.crew} • <span style={{ fontWeight: 600 }}>{amb.phone}</span></p>
+                        </div>
                       </div>
                     </div>
+                    
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <div style={{ textAlign: 'right' }}>
-                         <p style={{ fontSize: '0.75rem', fontWeight: 900 }}><MapPin size={12} style={{ marginRight: '4px' }} /> {amb.location}</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                          <MapPin size={14} /> <span>{amb.location}</span>
+                        </div>
+                        <span style={{ 
+                          fontSize: '0.65rem', 
+                          fontWeight: 700, 
+                          padding: '2px 8px', 
+                          borderRadius: '10px',
+                          background: statusBg,
+                          color: statusColor
+                        }}>{amb.status}</span>
                       </div>
-                      <button 
-                        className="btn-black" 
-                        style={{ padding: '6px 12px', fontSize: '0.6rem' }}
-                        onClick={() => handleDispatch(amb)}
-                        disabled={amb.status !== 'READY'}
-                      >
-                        {amb.status === 'READY' ? 'DISPATCH' : 'ENGAGED'}
-                      </button>
+                      {amb.status === 'READY' && (
+                        <button 
+                          className="btn-primary-premium"
+                          style={{ padding: '6px 14px', fontSize: '0.75rem', height: '32px' }}
+                          onClick={() => handleDispatch(amb)}
+                        >
+                          Dispatch
+                        </button>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* Room Control Terminal */}
-          <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ROOM INVENTORY DATABASE</h3>
-               <Bed size={18} />
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.25rem 2rem', background: 'rgba(6, 125, 113, 0.05)', borderBottom: '1px solid rgba(6, 125, 113, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                 <Bed size={18} style={{ color: 'var(--bg-side)' }} />
+                 <h3 style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--bg-side)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Room Inventory Database</h3>
+               </div>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                 <div style={{ position: 'relative' }}>
+                   <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                   <input type="text" placeholder="Search rooms..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+                 </div>
+                 <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                   <Filter size={14} /> FILTER
+                 </button>
+               </div>
             </div>
-            <div style={{ height: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-              <table className="data-table" style={{ border: 'none' }}>
+            <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
+              <table className="data-table-premium" style={{ border: 'none' }}>
                 <thead>
-                  <tr style={{ position: 'sticky', top: 0, background: '#f9fafb', zIndex: 10 }}>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>ROOM ID</th>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>DEPT</th>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>O2 LVL</th>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>STATUS</th>
-                    <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>ACTION</th>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Room ID</th>
+                    <th>Dept</th>
+                    <th>O2 Level</th>
+                    <th>Status</th>
+                    <th style={{ textAlign: 'right' }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {roomControl.map((room, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                      <td style={{ padding: '12px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: 900 }}>{room.id}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: 800, opacity: 0.5 }}>{room.dept}</td>
-                      <td style={{ padding: '12px 20px', fontWeight: 800 }}>{room.o2}</td>
-                      <td style={{ padding: '12px 20px' }}>
-                        <span className="badge" style={{ fontSize: '0.6rem' }}>{room.status}</span>
+                    <tr key={i}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{room.id}</td>
+                      <td style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>{room.dept}</td>
+                      <td style={{ fontWeight: 700 }}>{room.o2}</td>
+                      <td>
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          fontWeight: 700, 
+                          padding: '4px 8px', 
+                          borderRadius: '12px',
+                          background: room.status === 'AVAILABLE' ? '#ecfdf5' : '#fef2f2',
+                          color: room.status === 'AVAILABLE' ? '#059669' : '#dc2626'
+                        }}>{room.status}</span>
                       </td>
-                      <td style={{ padding: '12px 20px' }}>
+                      <td style={{ textAlign: 'right' }}>
                          <button 
-                          style={{ background: 'transparent', border: '1px solid #000', padding: '4px 8px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}
+                          className="btn-outline-premium"
+                          style={{ padding: '4px 10px', fontSize: '0.7rem', height: '28px' }}
                           onClick={() => handleService(room)}
                          >
-                            SERVICE
+                            Service
                          </button>
                       </td>
                     </tr>
@@ -356,49 +419,46 @@ export default function FacilityControlPage() {
               </table>
             </div>
           </div>
-          <style jsx global>{`
-            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-            .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-            .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-          `}</style>
         </div>
 
         {/* Infrastructure Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div className="card">
-             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '2rem' }}>UTILITY HEARTBEAT</h3>
-             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{ padding: '1.5rem', background: '#f4f4f5', borderLeft: '4px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="card-premium">
+             <h3 style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Utility Heartbeat</h3>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ padding: '1rem 1.25rem', background: '#f8fafc', borderLeft: '4px solid #0284c7', borderRadius: '0 8px 8px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                     <Zap size={20} />
-                     <span style={{ fontWeight: 900, fontSize: '0.8rem' }}>POWER GRID</span>
+                     <Zap size={18} style={{ color: '#0284c7' }} />
+                     <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-primary)' }}>Power Grid</span>
                    </div>
                    <button 
-                    style={{ background: 'transparent', border: 'none', color: utilityStatus.power === 'OPTIMAL' ? '#10b981' : '#f59e0b', fontWeight: 900, fontSize: '0.7rem', cursor: 'pointer' }}
+                    style={{ background: 'transparent', border: 'none', color: utilityStatus.power === 'OPTIMAL' ? '#059669' : '#d97706', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer' }}
                     onClick={() => showToast(`Power Grid Audit: ${utilityStatus.power}`, "info")}
                    >
                      {utilityStatus.power}
                    </button>
                 </div>
-                <div style={{ padding: '1.5rem', background: '#f4f4f5', borderLeft: '4px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                
+                <div style={{ padding: '1rem 1.25rem', background: '#f8fafc', borderLeft: '4px solid #059669', borderRadius: '0 8px 8px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                     <Wind size={20} />
-                     <span style={{ fontWeight: 900, fontSize: '0.8rem' }}>OXYGEN NODE</span>
+                     <Wind size={18} style={{ color: '#059669' }} />
+                     <span style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-primary)' }}>Oxygen Node</span>
                    </div>
                    <button 
-                    style={{ background: 'transparent', border: 'none', color: utilityStatus.oxygen === 'OPTIMAL' ? '#10b981' : '#3b82f6', fontWeight: 900, fontSize: '0.7rem', cursor: 'pointer' }}
+                    style={{ background: 'transparent', border: 'none', color: utilityStatus.oxygen === 'OPTIMAL' ? '#059669' : '#0284c7', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer' }}
                     onClick={() => showToast(`Oxygen Node Audit: ${utilityStatus.oxygen}`, "info")}
                    >
                      {utilityStatus.oxygen}
                    </button>
                 </div>
-                <div style={{ padding: '1.5rem', background: '#f4f4f5', borderLeft: '4px solid #dc2626', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                
+                <div style={{ padding: '1rem 1.25rem', background: '#fef2f2', borderLeft: '4px solid #dc2626', borderRadius: '0 8px 8px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                     <Activity size={20} />
-                     <span style={{ fontWeight: 900, fontSize: '0.8rem' }}>HVAC SYSTEM</span>
+                     <Activity size={18} style={{ color: '#dc2626' }} />
+                     <span style={{ fontWeight: 700, fontSize: '0.8rem', color: '#991b1b' }}>HVAC System</span>
                    </div>
                    <button 
-                    style={{ background: 'transparent', border: 'none', color: '#dc2626', fontWeight: 900, fontSize: '0.7rem', cursor: 'pointer' }}
+                    style={{ background: 'transparent', border: 'none', color: '#dc2626', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer' }}
                     onClick={() => showToast("HVAC Service Team Status: " + utilityStatus.hvac, "error")}
                    >
                      {utilityStatus.hvac}
@@ -407,13 +467,13 @@ export default function FacilityControlPage() {
              </div>
           </div>
 
-          <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem' }}>FACILITY NOTES</h3>
+          <div className="card-premium" style={{ background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--bg-side-dark) 100%)', border: 'none', color: '#fff' }}>
+             <h3 style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '1rem' }}>Facility Notes</h3>
              <textarea 
-               placeholder="ENTER ADMINISTRATIVE FACILITY OBSERVATIONS..." 
-               style={{ width: '100%', height: '150px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '1rem', fontSize: '0.8rem', outline: 'none' }}
+               placeholder="Enter administrative facility observations or handover logs..." 
+               style={{ width: '100%', height: '140px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '10px', color: '#fff', padding: '1rem', fontSize: '0.85rem', outline: 'none', resize: 'none' }}
              ></textarea>
-             <button className="btn-black" style={{ background: '#fff', color: '#000', width: '100%', marginTop: '1.5rem' }} onClick={() => showToast("Facility Log Synchronized", "success")}>SAVE LOG</button>
+             <button className="btn-primary-premium" style={{ background: '#fff', color: 'var(--bg-side)', width: '100%', marginTop: '1.25rem', height: '42px', justifyContent: 'center' }} onClick={() => showToast("Facility Log Synchronized", "success")}>Save Handover Log</button>
           </div>
         </div>
       </div>

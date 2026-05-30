@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { Users, Search, Filter, Download, Activity, Plus, MessageSquare, Circle, ExternalLink, User } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -67,41 +67,48 @@ export default function DoctorPatientsPage() {
 
   return (
     <DashboardLayout role="doctor" userName={sessionUser}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>PATIENT REGISTRY</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>STATION ID: MED-ALPHA-09 • {currentDateTime.toUpperCase()}</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+            Patient Registry
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '4px' }}>
+            STATION ID: <span style={{ color: 'var(--color-accent)', fontWeight: 800 }}>MED-ALPHA-09</span> • {currentDateTime.toUpperCase()}
+          </p>
         </div>
-        <button className="btn-black" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Plus size={18} /> <span>REGISTER PATIENT
-        </span></button>
+        <button className="btn-primary-premium">
+          <Plus size={18} /> <span>REGISTER PATIENT</span>
+        </button>
       </div>
 
-      <div className="card" style={{ padding: '2rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
+      <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', gap: '1rem', padding: '1.5rem', background: '#fff', borderBottom: '1px solid #f1f5f9' }}>
           <div style={{ flex: 1, position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
             <input 
               type="text" 
+              className="search-input-premium"
               placeholder="SEARCH CLINICAL DATABASE BY NAME, ID, OR CONDITION" 
-              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
+              style={{ width: '100%', maxWidth: 'none', background: '#f8fafc' }}
             />
           </div>
-          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>TRIAGE
-          </span></button>
+          <button className="btn-outline-premium">
+            <Filter size={18} /> <span>TRIAGE</span>
+          </button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
-          <table className="data-table">
+        <div className="table-responsive">
+          <table className="data-table-premium">
             <thead>
-              <tr style={{ background: '#29ABE2', color: '#fff' }}>
-                <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                <th style={{ padding: '12px 20px' }}>PATIENT IDENTITY</th>
-                <th style={{ padding: '12px 20px' }}>SYSTEM ID</th>
-                <th style={{ padding: '12px 20px' }}>CLINICAL CONDITION</th>
-                <th style={{ padding: '12px 20px' }}>LAST VISIT</th>
-                <th style={{ padding: '12px 20px' }}>PRIORITY</th>
-                <th style={{ padding: '12px 20px' }}>STATUS</th>
-                <th style={{ padding: '12px 20px' }}>ACTIONS</th>
+              <tr style={{ background: '#f8fafc' }}>
+                <th style={{ width: '80px' }}>S.NO</th>
+                <th style={{ minWidth: '250px' }}>PATIENT IDENTITY</th>
+                <th style={{ width: '150px' }}>SYSTEM ID</th>
+                <th style={{ width: '200px' }}>CLINICAL CONDITION</th>
+                <th style={{ width: '150px' }}>LAST VISIT</th>
+                <th style={{ width: '120px' }}>PRIORITY</th>
+                <th style={{ width: '120px' }}>STATUS</th>
+                <th style={{ textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -109,53 +116,68 @@ export default function DoctorPatientsPage() {
                 const styles = getStatusStyles(pt.status);
                 return (
                   <tr key={i} style={{ 
-                    background: styles.bg,
-                    borderLeft: `6px solid ${styles.border}`
-                  }}>
-                    <td style={{ padding: '10px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                    <td style={{ padding: '10px 20px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                         <div style={{ width: '32px', height: '32px', background: styles.badgeBg, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.7rem' }}>{pt.name.charAt(0)}</div>
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = '#f0fdfa'; e.currentTarget.style.transform = 'scale(1.005)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+                  >
+                    <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                         <div style={{ 
+                           width: '40px', height: '40px', 
+                           background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', 
+                           color: '#fff', 
+                           display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                           fontWeight: 800, fontSize: '1rem',
+                           borderRadius: '10px',
+                           boxShadow: '0 4px 10px rgba(14, 168, 155, 0.2)'
+                         }}>{pt.name.charAt(0)}</div>
                          <Link href={`/doctor/patients/${pt.id}`} style={{ textDecoration: 'none', color: '#000' }}>
-                            <span style={{ fontWeight: '900', fontSize: '0.85rem', borderBottom: '1px solid transparent' }} onMouseOver={(e) => e.currentTarget.style.borderBottomColor = '#000'} onMouseOut={(e) => e.currentTarget.style.borderBottomColor = 'transparent'}>{pt.name}</span>
+                            <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{pt.name}</span>
                          </Link>
                       </div>
                     </td>
-                    <td style={{ padding: '10px 20px', fontWeight: 900, fontSize: '0.8rem', opacity: 0.5 }}>{pt.id}</td>
-                    <td style={{ padding: '10px 20px', fontWeight: 800, fontSize: '0.8rem' }}>{pt.condition}</td>
-                    <td style={{ padding: '10px 20px', fontWeight: 900, fontSize: '0.85rem' }}>{pt.lastVisit}</td>
-                    <td style={{ padding: '10px 20px' }}>
-                      <span style={{ fontSize: '0.65rem', fontWeight: 900, color: styles.text }}>{pt.risk}</span>
+                    <td style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{pt.id}</td>
+                    <td style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      <span style={{ background: '#f1f5f9', padding: '4px 10px', borderRadius: '12px' }}>{pt.condition}</span>
                     </td>
-                    <td style={{ padding: '10px 20px' }}>
+                    <td style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-primary)' }}>{pt.lastVisit}</td>
+                    <td>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: styles.text }}>{pt.risk}</span>
+                    </td>
+                    <td>
                       <div style={{ 
                         display: 'inline-flex', 
                         alignItems: 'center', 
                         gap: '6px', 
-                        padding: '4px 10px', 
-                        background: styles.badgeBg,
-                        color: styles.badgeText,
-                        fontSize: '0.6rem',
-                        fontWeight: 900
+                        padding: '6px 12px', 
+                        background: styles.bg,
+                        color: styles.text,
+                        fontSize: '0.7rem',
+                        fontWeight: 800,
+                        borderRadius: '20px'
                       }}>
-                        <Circle size={6} fill="currentColor" />
+                        <Circle size={8} fill="currentColor" />
                         {pt.status}
                       </div>
                     </td>
-                    <td style={{ padding: '10px 20px' }}>
-                      <div style={{ display: 'flex', gap: '12px' }}>
-                        <Link href={`/doctor/patients/${pt.id}`} style={{ color: '#000' }} title="View Detailed Profile">
-                          <ExternalLink size={16} />
+                    <td style={{ textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', color: 'var(--text-secondary)' }}>
+                        <Link href={`/doctor/patients/${pt.id}`} style={{ color: 'inherit', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-accent)'} onMouseOut={(e) => e.currentTarget.style.color = 'inherit'} title="View Detailed Profile">
+                          <ExternalLink size={18} />
                         </Link>
                         <button 
-                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#000' }}
+                          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'inherit', transition: 'color 0.2s' }}
+                          onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-blue)'} onMouseOut={(e) => e.currentTarget.style.color = 'inherit'}
                           onClick={() => showToast(`Establishing encrypted link to ${pt.name}...`, "info")}
                           title="Message Patient"
                         >
-                          <MessageSquare size={16} />
+                          <MessageSquare size={18} />
                         </button>
-                        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} onClick={() => showToast(`Synchronizing EHR: ${pt.id}`, "success")} title="Access Health Records"><Activity size={16} /></button>
-                        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} onClick={() => showToast(`Exporting Clinical Data: ${pt.name}`, "info")} title="Download Records"><Download size={16} /></button>
+                        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'inherit', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-orange)'} onMouseOut={(e) => e.currentTarget.style.color = 'inherit'} onClick={() => showToast(`Synchronizing EHR: ${pt.id}`, "success")} title="Access Health Records"><Activity size={18} /></button>
+                        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'inherit', transition: 'color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-primary)'} onMouseOut={(e) => e.currentTarget.style.color = 'inherit'} onClick={() => showToast(`Exporting Clinical Data: ${pt.name}`, "info")} title="Download Records"><Download size={18} /></button>
                       </div>
                     </td>
                   </tr>

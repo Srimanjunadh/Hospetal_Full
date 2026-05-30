@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import { Activity, Clipboard, Clock, Play, Check } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -52,83 +52,99 @@ export default function DoctorOTSchedulePage() {
 
   return (
     <DashboardLayout role="doctor" userName={sessionUser}>
-      <div style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>SURGICAL CENTER COMMAND</h1>
-        <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>OPERATING THEATER (OT) QUEUE & READINESS CHECKLISTS</p>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+          Surgical Center Command
+        </h1>
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '4px' }}>
+          OPERATING THEATER (OT) QUEUE & READINESS CHECKLISTS
+        </p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '3rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           {/* OT Queue */}
-          <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>TODAY'S SURGICAL QUEUE</h3>
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.5rem 2rem', background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px' }}>TODAY'S SURGICAL QUEUE</h3>
               <Clock size={18} />
             </div>
-            <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="custom-scrollbar">
+            <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
               {!Array.isArray(surgeries) || surgeries.length === 0 ? (
-                <div style={{ padding: '3rem', textAlign: 'center', opacity: 0.3, fontWeight: 900 }}>NO SURGERIES SCHEDULED</div>
+                <div style={{ padding: '3rem', textAlign: 'center', opacity: 0.5, fontWeight: 700, color: 'var(--text-secondary)' }}>NO SURGERIES SCHEDULED</div>
               ) : (
                 surgeries.map((s, i) => (
-                  <div key={i} style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #eee', display: 'flex', gap: '20px', alignItems: 'center', cursor: 'pointer', background: selectedSurgery?.id === s.id ? '#f4f4f5' : '#fff' }} onClick={() => setSelectedSurgery(s)}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3, width: '30px' }}>{(i + 1).toString().padStart(2, '0')}</span>
+                  <div key={i} 
+                    style={{ 
+                      padding: '1.5rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', gap: '20px', alignItems: 'center', cursor: 'pointer', 
+                      background: selectedSurgery?.id === s.id ? '#f0fdfa' : '#fff',
+                      transition: 'all 0.2s ease',
+                      borderLeft: selectedSurgery?.id === s.id ? '4px solid var(--color-accent)' : '4px solid transparent'
+                    }} 
+                    onMouseOver={(e) => { if(selectedSurgery?.id !== s.id) e.currentTarget.style.background = '#f8fafc'; }}
+                    onMouseOut={(e) => { if(selectedSurgery?.id !== s.id) e.currentTarget.style.background = '#fff'; }}
+                    onClick={() => setSelectedSurgery(s)}
+                  >
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', width: '30px' }}>{(i + 1).toString().padStart(2, '0')}</span>
                     <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
-                        <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{s.procedure_name.toUpperCase()}</p>
-                        <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-secondary)' }}>OT ROOM {s.ot_room_number} • {new Date(s.scheduled_at).toLocaleTimeString()}</p>
+                        <p style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>{s.procedure_name}</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginTop: '4px' }}>OT ROOM {s.ot_room_number} • {new Date(s.scheduled_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                       </div>
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <span style={{ fontSize: '0.6rem', fontWeight: 900, padding: '4px 8px', border: '1px solid #000' }}>{s.status}</span>
-                        <Activity size={16} />
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 800, padding: '4px 10px', borderRadius: '12px', background: s.status === 'SCHEDULED' ? '#f1f5f9' : '#e0e7ff', color: s.status === 'SCHEDULED' ? 'var(--text-secondary)' : '#4338ca' }}>{s.status}</span>
+                        <Activity size={18} color="var(--text-secondary)" />
                       </div>
                     </div>
                   </div>
                 ))
               )}
             </div>
-            <style jsx global>{`
-              .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-              .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-              .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-            `}</style>
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* WHO Checklist */}
           {selectedSurgery ? (
-            <div className="card" style={{ border: '4px solid #29ABE2' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.9rem', marginBottom: '0.5rem' }}>WHO SAFETY CHECKLIST</h3>
-              <p style={{ fontSize: '0.6rem', fontWeight: 800, color: '#666', marginBottom: '2rem' }}>PROCEDURE: {selectedSurgery.procedure_name.toUpperCase()}</p>
+            <div className="card-premium" style={{ borderTop: '4px solid var(--color-accent)' }}>
+              <h3 style={{ fontWeight: 800, fontSize: '1rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>WHO SAFETY CHECKLIST</h3>
+              <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '2rem' }}>PROCEDURE: {selectedSurgery.procedure_name.toUpperCase()}</p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {Object.keys(selectedSurgery.checklist_status).map((item) => (
                   <div key={item} 
                     onClick={() => toggleChecklist(selectedSurgery.id, item)}
                     style={{ 
-                      padding: '12px', 
-                      border: '2px solid #29ABE2', 
+                      padding: '14px 16px', 
+                      borderRadius: '12px',
+                      border: selectedSurgery.checklist_status[item] ? '1px solid #10b981' : '1px solid #e2e8f0', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'space-between',
                       cursor: 'pointer',
-                      background: selectedSurgery.checklist_status[item] ? '#10b981' : '#fff',
-                      color: selectedSurgery.checklist_status[item] ? '#fff' : '#000'
-                    }}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>{item.toUpperCase()}</span>
-                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #29ABE2' }} />}
+                      background: selectedSurgery.checklist_status[item] ? '#ecfdf5' : '#f8fafc',
+                      transition: 'all 0.2s ease',
+                      boxShadow: selectedSurgery.checklist_status[item] ? '0 2px 4px rgba(16, 185, 129, 0.1)' : 'none'
+                    }}
+                    onMouseOver={(e) => { if(!selectedSurgery.checklist_status[item]) e.currentTarget.style.borderColor = 'var(--color-accent)' }}
+                    onMouseOut={(e) => { if(!selectedSurgery.checklist_status[item]) e.currentTarget.style.borderColor = '#e2e8f0' }}
+                    >
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: selectedSurgery.checklist_status[item] ? '#059669' : 'var(--text-primary)' }}>{item.toUpperCase()}</span>
+                    {selectedSurgery.checklist_status[item] ? <Check size={18} color="#059669" /> : <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #cbd5e1' }} />}
                   </div>
                 ))}
               </div>
 
-              <button className="btn-black" style={{ width: '100%', marginTop: '2rem', height: '50px' }}>
-                <Play size={16} style={{ marginRight: '10px' }} /> COMMENCE SURGERY
+              <button className="btn-primary-premium" style={{ width: '100%', marginTop: '2.5rem', height: '54px', justifyContent: 'center' }}>
+                <Play size={18} /> COMMENCE SURGERY
               </button>
             </div>
           ) : (
-            <div className="card" style={{ textAlign: 'center', padding: '3rem', opacity: 0.3 }}>
-              <Clipboard size={48} style={{ margin: '0 auto 1rem' }} />
-              <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>SELECT A PROCEDURE TO VIEW READINESS</p>
+            <div className="card-premium" style={{ textAlign: 'center', padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <Clipboard size={32} color="var(--text-secondary)" />
+              </div>
+              <p style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>SELECT A PROCEDURE TO VIEW READINESS</p>
             </div>
           )}
         </div>

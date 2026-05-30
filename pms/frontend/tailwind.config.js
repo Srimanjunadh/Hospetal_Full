@@ -15,7 +15,7 @@ export default {
         'primary-light': '#38bdf8',
       },
       fontFamily: {
-        'outfit': ['Outfit', 'sans-serif'],
+        'outfit': ['Lexend', 'sans-serif'],
         'inter': ['Inter', 'sans-serif'],
       },
       boxShadow: {

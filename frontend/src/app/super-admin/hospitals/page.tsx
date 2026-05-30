@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { Hospital, Plus, Search, Filter, MoreVertical, ShieldCheck, Activity, BarChart3, Settings, Trash2, Globe, Server, Users, X, TrendingUp, Zap, Bed, Pause, Power, Lock, Clock, Calendar, Download, Eye, EyeOff } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -54,19 +54,22 @@ export default function GlobalHospitalsPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>ROOT MANAGEMENT • INTERACTIVE FACILITY AUDIT</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <div style={{ display: 'flex', background: '#f4f4f5', padding: '4px', border: '1px solid #000' }}>
+          <div style={{ display: 'flex', background: '#f8fafc', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0', gap: '4px' }}>
             {["WEEK", "MONTH", "YEAR"].map(range => (
               <button 
                 key={range}
                 onClick={() => setTimeRange(range)}
                 style={{ 
-                  padding: '8px 16px', 
-                  fontSize: '0.6rem', 
-                  fontWeight: 900, 
+                  padding: '6px 16px', 
+                  fontSize: '0.7rem', 
+                  fontWeight: 700, 
                   border: 'none', 
-                  background: timeRange === range ? '#000' : 'transparent',
-                  color: timeRange === range ? '#fff' : '#000',
-                  cursor: 'pointer'
+                  borderRadius: '8px',
+                  background: timeRange === range ? '#ffffff' : 'transparent',
+                  color: timeRange === range ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  boxShadow: timeRange === range ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
                 }}
               >
                 {range}
@@ -75,7 +78,7 @@ export default function GlobalHospitalsPage() {
           </div>
           <Link 
             href="/super-admin/onboarding" 
-            className="btn-black"
+            className="btn-primary-premium"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -92,49 +95,53 @@ export default function GlobalHospitalsPage() {
       {/* Global Metrics Dashboard */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
         {[
-          { label: "TOTAL NODES", value: hospitals.length, icon: <Globe size={18} />, trend: "+2" },
-          { label: "ACTIVE PATIENTS", value: hospitals.reduce((acc, h) => acc + (h.patient_count || 0), 0), icon: <Users size={18} />, trend: "+12%" },
-          { label: "TOTAL NETWORK STAFF", value: hospitals.reduce((acc, h) => acc + (h.staff_count || 0), 0), icon: <Activity size={18} />, trend: "+16" },
-          { label: "NETWORK REVENUE", value: `$${hospitals.reduce((acc, h) => acc + (h.total_revenue || 0), 0).toLocaleString()}`, icon: <TrendingUp size={18} />, trend: "+8.4%" },
+          { label: "TOTAL NODES", value: hospitals.length, icon: <Globe size={18} />, trend: "+2", color: '#067D71', bg: '#eef7f6' },
+          { label: "ACTIVE PATIENTS", value: hospitals.reduce((acc, h) => acc + (h.patient_count || 0), 0), icon: <Users size={18} />, trend: "+12%", color: '#0ea5e9', bg: '#e0f2fe' },
+          { label: "TOTAL NETWORK STAFF", value: hospitals.reduce((acc, h) => acc + (h.staff_count || 0), 0), icon: <Activity size={18} />, trend: "+16", color: '#10b981', bg: '#e6f4ea' },
+          { label: "NETWORK REVENUE", value: `$${hospitals.reduce((acc, h) => acc + (h.total_revenue || 0), 0).toLocaleString()}`, icon: <TrendingUp size={18} />, trend: "+8.4%", color: '#f59e0b', bg: '#fef3c7' },
         ].map((stat, i) => (
-          <div key={i} className="card" style={{ padding: '1.5rem', border: '2px solid #29ABE2' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <div style={{ background: '#29ABE2', color: '#fff', padding: '8px' }}>{stat.icon}</div>
-              <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981' }}>{stat.trend}</span>
+          <div key={i} className="card-premium" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem' }}>
+            <div>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>{stat.label}</p>
+              <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{stat.value}</h3>
             </div>
-            <p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>{stat.label}</p>
-            <p style={{ fontSize: '1.5rem', fontWeight: 900 }}>{stat.value}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color }}>
+                {stat.icon}
+              </div>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#10b981' }}>{stat.trend}</span>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="card" style={{ padding: '2rem' }}>
+      <div className="card-premium" style={{ padding: '2rem' }}>
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
           <div style={{ flex: 1, position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
             <input 
               type="text" 
               placeholder="SEARCH GLOBAL REGISTRY BY NAME, NODE ID, OR LOCATION" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
+              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', borderRadius: '30px', fontWeight: '700', fontSize: '0.8rem', outline: 'none' }}
             />
           </div>
-          <button className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>NETWORK FILTER
+          <button className="btn-outline-premium" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexDirection: 'row', whiteSpace: 'nowrap' }}><Filter size={18} /> <span>NETWORK FILTER
           </span></button>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #29ABE2' }}>
-          <table className="data-table">
+        <div className="table-responsive" style={{ overflowX: 'auto', border: '1px solid #f1f5f9', borderRadius: '12px' }}>
+          <table className="data-table-premium">
             <thead>
-              <tr style={{ background: '#29ABE2', color: '#fff' }}>
-                <th style={{ padding: '12px 20px' }}>S.NO</th>
-                <th style={{ padding: '12px 20px' }}>FACILITY IDENTITY</th>
-                <th style={{ padding: '12px 20px' }}>NODE ID</th>
-                <th style={{ padding: '12px 20px' }}>DOCS / STAFF / PATS</th>
-                <th style={{ padding: '12px 20px' }}>REVENUE</th>
-                <th style={{ padding: '12px 20px' }}>STATUS</th>
-                <th style={{ padding: '12px 20px' }}>ACTIVITY TREND</th>
+              <tr>
+                <th style={{ padding: '16px 20px' }}>S.NO</th>
+                <th style={{ padding: '16px 20px' }}>FACILITY IDENTITY</th>
+                <th style={{ padding: '16px 20px' }}>NODE ID</th>
+                <th style={{ padding: '16px 20px' }}>DOCS / STAFF / PATS</th>
+                <th style={{ padding: '16px 20px' }}>REVENUE</th>
+                <th style={{ padding: '16px 20px' }}>STATUS</th>
+                <th style={{ padding: '16px 20px' }}>ACTIVITY TREND</th>
               </tr>
             </thead>
             <tbody>
@@ -147,7 +154,7 @@ export default function GlobalHospitalsPage() {
                   <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.8rem', opacity: 0.5 }}>{i + 1}</td>
                   <td style={{ padding: '15px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                       <div style={{ width: '35px', height: '35px', background: '#29ABE2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}><Hospital size={18} /></div>
+                       <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#eef7f6', color: '#067D71', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Hospital size={18} /></div>
                        <div>
                          <p style={{ fontWeight: '900', fontSize: '0.85rem' }}>{h.displayName}</p>
                          <p style={{ fontSize: '0.65rem', color: '#999', fontWeight: 700 }}>{h.location}</p>
@@ -222,34 +229,34 @@ export default function GlobalHospitalsPage() {
 
               {/* Management Controls */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '3rem' }}>
-                <button onClick={() => showToast("Updating Administrative Access...", "info")} className="btn-outline" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto' }}>
+                <button onClick={() => showToast("Updating Administrative Access...", "info")} className="btn-outline-premium" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto' }}>
                   <Lock size={20} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>RESET AUTH</span>
                 </button>
-                <button onClick={() => showToast("Node Suspended Successfully", "success")} className="btn-outline" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto', borderColor: '#f59e0b', color: '#f59e0b' }}>
+                <button onClick={() => showToast("Node Suspended Successfully", "success")} className="btn-outline-premium" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto', borderColor: '#f59e0b', color: '#f59e0b' }}>
                   <Pause size={20} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>PAUSE NODE</span>
                 </button>
-                <button onClick={() => showToast("Node Decommissioning Initiated", "error")} className="btn-outline" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto', borderColor: '#dc2626', color: '#dc2626' }}>
+                <button onClick={() => showToast("Node Decommissioning Initiated", "error")} className="btn-outline-premium" style={{ flexDirection: 'column', gap: '8px', padding: '1.5rem', height: 'auto', borderColor: '#dc2626', color: '#dc2626' }}>
                   <Power size={20} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>TERMINATE</span>
                 </button>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3rem' }}>
-                 <div className="card" style={{ padding: '1.5rem', background: '#29ABE2', color: '#fff' }}>
-                    <p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>TOTAL REVENUE ({timeRange})</p>
-                    <p style={{ fontSize: '1.5rem', fontWeight: 900 }}>{selectedHospital.revenueDisplay}</p>
+                 <div className="card-premium" style={{ padding: '1.5rem', background: 'var(--bg-side)', color: '#fff' }}>
+                    <p style={{ fontSize: '0.65rem', fontWeight: 600, opacity: 0.8 }}>TOTAL REVENUE ({timeRange})</p>
+                    <p style={{ fontSize: '1.75rem', fontWeight: 800, marginTop: '4px' }}>{selectedHospital.revenueDisplay}</p>
                  </div>
-                 <div className="card" style={{ padding: '1.5rem' }}>
-                    <p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>REGISTERED PATIENTS</p>
-                    <p style={{ fontSize: '1.5rem', fontWeight: 900 }}>{selectedHospital.patient_count}</p>
+                 <div className="card-premium" style={{ padding: '1.5rem' }}>
+                    <p style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-secondary)' }}>REGISTERED PATIENTS</p>
+                    <p style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedHospital.patient_count}</p>
                  </div>
               </div>
 
               {/* Growth Visualization */}
               <div style={{ marginBottom: '3rem' }}>
-                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>GROWTH ANALYTICS</h3>
-                 <div style={{ height: '150px', display: 'flex', alignItems: 'flex-end', gap: '10px', padding: '20px', background: '#f4f4f5', border: '1px solid #000' }}>
+                 <h3 style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '1px solid rgba(6, 125, 113, 0.2)', paddingBottom: '8px', color: 'var(--bg-side)' }}>GROWTH ANALYTICS</h3>
+                 <div style={{ height: '150px', display: 'flex', alignItems: 'flex-end', gap: '10px', padding: '20px', background: '#f4f4f5', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
                     {[40, 60, 45, 80, 55, 90, 75, 85, 65, 95].map((h, i) => (
-                      <div key={i} style={{ flex: 1, height: `${h}%`, background: '#000', position: 'relative' }}>
+                      <div key={i} style={{ flex: 1, height: `${h}%`, background: 'var(--bg-side)', borderRadius: '2px', position: 'relative' }}>
                         <div style={{ position: 'absolute', top: '-25px', left: '50%', transform: 'translateX(-50%)', fontSize: '0.5rem', fontWeight: 900 }}>{h}%</div>
                       </div>
                     ))}
@@ -257,11 +264,11 @@ export default function GlobalHospitalsPage() {
                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '0.6rem', fontWeight: 900, opacity: 0.4 }}>
                     <span>START {timeRange}</span>
                     <span>END {timeRange}</span>
-                 </div>
+                  </div>
               </div>
 
               <div style={{ marginBottom: '3rem' }}>
-                 <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>ADMINISTRATIVE IDENTITY</h3>
+                 <h3 style={{ fontWeight: 800, fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '1px solid rgba(6, 125, 113, 0.2)', paddingBottom: '8px', color: 'var(--bg-side)' }}>ADMINISTRATIVE IDENTITY</h3>
                  <div style={{ background: '#f4f4f5', padding: '1.5rem', border: '1px solid #000' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                        <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADMIN NAME</span>
@@ -288,7 +295,7 @@ export default function GlobalHospitalsPage() {
                  </div>
               </div>
 
-              <button className="btn-black" style={{ width: '100%', gap: '12px' }} onClick={() => showToast(`Generating System Export for ${selectedHospital.id}`, "info")}>
+              <button className="btn-primary-premium" style={{ width: '100%', gap: '12px' }} onClick={() => showToast(`Generating System Export for ${selectedHospital.id}`, "info")}>
                  <Download size={18} /> EXPORT COMPLIANCE REPORT
               </button>
             </motion.div>

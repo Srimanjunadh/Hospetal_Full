@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Clock, FileText, Pill, ShieldCheck, TrendingUp, Zap, Plus, Search, User, Key, MessageSquare, Hospital, Globe, LayoutDashboard, LogOut, Package, ShieldAlert, X, Shield, Star, Smartphone, Laptop, Database, Bell, UserCheck, Heart, Calendar } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
 import { apiService } from "@/services/api";
@@ -86,8 +87,8 @@ export default function PatientDashboard() {
   return (
     <DashboardLayout role="patient" userName={sessionName}>
       <div style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>PATIENT HEALTH REPOSITORY</h1>
-        <p style={{ color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '1px' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Patient Health Repository</h1>
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '1px' }}>
           SECURE CLINICAL ARCHIVE • READ-ONLY ACCESS
         </p>
       </div>
@@ -130,63 +131,101 @@ export default function PatientDashboard() {
       </AnimatePresence>
 
       {/* Financial Overview Banner */}
-      <div style={{ backgroundColor: '#fef3c7', border: '2px solid #d97706', padding: '1.5rem 2.5rem', marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="card-premium" style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '1px solid #fcd34d', padding: '1.5rem 2.5rem', marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h4 style={{ fontSize: '0.7rem', fontWeight: 900, color: '#d97706', letterSpacing: '1px' }}>TOTAL CUMULATIVE EXPENDITURE</h4>
-          <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#000' }}>₹{expenditure.total?.toLocaleString()}</h2>
+          <h4 style={{ fontSize: '0.8rem', fontWeight: 800, color: '#b45309', letterSpacing: '1px' }}>TOTAL CUMULATIVE EXPENDITURE</h4>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#78350f', marginTop: '4px' }}>₹{expenditure.total?.toLocaleString()}</h2>
         </div>
-        <button onClick={() => router.push("/patient/billing")} style={{ backgroundColor: '#000', color: '#fff', border: 'none', padding: '10px 20px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>
+        <button onClick={() => router.push("/patient/billing")} className="btn-outline-premium" style={{ background: '#fff', color: '#92400e', borderColor: '#fcd34d' }}>
           VIEW BILLING STATEMENTS
         </button>
       </div>
 
       {/* Vital Metrics */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
-        <div className="card">
-          <p className="card-title">HEART RATE</p>
-          <h2 className="card-value">{activeMetrics.hr} <span style={{ fontSize: '1rem' }}>BPM</span></h2>
-          <p style={{ fontSize: '0.6rem', fontWeight: 800, opacity: 0.5 }}>SYNCHRONIZED: {activeMetrics.lastSync}</p>
+        <div className="card-premium" style={{ display: 'flex', flexDirection: 'column', padding: '1.5rem' }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: 700 }}>HEART RATE</p>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)' }}>{activeMetrics.hr} <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>BPM</span></h2>
+            <p style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-secondary)' }}>SYNCHRONIZED: {activeMetrics.lastSync}</p>
+          </div>
+          <div style={{ height: '80px', width: '100%' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={[
+                { time: '08:00', value: Math.max(60, activeMetrics.hr - 5) },
+                { time: '12:00', value: Math.max(60, activeMetrics.hr + 2) },
+                { time: '16:00', value: Math.max(60, activeMetrics.hr - 3) },
+                { time: '20:00', value: Math.max(60, activeMetrics.hr + 4) },
+                { time: 'Now', value: activeMetrics.hr || 75 }
+              ]}>
+                <Line type="monotone" dataKey="value" stroke="#ef4444" strokeWidth={3} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-        <div className="card">
-          <p className="card-title">GLUCOSE LEVEL</p>
-          <h2 className="card-value">{activeMetrics.glucose} <span style={{ fontSize: '1rem' }}>mg/dL</span></h2>
-          <p style={{ fontSize: '0.6rem', fontWeight: 800, opacity: 0.5 }}>SYNCHRONIZED: {activeMetrics.lastSync}</p>
+        
+        <div className="card-premium" style={{ display: 'flex', flexDirection: 'column', padding: '1.5rem' }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: 700 }}>GLUCOSE LEVEL</p>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)' }}>{activeMetrics.glucose} <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>mg/dL</span></h2>
+            <p style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-secondary)' }}>SYNCHRONIZED: {activeMetrics.lastSync}</p>
+          </div>
+          <div style={{ height: '80px', width: '100%' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={[
+                { time: 'Mon', value: Math.max(80, activeMetrics.glucose - 10) },
+                { time: 'Tue', value: Math.max(80, activeMetrics.glucose - 5) },
+                { time: 'Wed', value: Math.max(80, activeMetrics.glucose + 5) },
+                { time: 'Thu', value: Math.max(80, activeMetrics.glucose + 12) },
+                { time: 'Today', value: activeMetrics.glucose || 90 }
+              ]}>
+                <defs>
+                  <linearGradient id="colorGlucose" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="#0ea5e9" strokeWidth={3} fillOpacity={1} fill="url(#colorGlucose)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
-          <p className="card-title" style={{ color: 'rgba(255,255,255,0.6)' }}>ASSIGNED CLINICIAN</p>
-          <h2 className="card-value" style={{ fontSize: '1.2rem', marginTop: '0.5rem' }}>DR. {activeMetrics.doctor.toUpperCase()}</h2>
-          <p style={{ fontSize: '0.6rem', fontWeight: 800, opacity: 0.5 }}>PRIMARY CARE NODE</p>
+        
+        <div className="card-premium" style={{ background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', border: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.75rem', fontWeight: 700 }}>ASSIGNED CLINICIAN</p>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginTop: '0.5rem', marginBottom: '1rem' }}>DR. {activeMetrics.doctor.toUpperCase()}</h2>
+          <p style={{ fontSize: '0.7rem', fontWeight: 800, color: '#a7f3d0', padding: '6px 12px', background: 'rgba(255,255,255,0.2)', borderRadius: '20px', display: 'inline-block', width: 'fit-content' }}>PRIMARY CARE NODE</p>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
         
         {/* ACTIVE PRESCRIPTION REGISTRY */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>ACTIVE PRESCRIPTION REGISTRY</h3>
-             <Pill size={16} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.2rem 2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>ACTIVE PRESCRIPTION REGISTRY</h3>
+             <Pill size={18} color="var(--color-accent)" />
           </div>
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="table-responsive">
+            <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>MEDICATION</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DOSAGE</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem', textAlign: 'right' }}>STATUS</th>
+                 <tr>
+                   <th style={{ width: '80px' }}>S.NO</th>
+                   <th>MEDICATION</th>
+                   <th>DOSAGE</th>
+                   <th style={{ textAlign: 'right' }}>STATUS</th>
                  </tr>
                </thead>
                <tbody>
                  {prescriptions.length === 0 ? (
-                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '3rem', fontWeight: 800, opacity: 0.3 }}>EMPTY REGISTRY</td></tr>
+                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>EMPTY REGISTRY</td></tr>
                  ) : prescriptions.map((p, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 900 }}>{p.name.toUpperCase()}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 800 }}>{p.dosage}</td>
-                     <td style={{ padding: '15px 20px', textAlign: 'right' }}>
-                        <span className="badge" style={{ fontSize: '0.55rem', background: '#f4f4f5', border: '1px solid #000' }}>{p.status}</span>
+                   <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{p.name.toUpperCase()}</td>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>{p.dosage}</td>
+                     <td style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 800, padding: '4px 10px', borderRadius: '12px', background: '#d1fae5', color: '#059669' }}>{p.status}</span>
                      </td>
                    </tr>
                  ))}
@@ -196,31 +235,31 @@ export default function PatientDashboard() {
         </div>
 
         {/* CONSULTATION REQUEST STATUS */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 2rem', background: '#10b981', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>CONSULTATION REQUEST STATUS</h3>
-             <Calendar size={16} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.2rem 2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>CONSULTATION REQUEST STATUS</h3>
+             <Calendar size={18} color="#10b981" />
           </div>
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="table-responsive">
+            <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>CONSULTATION</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>SCHEDULE</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem', textAlign: 'right' }}>STATUS</th>
+                 <tr>
+                   <th style={{ width: '80px' }}>S.NO</th>
+                   <th>CONSULTATION</th>
+                   <th>SCHEDULE</th>
+                   <th style={{ textAlign: 'right' }}>STATUS</th>
                  </tr>
                </thead>
                <tbody>
                  {appointments.length === 0 ? (
-                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '3rem', fontWeight: 800, opacity: 0.3 }}>NO ACTIVE REQUESTS</td></tr>
+                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>NO ACTIVE REQUESTS</td></tr>
                  ) : appointments.map((a, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 900 }}>{a.reason?.toUpperCase()}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 800 }}>{new Date(a.scheduled_at).toLocaleDateString()}</td>
-                     <td style={{ padding: '15px 20px', textAlign: 'right' }}>
-                        <span className="badge" style={{ fontSize: '0.55rem', background: a.status === 'scheduled' ? '#10b981' : '#f4f4f5', color: a.status === 'scheduled' ? '#fff' : '#000', border: '1px solid #000' }}>{a.status.toUpperCase()}</span>
+                   <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{a.reason?.toUpperCase()}</td>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>{new Date(a.scheduled_at).toLocaleDateString()}</td>
+                     <td style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 800, padding: '4px 10px', borderRadius: '12px', background: a.status === 'scheduled' ? '#d1fae5' : '#f1f5f9', color: a.status === 'scheduled' ? '#059669' : 'var(--text-secondary)' }}>{a.status.toUpperCase()}</span>
                      </td>
                    </tr>
                  ))}
@@ -230,32 +269,32 @@ export default function PatientDashboard() {
         </div>
 
         {/* ELECTRONIC HEALTH RECORDS (EHR) */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 2rem', background: '#3b82f6', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>ELECTRONIC HEALTH RECORDS</h3>
-             <Database size={16} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.2rem 2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>ELECTRONIC HEALTH RECORDS</h3>
+             <Database size={18} color="#3b82f6" />
           </div>
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="table-responsive">
+            <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DIAGNOSTIC REPORT</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>DATE</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem', textAlign: 'right' }}>ACTION</th>
+                 <tr>
+                   <th style={{ width: '80px' }}>S.NO</th>
+                   <th>DIAGNOSTIC REPORT</th>
+                   <th>DATE</th>
+                   <th style={{ textAlign: 'right' }}>ACTION</th>
                  </tr>
                </thead>
                <tbody>
                  {testResults.length === 0 ? (
-                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '3rem', fontWeight: 800, opacity: 0.3 }}>NO EHR DATA FOUND</td></tr>
+                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>NO EHR DATA FOUND</td></tr>
                  ) : testResults.map((t, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 900 }}>{t.test_name.toUpperCase()}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 800 }}>{new Date(t.created_at).toLocaleDateString()}</td>
-                     <td style={{ padding: '15px 20px', textAlign: 'right' }}>
-                        {t.status === 'pending' ? <Clock size={16} style={{ opacity: 0.3 }} /> : (
-                          <button onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.6rem', fontWeight: 900, cursor: 'pointer' }}>PDF</button>
+                   <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{t.test_name.toUpperCase()}</td>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>{new Date(t.created_at).toLocaleDateString()}</td>
+                     <td style={{ textAlign: 'right' }}>
+                        {t.status === 'pending' ? <Clock size={16} style={{ color: 'var(--text-secondary)', opacity: 0.5 }} /> : (
+                          <button onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} className="btn-outline-premium" style={{ padding: '6px 12px', fontSize: '0.7rem' }}>PDF</button>
                         )}
                      </td>
                    </tr>
@@ -266,31 +305,31 @@ export default function PatientDashboard() {
         </div>
 
         {/* PRESCRIPTION INVENTORY */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 2rem', background: '#f59e0b', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>PRESCRIPTION INVENTORY</h3>
-             <Package size={16} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.2rem 2rem', background: '#f8fafc', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', color: 'var(--text-primary)' }}>PRESCRIPTION INVENTORY</h3>
+             <Package size={18} color="#f59e0b" />
           </div>
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div className="table-responsive">
+            <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #29ABE2', textAlign: 'left' }}>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>STOCK ITEM</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem' }}>REMAINING</th>
-                   <th style={{ padding: '15px 20px', fontSize: '0.65rem', textAlign: 'right' }}>REFILL</th>
+                 <tr>
+                   <th style={{ width: '80px' }}>S.NO</th>
+                   <th>STOCK ITEM</th>
+                   <th>REMAINING</th>
+                   <th style={{ textAlign: 'right' }}>REFILL</th>
                  </tr>
                </thead>
                <tbody>
                  {prescriptions.length === 0 ? (
-                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '3rem', fontWeight: 800, opacity: 0.3 }}>EMPTY INVENTORY</td></tr>
+                   <tr><td colSpan={4} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>EMPTY INVENTORY</td></tr>
                  ) : prescriptions.map((p, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 900 }}>{p.name.toUpperCase()}</td>
-                     <td style={{ padding: '15px 20px', fontWeight: 800 }}>7 DAYS LEFT</td>
-                     <td style={{ padding: '15px 20px', textAlign: 'right' }}>
-                        <button className="badge" style={{ background: '#f4f4f5', border: '1px solid #000', fontSize: '0.55rem', fontWeight: 900, cursor: 'pointer' }}>REQUEST</button>
+                   <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{p.name.toUpperCase()}</td>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>7 DAYS LEFT</td>
+                     <td style={{ textAlign: 'right' }}>
+                        <button className="btn-outline-premium" style={{ padding: '6px 12px', fontSize: '0.7rem' }}>REQUEST</button>
                      </td>
                    </tr>
                  ))}

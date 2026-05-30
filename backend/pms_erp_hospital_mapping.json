@@ -176,10 +176,10 @@
   },
   "3": {
     "erp_id": 3,
-    "name": "Test Apollo Hospital Facility",
-    "node_code": "8144",
-    "admin_username": "apollo_admin_1",
-    "admin_password": "adminpassword123"
+    "name": "Mahesh Facility",
+    "node_code": "3114",
+    "admin_username": "Mahesh1",
+    "admin_password": "1144"
   },
   "4": {
     "erp_id": 4,

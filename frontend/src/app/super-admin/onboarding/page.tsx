@@ -40,7 +40,6 @@ export default function ProvisioningPage() {
 
     while (!isUnique && attempts < 100) {
       newCode = Math.floor(1000 + Math.random() * 9000).toString();
-      // Check if this code exists in activeRegistry (if activeRegistry has node_codes)
       const exists = activeRegistry.some(node => node.node_code === newCode);
       if (!exists) isUnique = true;
       attempts++;
@@ -86,6 +85,26 @@ export default function ProvisioningPage() {
 
   if (!mounted) return null;
 
+  const inputStyle = {
+    width: '100%',
+    padding: '14px 16px 14px 48px',
+    background: '#f8fafc',
+    border: '1px solid #cbd5e1',
+    borderRadius: '8px',
+    fontWeight: 650,
+    fontSize: '0.85rem',
+    outline: 'none',
+    color: 'var(--text-primary)',
+    transition: 'all 0.2s ease',
+  };
+
+  const labelStyle = {
+    fontSize: '0.7rem',
+    fontWeight: 800,
+    color: 'var(--text-secondary)',
+    letterSpacing: '0.5px'
+  };
+
   return (
     <DashboardLayout role="super_admin" userName="Master Admin">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
@@ -94,141 +113,141 @@ export default function ProvisioningPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>ROOT NODE DEPLOYMENT • GLOBAL NETWORK EXPANSION</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-           <div style={{ padding: '8px 15px', background: '#f4f4f5', border: '1px solid #000', fontSize: '0.7rem', fontWeight: 900 }}>
-              NETWORK NODES: {activeRegistry.length}/50
+           <div style={{ padding: '8px 16px', borderRadius: '30px', background: '#eef7f6', color: '#067D71', fontSize: '0.75rem', fontWeight: 900, border: '1px solid #cbd5e1' }}>
+              NETWORK NODES: {activeRegistry.length} / 50
            </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '3rem' }}>
         
         {/* Onboarding Form */}
-        <div className="card" style={{ padding: '3rem' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '3rem', borderBottom: '2px solid #29ABE2', paddingBottom: '10px' }}>FACILITY IDENTITY & ACCESS</h3>
+        <div className="card-premium" style={{ padding: '2.5rem' }}>
+          <h3 style={{ fontWeight: 900, fontSize: '0.85rem', letterSpacing: '2px', marginBottom: '2.5rem', color: 'var(--text-primary)', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>FACILITY IDENTITY & ACCESS</h3>
           
-          <form onSubmit={handleProvision} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>FACILITY NAME</label>
+          <form onSubmit={handleProvision} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>FACILITY NAME</label>
               <div style={{ position: 'relative' }}>
-                <Hospital style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <Hospital style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <input 
                   type="text" 
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   placeholder="E.G. METRO CORE HOSPITAL" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={inputStyle}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>FACILITY LOCATION (CITY/STATE)</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>FACILITY LOCATION (CITY/STATE)</label>
               <div style={{ position: 'relative' }}>
-                <MapPin style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <MapPin style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <input 
                   type="text" 
                   required
                   value={formData.location}
                   onChange={(e) => setFormData({...formData, location: e.target.value})}
                   placeholder="E.G. NEW YORK, NY" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={inputStyle}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>FACILITY SPECIALIZATION</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>FACILITY SPECIALIZATION</label>
               <div style={{ position: 'relative' }}>
-                <ShieldCheck style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <ShieldCheck style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <select 
                   required
                   title="Facility Specialization"
                   value={formData.specialization}
                   onChange={(e) => setFormData({...formData, specialization: e.target.value})}
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none', appearance: 'none', cursor: 'pointer' }}
+                  style={{ ...inputStyle, appearance: 'none', cursor: 'pointer' }}
                 >
                   <option value="Multi-Specialty">Multi-Specialty</option>
                   <option value="General Hospital">General Hospital</option>
                   <option value="Super Specialty">Super Specialty</option>
                   <option value="Teaching Hospital">Teaching Hospital</option>
-                  <option value="Children&apos;s Hospital">Children&apos;s Hospital</option>
-                  <option value="Women&apos;s Hospital">Women&apos;s Hospital</option>
+                  <option value="Children's Hospital">Children's Hospital</option>
+                  <option value="Women's Hospital">Women's Hospital</option>
                   <option value="Heart Center">Heart Center</option>
                   <option value="Eye Care Center">Eye Care Center</option>
                   <option value="ENT Center">ENT Center</option>
                 </select>
-                <div style={{ position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                <div style={{ position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-secondary)' }}>
                   <Plus size={14} />
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'flex-end' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>SECURE NODE IDENTITY (4-DIGIT)</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'flex-end' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={labelStyle}>SECURE NODE IDENTITY (4-DIGIT)</label>
                 <div style={{ position: 'relative' }}>
-                  <Zap style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                  <Zap style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                   <input 
                     type="text" 
                     readOnly
                     value={formData.nodeCode}
                     placeholder="CLICK GENERATE --->" 
-                    style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: '1px solid #000', fontWeight: 900, outline: 'none', letterSpacing: '4px' }}
+                    style={{ ...inputStyle, letterSpacing: '4px', border: '1px solid #cbd5e1', fontWeight: 800 }}
                   />
                 </div>
               </div>
               <button 
                 type="button"
                 onClick={generateUniqueCode}
-                className="btn-outline" 
-                style={{ height: '50px', padding: '0 20px', fontSize: '0.6rem', background: '#fff', color: '#000', border: '2px solid #29ABE2' }}
+                className="btn-outline-premium" 
+                style={{ height: '48px', padding: '0 20px', fontSize: '0.7rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 GENERATE UNIQUE CODE
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>ADMIN NETWORK ID (FOR LOGIN)</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>ADMIN NETWORK ID (FOR LOGIN)</label>
               <div style={{ position: 'relative' }}>
-                <User style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <User style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <input 
                   type="text" 
                   required
                   value={formData.adminId}
                   onChange={(e) => setFormData({...formData, adminId: e.target.value})}
                   placeholder="E.G. ADMIN_METRO_01" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={inputStyle}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>ADMIN MOBILE NUMBER</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>ADMIN MOBILE NUMBER</label>
               <div style={{ position: 'relative' }}>
-                <Phone style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <Phone style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <input 
                   type="tel" 
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   placeholder="E.G. +91 98765 43210" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={inputStyle}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>ACCESS PASSWORD</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={labelStyle}>ACCESS PASSWORD</label>
               <div style={{ position: 'relative' }}>
-                <Key style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <Key style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <input 
                   type="password" 
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   placeholder="••••••••" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={inputStyle}
                 />
               </div>
             </div>
@@ -236,8 +255,8 @@ export default function ProvisioningPage() {
             <button 
               type="submit" 
               disabled={isDeploying}
-              className="btn-black" 
-              style={{ padding: '20px', marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '12px', opacity: isDeploying ? 0.7 : 1 }}
+              className="btn-primary-premium" 
+              style={{ padding: '16px', marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '12px', opacity: isDeploying ? 0.7 : 1 }}
             >
               {isDeploying ? (
                 <>
@@ -256,54 +275,56 @@ export default function ProvisioningPage() {
 
         {/* Deployment Metrics & Status */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '2px', marginBottom: '2rem' }}>DEPLOYMENT STATUS</h3>
+          <div className="card-premium" style={{ background: 'var(--bg-side)', color: '#fff', padding: '2rem' }}>
+             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', color: '#fff' }}>DEPLOYMENT STATUS</h3>
              {isDeploying ? (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                     <Database className="animate-pulse" size={18} /> <span>INITIALIZING DB NODE...</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '0.85rem', fontWeight: 600 }}>
+                     <Database className="animate-pulse" size={18} style={{ color: '#00f2fe' }} /> <span>INITIALIZING DB NODE...</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                     <Server className="animate-bounce" size={18} /> <span>CONFIGURING PMS INTERFACE...</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '0.85rem', fontWeight: 600 }}>
+                     <Server className="animate-bounce" size={18} style={{ color: '#00f2fe' }} /> <span>CONFIGURING PMS INTERFACE...</span>
                   </div>
-                  <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)' }}>
+                  <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
                      <motion.div 
                        initial={{ width: 0 }}
                        animate={{ width: '100%' }}
                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                       style={{ height: '100%', background: '#fff' }}
+                       style={{ height: '100%', background: '#00f2fe' }}
                      />
                   </div>
                </div>
              ) : (
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: 0.5 }}>
-                  <p style={{ fontSize: '0.8rem', fontWeight: 700 }}>AWAITING NEXT FACILITY ONBOARDING REQUEST...</p>
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: 0.8 }}>
+                  <p style={{ fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <CheckCircle size={16} style={{ color: '#00f2fe' }} /> AWAITING NEXT NODE REQUEST...
+                  </p>
                </div>
              )}
           </div>
 
-          <div className="card">
+          <div className="card-premium" style={{ padding: '2rem' }}>
              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '2px' }}>LIVE IDENTITY REGISTRY</h3>
-                <button onClick={fetchAdmins} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', color: 'var(--text-primary)' }}>LIVE IDENTITY REGISTRY</h3>
+                <button onClick={fetchAdmins} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>
                   <RefreshCcw size={16} className={isLoadingRegistry ? "animate-spin" : ""} />
                 </button>
              </div>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '400px', overflowY: 'auto' }}>
                 {isLoadingRegistry ? (
-                  <p style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.5, textAlign: 'center', padding: '2rem' }}>SYNCHRONIZING WITH ROOT DB...</p>
+                  <p style={{ fontSize: '0.75rem', fontWeight: 700, opacity: 0.5, textAlign: 'center', padding: '2rem' }}>SYNCHRONIZING WITH ROOT DB...</p>
                 ) : activeRegistry.length > 0 ? activeRegistry.map((p, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', background: '#f4f4f5', borderLeft: '4px solid #000' }}>
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#f8fafc', borderLeft: '4px solid #067D71', borderRadius: '4px' }}>
                      <div>
-                        <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>{(p.name || p.username || 'UNKNOWN').toUpperCase()}</p>
-                        <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>
-                           CONTACT: <span style={{ color: '#000' }}>{p.phone || p.email || 'N/A'}</span>
+                        <p style={{ fontWeight: 900, fontSize: '0.85rem', color: 'var(--text-primary)' }}>{(p.name || p.username || 'UNKNOWN').toUpperCase()}</p>
+                        <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                           CONTACT: <span style={{ color: 'var(--text-primary)' }}>{p.phone || p.email || 'N/A'}</span>
                         </p>
                      </div>
-                     <span style={{ fontSize: '0.6rem', fontWeight: 900, color: '#10b981' }}>ACTIVE NODE</span>
+                     <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981', padding: '4px 10px', background: '#e6f4ea', borderRadius: '12px' }}>ACTIVE NODE</span>
                   </div>
                 )) : (
-                  <p style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.5, textAlign: 'center', padding: '2rem' }}>NO IDENTITIES ANCHORED YET</p>
+                  <p style={{ fontSize: '0.75rem', fontWeight: 700, opacity: 0.5, textAlign: 'center', padding: '2rem' }}>NO IDENTITIES ANCHORED YET</p>
                 )}
              </div>
           </div>
@@ -312,4 +333,3 @@ export default function ProvisioningPage() {
     </DashboardLayout>
   );
 }
-

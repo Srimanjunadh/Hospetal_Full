@@ -243,7 +243,7 @@ export default function PatientDetailPage() {
     setIsSubmitting(true);
     try {
       const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
-      await apiService.prescribeMedication({
+      await apiService.prescribeMeds({
         hospital_id: session.hospital_id,
         patient_id: patient.id,
         doctor_id: session.doctor_id,
@@ -328,10 +328,10 @@ export default function PatientDetailPage() {
           
           {/* Left Sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-             <div className="card" style={{ padding: '2.5rem', border: '4px solid #29ABE2', position: 'relative' }}>
-                <div style={{ position: 'absolute', top: '15px', right: '15px', padding: '4px 8px', background: '#29ABE2', color: '#fff', fontSize: '0.55rem', fontWeight: 900 }}>NODE-5500</div>
-                <div style={{ width: '100px', height: '100px', background: '#f4f4f5', border: '2px solid #29ABE2', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
-                   <User size={50} />
+             <div className="card-premium" style={{ padding: '2.5rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '15px', right: '15px', padding: '6px 10px', background: 'var(--color-accent)', color: '#fff', fontSize: '0.65rem', fontWeight: 800, borderRadius: '12px' }}>NODE-5500</div>
+                <div style={{ width: '100px', height: '100px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem', borderRadius: '50%' }}>
+                   <User size={50} style={{ color: 'var(--text-secondary)' }} />
                 </div>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -349,8 +349,8 @@ export default function PatientDetailPage() {
              </div>
 
              {/* AI Insights Card */}
-             <div className="card" style={{ padding: '2rem', background: '#f8fafc', border: '2px solid #3b82f6', position: 'relative', overflow: 'hidden' }}>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '10px', color: '#3b82f6', marginBottom: '1.5rem' }}>
+             <div className="card-premium" style={{ padding: '2rem', background: '#eff6ff', border: '1px solid #bfdbfe', position: 'relative', overflow: 'hidden' }}>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', color: '#2563eb', marginBottom: '1.5rem' }}>
                    <BrainCircuit size={18} /> AI REAL-TIME INSIGHTS
                 </h4>
                 {aiAnalysis ? (
@@ -384,9 +384,9 @@ export default function PatientDetailPage() {
                     onClick={() => setActiveTab(tab)}
                     style={{ 
                       padding: '12px 0', background: 'transparent', border: 'none', cursor: 'pointer',
-                      fontSize: '0.75rem', fontWeight: 900, color: activeTab === tab ? '#29ABE2' : '#9ca3af',
-                      borderBottom: activeTab === tab ? '4px solid #29ABE2' : '4px solid transparent',
-                      transition: '0.2s all', textTransform: 'uppercase', letterSpacing: '1px'
+                      fontSize: '0.8rem', fontWeight: 800, color: activeTab === tab ? 'var(--color-accent)' : 'var(--text-secondary)',
+                      borderBottom: activeTab === tab ? '4px solid var(--color-accent)' : '4px solid transparent',
+                      transition: '0.2s all', textTransform: 'uppercase', letterSpacing: '0.5px'
                     }}
                    >
                     {tab}
@@ -403,9 +403,9 @@ export default function PatientDetailPage() {
                       animate={{ opacity: 1, y: 0 }}
                       style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
                      >
-                        <div className="card" style={{ padding: '2rem' }}>
-                           <h3 style={{ fontSize: '0.85rem', fontWeight: 900, marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                             <Zap size={18} /> VITAL MONITORING
+                        <div className="card-premium" style={{ padding: '2rem' }}>
+                           <h3 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
+                             <Zap size={18} style={{ color: 'var(--color-accent)' }} /> VITAL MONITORING
                            </h3>
                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
                               {[
@@ -414,17 +414,17 @@ export default function PatientDetailPage() {
                                 { label: "SpO2", val: "98" },
                                 { label: "TEMP", val: "98.6" }
                               ].map((v, i) => (
-                                <div key={i} style={{ padding: '1.5rem', background: '#f4f4f5', border: '1px solid #eee' }}>
-                                   <p style={{ fontSize: '0.55rem', fontWeight: 900, opacity: 0.5, marginBottom: '8px' }}>{v.label}</p>
-                                   <p style={{ fontSize: '1.5rem', fontWeight: 900 }}>{v.val}</p>
+                                <div key={i} style={{ padding: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
+                                   <p style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>{v.label}</p>
+                                   <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{v.val}</p>
                                 </div>
                               ))}
                            </div>
                         </div>
 
-                        <div className="card" style={{ padding: '2rem', borderLeft: '8px solid #29ABE2' }}>
-                           <h3 style={{ fontSize: '0.85rem', fontWeight: 900, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              <TrendingUp size={18} /> PERSONALIZED AI RECOMMENDATIONS
+                        <div className="card-premium" style={{ padding: '2rem', borderLeft: '4px solid var(--color-accent)' }}>
+                           <h3 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
+                              <TrendingUp size={18} style={{ color: 'var(--color-accent)' }} /> PERSONALIZED AI RECOMMENDATIONS
                            </h3>
                            {aiAnalysis ? (
                               <ul style={{ paddingLeft: '1.2rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -460,12 +460,12 @@ export default function PatientDetailPage() {
                          ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                {tests.map((test, i) => (
-                                  <div key={i} style={{ padding: '1.5rem', border: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div key={i} style={{ padding: '1.5rem', border: '1px solid #e2e8f0', background: '#fff', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                      <div>
-                                        <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{test.test_name.toUpperCase()}</p>
-                                        <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>ID: {test.test_id} • {test.status.toUpperCase()}</p>
+                                        <p style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{test.test_name.toUpperCase()}</p>
+                                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>ID: {test.test_id} • {test.status.toUpperCase()}</p>
                                      </div>
-                                     <button style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '10px 20px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}>REPORT</button>
+                                     <button className="btn-primary-premium" style={{ padding: '10px 20px', fontSize: '0.7rem' }}>Report</button>
                                   </div>
                                ))}
                             </div>
@@ -491,11 +491,11 @@ export default function PatientDetailPage() {
                          ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                {prescriptions.map((pres, i) => (
-                                  <div key={i} style={{ padding: '1.5rem', border: '2px solid #eee', background: '#fff' }}>
-                                     <p style={{ fontWeight: 900, fontSize: '0.8rem', color: '#3b82f6', marginBottom: '10px' }}>RX-{pres.id.toString().padStart(5, '0')}</p>
+                                  <div key={i} style={{ padding: '1.5rem', border: '1px solid #e2e8f0', background: '#fff', borderRadius: '12px' }}>
+                                     <p style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--color-accent)', marginBottom: '10px' }}>RX-{pres.id.toString().padStart(5, '0')}</p>
                                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                                         {pres.medicines.map((m: any, j: number) => (
-                                           <span key={j} style={{ padding: '4px 10px', background: '#f4f4f5', fontSize: '0.7rem', fontWeight: 900, border: '1px solid #000' }}>
+                                           <span key={j} style={{ padding: '6px 12px', background: '#f8fafc', fontSize: '0.75rem', fontWeight: 700, border: '1px solid #e2e8f0', borderRadius: '20px', color: 'var(--text-primary)' }}>
                                               {m.name || m.medicine} • {m.dosage || m.quantity}
                                            </span>
                                         ))}
@@ -510,18 +510,18 @@ export default function PatientDetailPage() {
              </div>
 
              {/* Action Buttons */}
-             <div style={{ marginTop: '2rem', paddingTop: '3rem', borderTop: '2px solid #29ABE2', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                <button onClick={() => setShowPrescriptionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <Pill size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>PRESCRIBE MEDS</span>
+             <div style={{ marginTop: '2rem', paddingTop: '3rem', borderTop: '1px solid #e2e8f0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+                <button onClick={() => setShowPrescriptionModal(true)} className="card-premium" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '1.5rem', transition: 'all 0.2s', border: '1px solid #e2e8f0' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'} onMouseOut={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}>
+                  <Pill size={24} style={{ color: 'var(--color-accent)' }} /> <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)' }}>PRESCRIBE MEDS</span>
                 </button>
-                <button onClick={() => setShowLabModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <FlaskConical size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>REQUEST LAB</span>
+                <button onClick={() => setShowLabModal(true)} className="card-premium" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '1.5rem', transition: 'all 0.2s', border: '1px solid #e2e8f0' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'} onMouseOut={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}>
+                  <FlaskConical size={24} style={{ color: 'var(--color-accent)' }} /> <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)' }}>REQUEST LAB</span>
                 </button>
-                <button onClick={() => setShowAdmissionModal(true)} style={{ padding: '1.5rem', background: '#fff', border: '2px solid #29ABE2', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <ShieldAlert size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADMIT PATIENT</span>
+                <button onClick={() => setShowAdmissionModal(true)} className="card-premium" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '1.5rem', transition: 'all 0.2s', border: '1px solid #e2e8f0' }} onMouseOver={(e) => e.currentTarget.style.borderColor = '#ef4444'} onMouseOut={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}>
+                  <ShieldAlert size={24} style={{ color: '#ef4444' }} /> <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)' }}>ADMIT PATIENT</span>
                 </button>
-                <button onClick={() => setShowRecordModal(true)} style={{ padding: '1.5rem', background: '#29ABE2', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                  <FileText size={24} /> <span style={{ fontSize: '0.65rem', fontWeight: 900 }}>ADD OLD DOCS</span>
+                <button onClick={() => setShowRecordModal(true)} className="btn-primary-premium" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '1.5rem', height: '100%', justifyContent: 'center' }}>
+                  <FileText size={24} /> <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>ADD OLD DOCS</span>
                 </button>
              </div>
 

@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('C:/Users/ASUS/OneDrive/Desktop/ERP/backend/medclues.db')
+conn = sqlite3.connect('c:/Users/ASUS/OneDrive/Desktop/Hospetal_Full/backend/medclues.db')
 c = conn.cursor()
 c.execute('SELECT id, name, location, node_code FROM hospitals ORDER BY id')
 hospitals = c.fetchall()

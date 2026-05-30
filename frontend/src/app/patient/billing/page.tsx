@@ -42,15 +42,15 @@ export default function PatientBillingPage() {
         {/* Financial Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
-              <Zap size={14} />
-              <span style={{ fontSize: '0.6rem', fontWeight: 800, letterSpacing: '2px', opacity: 0.5 }}>FINANCIAL TERMINAL</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.5rem' }}>
+              <Zap size={16} color="var(--color-accent)" />
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--text-secondary)' }}>FINANCIAL TERMINAL</span>
             </div>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-1px' }}>BILLING & SETTLEMENTS</h1>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)' }}>Billing & Settlements</h1>
           </div>
           <div style={{ textAlign: 'right' }}>
-             <p style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5, marginBottom: '4px' }}>OUTSTANDING BALANCE</p>
-             <h2 style={{ fontSize: '2rem', fontWeight: 900 }}>₹{totalUnpaid.toLocaleString()}</h2>
+             <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>OUTSTANDING BALANCE</p>
+             <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-primary)' }}>₹{totalUnpaid.toLocaleString()}</h2>
           </div>
         </div>
 
@@ -58,52 +58,56 @@ export default function PatientBillingPage() {
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
             {/* Active Bills */}
-            <div className="card" style={{ background: '#fff', padding: '2.5rem', flex: 1, display: 'flex', flexDirection: 'column', marginBottom: 0 }}>
-               <h3 style={{ fontSize: '0.8rem', fontWeight: 900, letterSpacing: '1px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                 <Receipt size={18} /> INVOICE HISTORY
-               </h3>
+            <div className="card-premium" style={{ background: '#fff', padding: '0', flex: 1, display: 'flex', flexDirection: 'column', marginBottom: 0, overflow: 'hidden' }}>
+               <div style={{ padding: '1.5rem', borderBottom: '1px solid #f1f5f9', background: '#f8fafc' }}>
+                 <h3 style={{ fontSize: '0.9rem', fontWeight: 800, letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
+                   <Receipt size={18} color="var(--color-accent)" /> INVOICE HISTORY
+                 </h3>
+               </div>
 
                {isLoading ? (
-                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, opacity: 0.2 }}>SYNCHRONIZING...</div>
+                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: 'var(--text-secondary)' }}>SYNCHRONIZING...</div>
                ) : bills.length === 0 ? (
-                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, opacity: 0.2 }}>NO BILLING RECORDS FOUND</div>
+                 <div style={{ padding: '4rem', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: 'var(--text-secondary)' }}>NO BILLING RECORDS FOUND</div>
                ) : (
-                 <div style={{ maxHeight: '500px', overflowY: 'auto', border: '2px solid var(--bg-side)', flex: 1 }} className="custom-scrollbar">
-                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                 <div className="table-responsive" style={{ flex: 1 }}>
+                   <table className="data-table-premium" style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
-                        <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid var(--bg-side)', textAlign: 'left' }}>
-                          <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
-                          <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>INVOICE IDENTITY</th>
-                          <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px' }}>FISCAL AMOUNT</th>
-                          <th style={{ padding: '15px 20px', fontSize: '0.65rem', letterSpacing: '1px', textAlign: 'right' }}>STATUS / ACTION</th>
+                        <tr>
+                          <th style={{ width: '80px' }}>S.NO</th>
+                          <th>INVOICE IDENTITY</th>
+                          <th>FISCAL AMOUNT</th>
+                          <th style={{ textAlign: 'right' }}>STATUS / ACTION</th>
                         </tr>
                       </thead>
                       <tbody>
                         {bills.map((bill, i) => (
-                          <tr key={bill.id} style={{ borderBottom: '1px solid #eee' }}>
-                            <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                            <td style={{ padding: '15px 20px' }}>
+                          <tr key={bill.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                            <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                            <td>
                                <div>
-                                 <p style={{ fontWeight: 900, fontSize: '0.85rem' }}>{bill.reason.toUpperCase()}</p>
-                                 <p style={{ fontSize: '0.6rem', fontWeight: 700, opacity: 0.4 }}>INV-{bill.id.toString().padStart(6, '0')} • {new Date().toLocaleDateString()}</p>
+                                 <p style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{bill.reason.toUpperCase()}</p>
+                                 <p style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)' }}>INV-{bill.id.toString().padStart(6, '0')} • {new Date().toLocaleDateString()}</p>
                                </div>
                             </td>
-                            <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '1rem' }}>₹{bill.amount.toLocaleString()}</td>
-                            <td style={{ padding: '15px 20px', textAlign: 'right' }}>
+                            <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>₹{bill.amount.toLocaleString()}</td>
+                            <td style={{ textAlign: 'right' }}>
                                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', justifyContent: 'flex-end' }}>
                                   <span style={{ 
-                                    fontSize: '0.55rem', 
-                                    fontWeight: 900, 
-                                    padding: '4px 8px', 
-                                    background: bill.status === 'unpaid' ? '#000' : '#f4f4f5',
-                                    color: bill.status === 'unpaid' ? '#fff' : '#000',
-                                    borderRadius: '2px'
+                                    fontSize: '0.7rem', 
+                                    fontWeight: 800, 
+                                    padding: '4px 10px', 
+                                    borderRadius: '12px',
+                                    background: bill.status === 'unpaid' ? '#fee2e2' : '#d1fae5',
+                                    color: bill.status === 'unpaid' ? '#dc2626' : '#059669'
                                   }}>
                                     {bill.status.toUpperCase()}
                                   </span>
                                   <button 
                                     onClick={() => showToast(`Downloading INVOICE ${bill.id}...`, "success")}
-                                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', opacity: 0.5 }}
+                                    className="btn-outline-premium"
+                                    style={{ padding: '8px' }}
+                                    title="Download Invoice"
                                   >
                                     <Download size={16} />
                                   </button>
@@ -115,22 +119,17 @@ export default function PatientBillingPage() {
                    </table>
                  </div>
                )}
-               <style jsx global>{`
-                 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-                 .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
-               `}</style>
             </div>
           </div>
 
           {/* Sidebar Actions */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
-             <div className="card" style={{ background: '#000', color: '#fff', border: '2px solid #000', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: 0 }}>
+             <div className="card-premium" style={{ background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', border: 'none', padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <CreditCard size={20} />
-                  <h3 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px' }}>QUICK SETTLE</h3>
+                  <CreditCard size={24} />
+                  <h3 style={{ fontSize: '0.9rem', fontWeight: 800, letterSpacing: '1px' }}>QUICK SETTLE</h3>
                 </div>
-                <p style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.7, lineHeight: 1.6 }}>
+                <p style={{ fontSize: '0.8rem', fontWeight: 500, opacity: 0.9, lineHeight: 1.6 }}>
                   Settle your outstanding balance using secure digital assets or standard gateway nodes.
                 </p>
                 <button 
@@ -138,33 +137,36 @@ export default function PatientBillingPage() {
                   disabled={totalUnpaid === 0}
                   style={{ 
                     width: '100%', 
-                    padding: '14px', 
+                    padding: '16px', 
                     background: '#fff', 
-                    color: '#000', 
+                    color: 'var(--color-accent)', 
                     border: 'none', 
-                    fontWeight: 900, 
-                    fontSize: '0.75rem', 
+                    fontWeight: 800, 
+                    fontSize: '0.85rem', 
                     cursor: totalUnpaid === 0 ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px'
+                    gap: '8px',
+                    borderRadius: '8px',
+                    opacity: totalUnpaid === 0 ? 0.7 : 1,
+                    transition: 'opacity 0.2s'
                   }}
                 >
-                  PAY NOW <ArrowUpRight size={16} />
+                  PAY NOW <ArrowUpRight size={18} />
                 </button>
              </div>
 
-             <div className="card" style={{ padding: '2rem', marginBottom: 0 }}>
-                <h4 style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '1px', opacity: 0.4, marginBottom: '1rem' }}>REPORTS</h4>
-                <button style={{ width: '100%', padding: '12px', background: 'transparent', border: '2px solid var(--bg-side)', color: 'var(--bg-side)', fontSize: '0.65rem', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-                  <Download size={14} /> EXPORT FISCAL REPORT
+             <div className="card-premium" style={{ padding: '2rem', marginBottom: 0 }}>
+                <h4 style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px', color: 'var(--text-secondary)', marginBottom: '1rem' }}>REPORTS</h4>
+                <button className="btn-outline-premium" style={{ width: '100%', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Download size={16} /> EXPORT FISCAL REPORT
                 </button>
              </div>
 
-             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '1rem 0', opacity: 0.4, marginTop: 'auto' }}>
-                <ShieldCheck size={16} />
-                <span style={{ fontSize: '0.55rem', fontWeight: 800 }}>AES-256 ENCRYPTED TRANSACTION NODE</span>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '1rem 0', color: 'var(--text-secondary)', marginTop: 'auto', justifyContent: 'center' }}>
+                <ShieldCheck size={18} />
+                <span style={{ fontSize: '0.7rem', fontWeight: 700 }}>AES-256 ENCRYPTED TRANSACTION NODE</span>
              </div>
           </div>
 

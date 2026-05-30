@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:password@localhost/medclues")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./medclues.db")
 
 # Resolve relative SQLite path to be absolute relative to the backend directory
 if DATABASE_URL.startswith("sqlite+aiosqlite:///"):
@@ -14,7 +14,8 @@ if DATABASE_URL.startswith("sqlite+aiosqlite:///"):
         backend_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         db_filename = db_relative_path.replace("./", "")
         db_absolute_path = os.path.join(backend_dir, db_filename)
-        DATABASE_URL = f"sqlite+aiosqlite:///{db_absolute_path.replace('\\', '/')}"
+        db_path_posix = db_absolute_path.replace('\\', '/')
+        DATABASE_URL = f"sqlite+aiosqlite:///{db_path_posix}"
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_async_engine(DATABASE_URL, echo=True, connect_args=connect_args)

@@ -90,13 +90,60 @@ async def list_users(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
+def serialize_user(u: User) -> dict:
+    assigned_doctor_data = None
+    if u.assigned_doctor:
+        try:
+            assigned_doctor_data = {
+                "id": u.assigned_doctor.id,
+                "specialization": u.assigned_doctor.specialization,
+                "user": {
+                    "name": u.assigned_doctor.user.name if u.assigned_doctor.user else "Unknown"
+                } if u.assigned_doctor.user else None
+            }
+        except Exception:
+            pass
+
+    assigned_nurse_data = None
+    if u.assigned_nurse:
+        assigned_nurse_data = {
+            "id": u.assigned_nurse.id,
+            "name": u.assigned_nurse.name
+        }
+
+    return {
+        "id": u.id,
+        "username": u.username,
+        "name": u.name,
+        "role": u.role,
+        "email": u.email,
+        "phone": u.phone,
+        "cleartext_password": u.cleartext_password,
+        "assigned_doctor_id": u.assigned_doctor_id,
+        "assigned_nurse_id": u.assigned_nurse_id,
+        "age": u.age,
+        "location": u.location,
+        "weight": u.weight,
+        "hospital_id": u.hospital_id,
+        "created_at": u.created_at,
+        "assigned_doctor": assigned_doctor_data,
+        "assigned_nurse": assigned_nurse_data
+    }
+
 @router.get("/{user_id}", response_model=UserSchema)
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).filter(User.id == user_id))
+    result = await db.execute(
+        select(User)
+        .options(
+            joinedload(User.assigned_doctor).joinedload(Doctor.user),
+            joinedload(User.assigned_nurse)
+        )
+        .filter(User.id == user_id)
+    )
     user = result.scalars().first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return user
+    return serialize_user(user)
 
 @router.delete("/{user_id}")
 async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
@@ -110,7 +157,14 @@ async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return {"message": "User deleted successfully"}
 @router.put("/{user_id}", response_model=UserSchema)
 async def update_user(user_id: int, user_data: UserUpdate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User).filter(User.id == user_id))
+    result = await db.execute(
+        select(User)
+        .options(
+            joinedload(User.assigned_doctor).joinedload(Doctor.user),
+            joinedload(User.assigned_nurse)
+        )
+        .filter(User.id == user_id)
+    )
     user = result.scalars().first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -125,8 +179,18 @@ async def update_user(user_id: int, user_data: UserUpdate, db: AsyncSession = De
         setattr(user, key, value)
     
     await db.commit()
-    await db.refresh(user)
-    return user
+    
+    # Reload with options after commit to avoid MissingGreenlet
+    result = await db.execute(
+        select(User)
+        .options(
+            joinedload(User.assigned_doctor).joinedload(Doctor.user),
+            joinedload(User.assigned_nurse)
+        )
+        .filter(User.id == user_id)
+    )
+    user = result.scalars().first()
+    return serialize_user(user)
 
 @router.post("/schedule", response_model=StaffScheduleSchema)
 async def create_staff_schedule(sched: StaffScheduleCreate, db: AsyncSession = Depends(get_db)):

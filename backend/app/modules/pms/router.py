@@ -161,10 +161,40 @@ async def register_user(data: dict, db: sqlite3.Connection = Depends(get_db)):
         return {"success": False, "message": "User already exists"}
     
     hashed_pw = get_password_hash(password)
+    
+    # Round-Robin Nurse Auto-Assignment for PMS
+    target_hosp_id = 1
+    cursor.execute("SELECT id FROM users WHERE role = 'nurse' AND hospital_id = ? ORDER BY id", (target_hosp_id,))
+    nurse_rows = cursor.fetchall()
+    nurses = []
+    for r in nurse_rows:
+        try:
+            nurses.append(r["id"])
+        except Exception:
+            try:
+                nurses.append(r[0])
+            except Exception:
+                pass
+                
+    assigned_nurse_id = None
+    if nurses:
+        cursor.execute("SELECT COUNT(id) FROM users WHERE role = 'patient' AND hospital_id = ?", (target_hosp_id,))
+        count_row = cursor.fetchone()
+        total_patients = 0
+        if count_row:
+            try:
+                total_patients = count_row[0]
+            except Exception:
+                try:
+                    total_patients = list(count_row)[0]
+                except Exception:
+                    total_patients = 0
+        assigned_nurse_id = nurses[total_patients % len(nurses)]
+        
     cursor.execute("""
-        INSERT INTO users (username, name, email, role, hashed_password, cleartext_password, phone, age, location, created_at)
-        VALUES (?, ?, ?, 'patient', ?, ?, ?, ?, ?, datetime('now'))
-    """, (email, name, email, hashed_pw, password, phone, data.get("age"), str(data.get("address", ""))))
+        INSERT INTO users (username, name, email, role, hashed_password, cleartext_password, phone, age, location, hospital_id, assigned_nurse_id, created_at)
+        VALUES (?, ?, ?, 'patient', ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+    """, (email, name, email, hashed_pw, password, phone, data.get("age"), str(data.get("address", "")), target_hosp_id, assigned_nurse_id))
     db.commit()
     
     # Patient record is implied by role='patient' in this system

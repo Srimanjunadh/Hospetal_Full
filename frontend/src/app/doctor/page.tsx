@@ -21,6 +21,7 @@ import {
   Bell,
   Search,
   CheckCircle,
+  Eye,
 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
@@ -285,39 +286,40 @@ export default function DoctorDashboard() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "3rem",
+          marginBottom: "2.5rem",
         }}
       >
         <div>
-          <h1 style={{ fontSize: "2.5rem", fontWeight: 900 }}>
-            CLINICAL COMMAND CENTER
+          <h1 style={{ fontSize: "2.2rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>
+            Clinical Command Center
           </h1>
-          <p style={{ color: "var(--text-secondary)", fontWeight: 700 }}>
-            STATION ID: {stationId} • {currentDateTime.toUpperCase()}
+          <p style={{ color: "var(--text-secondary)", fontWeight: 600, fontSize: "0.9rem", marginTop: '4px' }}>
+            STATION ID: <span style={{ color: "var(--color-accent)", fontWeight: 800 }}>{stationId}</span> • {currentDateTime.toUpperCase()}
           </p>
         </div>
         <div style={{ display: "flex", gap: "1rem" }}>
           <button 
-            className="btn-outline"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              flexDirection: 'row',
-              whiteSpace: 'nowrap'
+              padding: '12px 20px',
+              border: '2px solid #e2e8f0',
+              borderRadius: '12px',
+              background: '#fff',
+              color: 'var(--text-secondary)',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
             }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
           >
             <FileText size={18} /> <span>REPORTS</span>
           </button>
           <button 
-            className="btn-black"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              flexDirection: 'row',
-              whiteSpace: 'nowrap'
-            }}
+            className="btn-primary-premium"
           >
             <Plus size={18} /> <span>NEW ENCOUNTER</span>
           </button>
@@ -333,7 +335,7 @@ export default function DoctorDashboard() {
       >
         {/* Patient Roster */}
         <div
-          className="card"
+          className="card-premium"
           style={{
             padding: "0",
             overflow: "hidden",
@@ -346,188 +348,111 @@ export default function DoctorDashboard() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              padding: "1.5rem 2rem",
-              borderBottom: "2px solid #000",
+              padding: "1.25rem 2rem",
+              borderBottom: "1px solid #f1f5f9",
               background: "#fff",
             }}
           >
-            <h3
-              style={{
-                fontWeight: 900,
-                fontSize: "0.8rem",
-                letterSpacing: "2px",
-              }}
-            >
-              ASSIGNED PATIENTS
+            <h3 style={{ fontWeight: 800, fontSize: "0.95rem", color: "var(--text-primary)" }}>
+              Assigned Patients
             </h3>
             <span
               style={{
-                fontSize: "0.65rem",
-                fontWeight: 900,
-                background: "#10b981",
-                color: "#fff",
-                padding: "6px 10px",
-                borderRadius: "2px",
+                fontSize: "0.75rem",
+                fontWeight: 800,
+                background: "rgba(14, 168, 155, 0.1)",
+                color: "var(--color-accent)",
+                padding: "6px 12px",
+                borderRadius: "20px",
               }}
             >
               {highRiskPatients.length} ACTIVE
             </span>
           </div>
 
-          <div style={{ width: "100%", overflowX: "auto", height: "800px", overflowY: "auto" }} className="custom-scrollbar">
-            <table
-              className="data-table"
-              style={{ border: "none", minWidth: "100%" }}
-            >
+          <div style={{ width: "100%", overflowX: "auto", height: "700px", overflowY: "auto" }} className="custom-scrollbar">
+            <table className="data-table-premium" style={{ minWidth: "100%" }}>
               <thead>
-                <tr style={{ textAlign: "left", position: "sticky", top: 0, background: "#fff", zIndex: 10, boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
-                  <th style={{ padding: "1rem 2rem", fontSize: "0.65rem", letterSpacing: "1px", width: "80px" }}>S.NO</th>
-                  <th
-                    style={{
-                      padding: "1rem 2rem",
-                      fontSize: "0.65rem",
-                      letterSpacing: "1px",
-                      minWidth: "250px"
-                    }}
-                  >
-                    IDENTITY
-                  </th>
-                  <th
-                    style={{
-                      padding: "1rem 1rem",
-                      fontSize: "0.65rem",
-                      letterSpacing: "1px",
-                      width: "180px"
-                    }}
-                  >
-                    CONDITION
-                  </th>
-                  <th
-                    style={{
-                      padding: "1rem 1rem",
-                      fontSize: "0.65rem",
-                      letterSpacing: "1px",
-                      width: "120px"
-                    }}
-                  >
-                    VITALS
-                  </th>
-                  <th
-                    style={{
-                      padding: "1rem 2rem",
-                      fontSize: "0.65rem",
-                      letterSpacing: "1px",
-                      textAlign: "right",
-                    }}
-                  >
-                    ACTIONS
-                  </th>
+                <tr style={{ position: "sticky", top: 0, background: "#f8fafc", zIndex: 10 }}>
+                  <th style={{ width: "80px" }}>S.NO</th>
+                  <th style={{ minWidth: "250px" }}>IDENTITY</th>
+                  <th style={{ width: "180px" }}>CONDITION</th>
+                  <th style={{ width: "200px" }}>VITALS TREND</th>
+                  <th style={{ textAlign: "right" }}>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
                 {highRiskPatients.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan={5}
-                      style={{
-                        textAlign: "center",
-                        padding: "3rem",
-                        opacity: 0.3,
-                        fontWeight: 900,
-                      }}
-                    >
+                    <td colSpan={5} style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)", fontWeight: 700 }}>
                       NO CLINICAL SESSIONS ACTIVE
                     </td>
                   </tr>
                 ) : (
                   highRiskPatients.map((patient, i) => (
-                    <tr key={i} style={{ borderBottom: "1px solid #eee" }}>
-                      <td style={{ padding: "1.5rem 2rem", fontWeight: 900, fontSize: "0.75rem", opacity: 0.3 }}>{(i + 1).toString().padStart(2, "0")}</td>
-                      <td style={{ padding: "1.5rem 2rem" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "14px",
-                          }}
-                        >
+                    <tr 
+                      key={i} 
+                      style={{ transition: 'all 0.3s ease', cursor: 'pointer' }}
+                      onMouseOver={(e) => { e.currentTarget.style.background = '#f0fdfa'; e.currentTarget.style.transform = 'scale(1.005)'; }}
+                      onMouseOut={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+                      onClick={() => setSelectedPatient(patient)}
+                    >
+                      <td style={{ fontWeight: 700, color: "var(--text-secondary)", opacity: 0.6 }}>{(i + 1).toString().padStart(2, "0")}</td>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                           <div
                             style={{
-                              width: "36px",
-                              height: "36px",
-                              background: "#000",
+                              width: "40px",
+                              height: "40px",
+                              background: "linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)",
                               color: "#fff",
+                              borderRadius: "10px",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              fontSize: "0.8rem",
-                              fontWeight: 900,
+                              fontSize: "1rem",
+                              fontWeight: 800,
+                              boxShadow: "0 4px 10px rgba(14, 168, 155, 0.2)"
                             }}
                           >
-                            {patient.name[0]}
+                            <Eye size={18} />
                           </div>
-                          <div style={{ whiteSpace: "nowrap" }}>
-                            <p style={{ fontWeight: 900, fontSize: "0.85rem" }}>
-                              {patient.name}
+                          <div>
+                            <p style={{ fontWeight: 800, fontSize: "0.9rem", color: "var(--text-primary)" }}>
+                              PATIENT #{i + 1}
                             </p>
-                            <p
-                              style={{
-                                fontSize: "0.65rem",
-                                opacity: 0.5,
-                                fontWeight: 700,
-                                marginTop: "2px",
-                              }}
-                            >
-                              {patient.id}
+                            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+                              Click for details
                             </p>
                           </div>
                         </div>
                       </td>
-                      <td
-                        style={{
-                          padding: "1.5rem 1rem",
-                          fontSize: "0.75rem",
-                          fontWeight: 800,
-                        }}
-                      >
-                        {patient.condition}
+                      <td style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-primary)" }}>
+                        <span style={{ background: '#f1f5f9', padding: '4px 10px', borderRadius: '12px' }}>{patient.condition}</span>
                       </td>
-                      <td style={{ padding: "1.5rem 1rem" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
-                          <Activity size={14} color="#dc2626" />
-                          <span style={{ fontSize: "0.8rem", fontWeight: 900 }}>
-                            {patient.vitals}
-                          </span>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--text-primary)" }}>{patient.vitals}</span>
+                            <span style={{ fontSize: "0.6rem", fontWeight: 700, color: "#10b981" }}>+2.4% STABLE</span>
+                          </div>
+                          {/* Mini Sparkline Graph */}
+                          <svg width="60" height="24" viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.8 }}>
+                            <path d="M0 20C5 20 8 5 15 5C22 5 25 18 30 18C35 18 40 8 45 8C50 8 55 15 60 15" stroke="url(#paint0_linear)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <defs>
+                              <linearGradient id="paint0_linear" x1="0" y1="20" x2="60" y2="20" gradientUnits="userSpaceOnUse">
+                                <stop stopColor="#10b981"/>
+                                <stop offset="1" stopColor="#3b82f6"/>
+                              </linearGradient>
+                            </defs>
+                          </svg>
                         </div>
                       </td>
-                      <td
-                        style={{ padding: "1.5rem 2rem", textAlign: "right" }}
-                      >
+                      <td style={{ textAlign: "right" }}>
                         <button
-                          onClick={() => setSelectedPatient(patient)}
-                          style={{
-                            background: "#000",
-                            color: "#fff",
-                            border: "none",
-                            padding: "8px 18px",
-                            fontSize: "0.65rem",
-                            fontWeight: 900,
-                            cursor: "pointer",
-                            letterSpacing: "1px",
-                            transition: "background 0.2s",
-                          }}
-                          onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "#333")
-                          }
-                          onMouseLeave={(e) =>
-                            (e.currentTarget.style.background = "#000")
-                          }
+                          onClick={(e) => { e.stopPropagation(); setSelectedPatient(patient); }}
+                          className="btn-primary-premium"
+                          style={{ padding: '8px 16px', fontSize: '0.75rem' }}
                         >
                           DIAGNOSE
                         </button>
@@ -543,42 +468,31 @@ export default function DoctorDashboard() {
         {/* Right Section: Alerts and Activity */}
         <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
           {/* Pending Consultation Requests */}
+          {/* Pending Consultation Requests */}
           <div
-            className="card"
-            style={{ padding: "0", border: "2px solid #3b82f6" }}
+            className="card-premium"
+            style={{ padding: "0", border: "1px solid #e0f2fe", overflow: 'hidden' }}
           >
             <div
               style={{
                 padding: "1.25rem",
-                background: "#3b82f6",
+                background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
                 color: "#fff",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
-              <h3
-                style={{
-                  fontWeight: 900,
-                  fontSize: "0.7rem",
-                  letterSpacing: "2px",
-                }}
-              >
+              <h3 style={{ fontWeight: 800, fontSize: "0.85rem", letterSpacing: "1px" }}>
                 PENDING REQUESTS
               </h3>
-              <Bell size={16} />
+              <div style={{ background: 'rgba(255,255,255,0.2)', padding: '6px', borderRadius: '50%' }}>
+                <Bell size={16} />
+              </div>
             </div>
-            <div style={{ padding: "1rem", height: "350px", overflowY: "auto" }} className="custom-scrollbar">
+            <div style={{ padding: "1rem", height: "250px", overflowY: "auto" }} className="custom-scrollbar">
               {pendingAppointments.length === 0 ? (
-                <p
-                  style={{
-                    fontSize: "0.7rem",
-                    fontWeight: 800,
-                    opacity: 0.3,
-                    textAlign: "center",
-                    padding: "1rem",
-                  }}
-                >
+                <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-secondary)", textAlign: "center", padding: "2rem" }}>
                   NO PENDING TASKS
                 </p>
               ) : (
@@ -587,39 +501,30 @@ export default function DoctorDashboard() {
                     key={i}
                     style={{
                       padding: "1rem",
-                      borderBottom: "1px solid #eee",
+                      borderBottom: "1px solid #f1f5f9",
                       display: "flex",
                       gap: "15px",
                       alignItems: "center",
+                      transition: 'background 0.2s',
+                      borderRadius: '8px'
                     }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f8fafc'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                   >
-                    <span style={{ fontSize: "0.7rem", fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, "0")}</span>
+                    <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--text-secondary)", opacity: 0.5 }}>{(i + 1).toString().padStart(2, "0")}</span>
                     <div style={{ flex: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
-                        <p style={{ fontWeight: 900, fontSize: "0.75rem" }}>
+                        <p style={{ fontWeight: 800, fontSize: "0.85rem", color: 'var(--text-primary)' }}>
                           {appt.patient.name.toUpperCase()}
                         </p>
-                        <p
-                          style={{
-                            fontSize: "0.6rem",
-                            fontWeight: 700,
-                            opacity: 0.5,
-                          }}
-                        >
+                        <p style={{ fontSize: "0.7rem", fontWeight: 600, color: "var(--text-secondary)" }}>
                           {appt.type} • {appt.preferred_time}
                         </p>
                       </div>
                       <button
                         onClick={() => handleApprove(appt.id)}
-                        style={{
-                          background: "#10b981",
-                          color: "#fff",
-                          border: "none",
-                          padding: "5px 10px",
-                          fontSize: "0.6rem",
-                          fontWeight: 900,
-                          cursor: "pointer",
-                        }}
+                        className="btn-primary-premium"
+                        style={{ padding: '6px 12px', fontSize: '0.7rem' }}
                       >
                         APPROVE
                       </button>
@@ -628,21 +533,16 @@ export default function DoctorDashboard() {
                 ))
               )}
             </div>
-            <style jsx global>{`
-              .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-              .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-              .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-            `}</style>
           </div>
+
           <div
-            className="card"
+            className="card-premium"
             style={{ 
-              background: "linear-gradient(145deg, #000 0%, #1a1a1a 100%)", 
+              background: "linear-gradient(145deg, #0f172a 0%, #1e293b 100%)", 
               color: "#fff", 
               padding: "2rem",
               position: "relative",
               overflow: "hidden",
-              border: "2px solid #333"
             }}
           >
             {/* Background scanning animation effect */}
@@ -652,109 +552,69 @@ export default function DoctorDashboard() {
               left: 0, 
               right: 0, 
               height: "2px", 
-              background: "linear-gradient(90deg, transparent, #3b82f6, transparent)",
-              boxShadow: "0 0 15px #3b82f6",
+              background: "linear-gradient(90deg, transparent, #38bdf8, transparent)",
+              boxShadow: "0 0 15px #38bdf8",
               zIndex: 1,
-              animation: "scan 4s linear infinite"
+              animation: "scan 3s linear infinite"
             }}></div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                marginBottom: "2.5rem",
-                position: "relative",
-                zIndex: 2
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "2rem", position: "relative", zIndex: 2 }}>
               <div>
-                <h3
-                  style={{
-                    fontWeight: 900,
-                    fontSize: "0.85rem",
-                    letterSpacing: "3px",
-                    color: "#3b82f6"
-                  }}
-                >
+                <h3 style={{ fontWeight: 800, fontSize: "0.95rem", letterSpacing: "2px", color: "#38bdf8" }}>
                   AI RISK ANALYSIS
                 </h3>
-                <p
-                  style={{ fontSize: "0.6rem", fontWeight: 700, opacity: 0.4, letterSpacing: "1px" }}
-                >
-                  COGNITIVE DIAGNOSTIC NODE: V1.0.4 ACTIVE
+                <p style={{ fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", letterSpacing: "1px", marginTop: '4px' }}>
+                  COGNITIVE DIAGNOSTIC NODE: V1.0.4
                 </p>
               </div>
-              <div className="pulse-slow">
-                <Cpu size={22} color="#3b82f6" />
+              <div className="pulse-slow" style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '10px', borderRadius: '12px' }}>
+                <Cpu size={24} color="#38bdf8" />
               </div>
             </div>
 
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "1.2rem", position: "relative", zIndex: 2 }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem", position: "relative", zIndex: 2 }}>
               {riskScore ? (
-                <div
-                  style={{
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    padding: "1.5rem",
-                    background: "rgba(255,255,255,0.03)",
-                    borderRadius: "4px"
-                  }}
-                >
+                <div style={{ border: "1px solid rgba(255,255,255,0.1)", padding: "1.5rem", background: "rgba(255,255,255,0.03)", borderRadius: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
-                    <span style={{ fontSize: "0.6rem", fontWeight: 900, color: riskScore.risk_level === "CRITICAL" ? "#ef4444" : "#10b981", letterSpacing: "1px" }}>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 800, color: riskScore.risk_level === "CRITICAL" ? "#ef4444" : "#10b981", letterSpacing: "1px" }}>
                       STATUS: {riskScore.risk_level}
                     </span>
-                    <span style={{ fontSize: "0.6rem", fontWeight: 900, opacity: 0.5 }}>LATEST SYNC</span>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 700, color: '#94a3b8' }}>LATEST SYNC</span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
-                    <h2 style={{ fontSize: "2.5rem", fontWeight: 900, margin: 0 }}>{riskScore.score_value}<span style={{ fontSize: "1rem", opacity: 0.3 }}>/10</span></h2>
-                    <div style={{ flex: 1, height: "4px", background: "rgba(255,255,255,0.1)", borderRadius: "2px", overflow: "hidden" }}>
-                      <div style={{ width: `${riskScore.score_value * 10}%`, height: "100%", background: riskScore.score_value > 7 ? "#ef4444" : "#3b82f6", boxShadow: "0 0 10px currentColor" }}></div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "15px" }}>
+                    <h2 style={{ fontSize: "3rem", fontWeight: 800, margin: 0 }}>{riskScore.score_value}<span style={{ fontSize: "1.2rem", color: '#94a3b8' }}>/10</span></h2>
+                    <div style={{ flex: 1, height: "6px", background: "rgba(255,255,255,0.1)", borderRadius: "3px", overflow: "hidden" }}>
+                      <div style={{ width: `${riskScore.score_value * 10}%`, height: "100%", background: riskScore.score_value > 7 ? "#ef4444" : "#38bdf8", boxShadow: "0 0 10px currentColor", borderRadius: '3px' }}></div>
                     </div>
                   </div>
-                  <p style={{ fontSize: "0.6rem", fontWeight: 700, opacity: 0.5, marginTop: "1rem" }}>
+                  <p style={{ fontSize: "0.7rem", fontWeight: 600, color: "#94a3b8", marginTop: "1rem" }}>
                     CALCULATED AT: {new Date(riskScore.calculated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                   </p>
                 </div>
               ) : (
                 <>
                   {/* Predictive Alert Block */}
-                  <div
-                    style={{
-                      borderLeft: "4px solid #fbbf24",
-                      background: "rgba(251, 191, 36, 0.05)",
-                      padding: "1.2rem",
-                      position: "relative"
-                    }}
-                  >
+                  <div style={{ borderLeft: "4px solid #f59e0b", background: "rgba(245, 158, 11, 0.1)", padding: "1.2rem", borderRadius: '0 12px 12px 0' }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                      <p style={{ fontSize: "0.6rem", fontWeight: 900, color: "#fbbf24", letterSpacing: "1px" }}>PREDICTIVE ALERT</p>
-                      <Activity size={12} color="#fbbf24" className="pulse" />
+                      <p style={{ fontSize: "0.7rem", fontWeight: 800, color: "#fcd34d", letterSpacing: "1px" }}>PREDICTIVE ALERT</p>
+                      <Activity size={14} color="#fcd34d" className="pulse" />
                     </div>
-                    <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#fff", lineHeight: "1.4" }}>
+                    <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#fff", lineHeight: "1.5" }}>
                       82% RISK OF HYPERTENSIVE CRISIS DETECTED IN ROOM 102
                     </p>
-                    <div style={{ marginTop: "0.8rem", display: "flex", gap: "10px" }}>
-                       <span style={{ fontSize: "0.55rem", padding: "2px 6px", background: "rgba(255,255,255,0.1)", fontWeight: 900 }}>TREND: RISING</span>
-                       <span style={{ fontSize: "0.55rem", padding: "2px 6px", background: "rgba(255,255,255,0.1)", fontWeight: 900 }}>PRIORITY: HIGH</span>
+                    <div style={{ marginTop: "1rem", display: "flex", gap: "10px" }}>
+                       <span style={{ fontSize: "0.65rem", padding: "4px 8px", background: "rgba(0,0,0,0.2)", borderRadius: '4px', fontWeight: 800, color: '#fcd34d' }}>TREND: RISING</span>
+                       <span style={{ fontSize: "0.65rem", padding: "4px 8px", background: "rgba(239, 68, 68, 0.2)", borderRadius: '4px', fontWeight: 800, color: '#fca5a5' }}>PRIORITY: HIGH</span>
                     </div>
                   </div>
 
                   {/* Recovery Trend Block */}
-                  <div
-                    style={{
-                      borderLeft: "4px solid #10b981",
-                      background: "rgba(16, 185, 129, 0.05)",
-                      padding: "1.2rem",
-                    }}
-                  >
+                  <div style={{ borderLeft: "4px solid #10b981", background: "rgba(16, 185, 129, 0.1)", padding: "1.2rem", borderRadius: '0 12px 12px 0' }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                      <p style={{ fontSize: "0.6rem", fontWeight: 900, color: "#10b981", letterSpacing: "1px" }}>RECOVERY TREND</p>
-                      <CheckCircle size={12} color="#10b981" />
+                      <p style={{ fontSize: "0.7rem", fontWeight: 800, color: "#6ee7b7", letterSpacing: "1px" }}>RECOVERY TREND</p>
+                      <CheckCircle size={14} color="#6ee7b7" />
                     </div>
-                    <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#fff", lineHeight: "1.4" }}>
+                    <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#fff", lineHeight: "1.5" }}>
                       STABLE VITALS IMPROVEMENT OBSERVED ACROSS WARD-ALPHA
                     </p>
                   </div>
@@ -773,54 +633,29 @@ export default function DoctorDashboard() {
                 animation: pulse 3s infinite;
               }
               @keyframes pulse {
-                0% { opacity: 1; }
-                50% { opacity: 0.5; }
-                100% { opacity: 1; }
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.05); opacity: 0.8; }
+                100% { transform: scale(1); opacity: 1; }
               }
             `}</style>
           </div>
 
-          <div className="card" style={{ border: "2px solid #dc2626" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <h3
-                style={{
-                  fontWeight: 900,
-                  fontSize: "0.7rem",
-                  letterSpacing: "1px",
-                }}
-              >
+          <div className="card-premium" style={{ borderLeft: "4px solid #ef4444" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+              <h3 style={{ fontWeight: 800, fontSize: "0.85rem", color: 'var(--text-primary)' }}>
                 CRITICAL LOGISTICS
               </h3>
-              <Activity size={16} color="#dc2626" />
+              <div style={{ background: '#fef2f2', padding: '8px', borderRadius: '50%' }}>
+                <Activity size={18} color="#ef4444" />
+              </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                background: "#fef2f2",
-                padding: "10px",
-              }}
-            >
-              <FlaskConical size={18} color="#dc2626" />
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", background: "#f8fafc", padding: "16px", borderRadius: '12px', border: '1px solid #f1f5f9' }}>
+              <FlaskConical size={24} color="#ef4444" />
               <div>
-                <p
-                  style={{
-                    fontSize: "0.75rem",
-                    fontWeight: 900,
-                    color: "#dc2626",
-                  }}
-                >
+                <p style={{ fontSize: "0.85rem", fontWeight: 800, color: "#ef4444" }}>
                   BLOOD BANK SHORTAGE
                 </p>
-                <p style={{ fontSize: "0.6rem", fontWeight: 700 }}>
+                <p style={{ fontSize: "0.75rem", fontWeight: 600, color: 'var(--text-secondary)' }}>
                   O- RESERVES BELOW 10%
                 </p>
               </div>
@@ -855,66 +690,76 @@ export default function DoctorDashboard() {
               }}
             />
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
               style={{
-                width: "800px",
+                width: "900px",
                 maxWidth: "95vw",
                 background: "#fff",
                 position: "relative",
-                border: "4px solid #000",
+                borderRadius: "24px",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
                 maxHeight: "90vh",
                 overflowY: "auto",
               }}
+              className="custom-scrollbar"
             >
               <div
                 style={{
                   padding: "2rem",
-                  background: "#000",
+                  background: "linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)",
                   color: "#fff",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  borderTopLeftRadius: '24px',
+                  borderTopRightRadius: '24px',
                 }}
               >
-                <div>
-                  <h2 style={{ fontSize: "1.5rem", fontWeight: 900 }}>
-                    {selectedPatient.name}
-                  </h2>
-                  <p
-                    style={{
-                      fontSize: "0.7rem",
-                      fontWeight: 700,
-                      opacity: 0.5,
-                    }}
-                  >
-                    {selectedPatient.id} • CLINICAL HISTORY
-                  </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                  <div style={{ width: '60px', height: '60px', background: 'rgba(255,255,255,0.2)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 800 }}>
+                    {selectedPatient.name[0]}
+                  </div>
+                  <div>
+                    <h2 style={{ fontSize: "1.8rem", fontWeight: 800, margin: 0, letterSpacing: '-0.5px' }}>
+                      {selectedPatient.name}
+                    </h2>
+                    <p style={{ fontSize: "0.85rem", fontWeight: 600, opacity: 0.8, marginTop: '4px' }}>
+                      {selectedPatient.id} • CLINICAL HISTORY
+                    </p>
+                  </div>
                 </div>
                 <button
                   onClick={handleAdmit}
                   style={{
-                    background: "#dc2626",
+                    background: "#ef4444",
                     color: "#fff",
                     border: "none",
-                    padding: "10px 20px",
-                    fontSize: "0.7rem",
-                    fontWeight: 900,
+                    padding: "12px 24px",
+                    fontSize: "0.8rem",
+                    fontWeight: 800,
+                    borderRadius: '12px',
                     cursor: "pointer",
+                    boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)',
+                    transition: 'all 0.2s'
                   }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
                   ADMIT PATIENT
                 </button>
               </div>
 
-              <div style={{ padding: "2rem" }}>
+              <div style={{ padding: "2.5rem" }}>
                 <div
                   style={{
                     display: "flex",
-                    gap: "2rem",
-                    marginBottom: "2rem",
-                    borderBottom: "1px solid #eee",
+                    gap: "1rem",
+                    marginBottom: "2.5rem",
+                    background: '#f8fafc',
+                    padding: '8px',
+                    borderRadius: '16px'
                   }}
                 >
                   {[
@@ -927,15 +772,17 @@ export default function DoctorDashboard() {
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       style={{
-                        padding: "1rem 0",
-                        background: "none",
+                        padding: "12px 24px",
+                        background: activeTab === tab ? "#fff" : "transparent",
                         border: "none",
-                        borderBottom:
-                          activeTab === tab ? "4px solid #000" : "none",
-                        fontWeight: 900,
-                        fontSize: "0.75rem",
+                        borderRadius: "12px",
+                        boxShadow: activeTab === tab ? "0 4px 12px rgba(0,0,0,0.05)" : "none",
+                        color: activeTab === tab ? "var(--color-accent)" : "var(--text-secondary)",
+                        fontWeight: 800,
+                        fontSize: "0.85rem",
                         cursor: "pointer",
-                        opacity: activeTab === tab ? 1 : 0.3,
+                        flex: 1,
+                        transition: 'all 0.3s ease'
                       }}
                     >
                       {tab.toUpperCase()}
@@ -958,62 +805,47 @@ export default function DoctorDashboard() {
                         gap: "1.5rem",
                       }}
                     >
-                      <div className="card" style={{ padding: "1.5rem" }}>
-                        <p
-                          style={{
-                            fontSize: "0.6rem",
-                            fontWeight: 900,
-                            opacity: 0.5,
-                          }}
-                        >
-                          BLOOD PRESSURE
-                        </p>
-                        <p style={{ fontSize: "1.5rem", fontWeight: 900 }}>
-                          120/80
-                        </p>
+                      <div className="card-premium" style={{ padding: "1.5rem", textAlign: 'center' }}>
+                        <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-secondary)", marginBottom: '8px' }}>BLOOD PRESSURE</p>
+                        <p style={{ fontSize: "2rem", fontWeight: 800, color: 'var(--color-accent)' }}>120<span style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>/80</span></p>
+                        <div style={{ marginTop: '10px' }}>
+                          <svg width="100%" height="30" viewBox="0 0 100 30" preserveAspectRatio="none">
+                            <path d="M0,15 L20,15 L30,5 L40,25 L50,15 L100,15" stroke="var(--color-accent)" strokeWidth="2" fill="none" />
+                          </svg>
+                        </div>
                       </div>
-                      <div className="card" style={{ padding: "1.5rem" }}>
-                        <p
-                          style={{
-                            fontSize: "0.6rem",
-                            fontWeight: 900,
-                            opacity: 0.5,
-                          }}
-                        >
-                          HEART RATE
-                        </p>
-                        <p style={{ fontSize: "1.5rem", fontWeight: 900 }}>
-                          72 BPM
-                        </p>
+                      <div className="card-premium" style={{ padding: "1.5rem", textAlign: 'center' }}>
+                        <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-secondary)", marginBottom: '8px' }}>HEART RATE</p>
+                        <p style={{ fontSize: "2rem", fontWeight: 800, color: '#ef4444' }}>72 <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>BPM</span></p>
+                        <div style={{ marginTop: '10px' }}>
+                          <svg width="100%" height="30" viewBox="0 0 100 30" preserveAspectRatio="none">
+                            <path d="M0,20 Q25,20 25,5 T50,20 T75,25 T100,20" stroke="#ef4444" strokeWidth="2" fill="none" />
+                          </svg>
+                        </div>
                       </div>
-                      <div className="card" style={{ padding: "1.5rem" }}>
-                        <p
-                          style={{
-                            fontSize: "0.6rem",
-                            fontWeight: 900,
-                            opacity: 0.5,
-                          }}
-                        >
-                          SPO2
-                        </p>
-                        <p style={{ fontSize: "1.5rem", fontWeight: 900 }}>
-                          98%
-                        </p>
+                      <div className="card-premium" style={{ padding: "1.5rem", textAlign: 'center' }}>
+                        <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-secondary)", marginBottom: '8px' }}>SPO2</p>
+                        <p style={{ fontSize: "2rem", fontWeight: 800, color: '#3b82f6' }}>98<span style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>%</span></p>
+                        <div style={{ marginTop: '10px' }}>
+                          <svg width="100%" height="30" viewBox="0 0 100 30" preserveAspectRatio="none">
+                            <path d="M0,5 L100,5" stroke="#3b82f6" strokeWidth="2" strokeDasharray="4 4" fill="none" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
                     <div
-                      className="card"
+                      className="card-premium"
                       style={{
                         padding: "1.5rem",
                         background: "#fef2f2",
-                        border: "1px solid #dc2626",
+                        border: "1px solid #fca5a5",
                       }}
                     >
                       <h4
                         style={{
-                          fontSize: "0.75rem",
-                          fontWeight: 900,
-                          color: "#dc2626",
+                          fontSize: "0.85rem",
+                          fontWeight: 800,
+                          color: "#ef4444",
                           marginBottom: "1rem",
                         }}
                       >
@@ -1022,9 +854,10 @@ export default function DoctorDashboard() {
                       <ul
                         style={{
                           paddingLeft: "1.25rem",
-                          fontSize: "0.85rem",
-                          fontWeight: 700,
-                          lineHeight: "1.6",
+                          fontSize: "0.9rem",
+                          fontWeight: 600,
+                          color: '#7f1d1d',
+                          lineHeight: "1.8",
                         }}
                       >
                         <li>CHRONIC HYPERTENSION (STAGE 1)</li>
@@ -1063,32 +896,36 @@ export default function DoctorDashboard() {
                       <div
                         key={i}
                         style={{
-                          padding: "1.5rem",
-                          border: "1px solid #eee",
+                          padding: "1.25rem",
+                          borderBottom: "1px solid #f1f5f9",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
+                          transition: 'background 0.2s',
+                          borderRadius: '8px'
                         }}
+                        onMouseOver={(e) => e.currentTarget.style.background = '#f8fafc'}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                       >
                         <div>
-                          <p style={{ fontWeight: 900, fontSize: "0.8rem" }}>
+                          <p style={{ fontWeight: 800, fontSize: "0.85rem", color: 'var(--text-primary)' }}>
                             {rec.type}
                           </p>
                           <p
                             style={{
-                              fontSize: "0.65rem",
-                              fontWeight: 700,
-                              opacity: 0.5,
+                              fontSize: "0.7rem",
+                              fontWeight: 600,
+                              color: 'var(--text-secondary)'
                             }}
                           >
                             {rec.date} • {rec.provider}
                           </p>
                         </div>
                         <button
-                          className="btn-outline"
-                          style={{ fontSize: "0.6rem", padding: "6px 12px" }}
+                          className="btn-outline-premium"
+                          style={{ fontSize: "0.7rem", padding: "6px 14px" }}
                         >
-                          VIEW RECORD
+                          View Record
                         </button>
                       </div>
                     ))}
@@ -1099,17 +936,19 @@ export default function DoctorDashboard() {
                   <div>
                     <div
                       style={{
-                        background: "#f4f4f5",
+                        background: "#f8fafc",
                         padding: "1.5rem",
-                        border: "2px dashed #000",
+                        border: "1px solid #e2e8f0",
+                        borderRadius: "16px",
                         marginBottom: "2rem",
                       }}
                     >
                       <p
                         style={{
-                          fontSize: "0.65rem",
-                          fontWeight: 900,
+                          fontSize: "0.75rem",
+                          fontWeight: 700,
                           marginBottom: "1rem",
+                          color: "var(--text-primary)",
                         }}
                       >
                         REQUISITION NEW DIAGNOSTIC
@@ -1123,31 +962,35 @@ export default function DoctorDashboard() {
                       >
                         <input
                           type="text"
-                          placeholder="TEST NAME (e.g. BLOOD SUGAR)"
+                          placeholder="Test Name (e.g. Blood Sugar)"
                           value={testName}
                           onChange={(e) => setTestName(e.target.value)}
                           style={{
                             flex: 1,
-                            padding: "10px",
-                            border: "2px solid #000",
-                            fontWeight: 800,
-                            fontSize: "0.8rem",
+                            padding: "12px 16px",
+                            border: "1px solid #cbd5e1",
+                            borderRadius: "12px",
+                            fontWeight: 600,
+                            fontSize: "0.85rem",
+                            outline: "none",
                           }}
                         />
                         <button
                           onClick={handleAddTest}
                           disabled={!testName}
+                          className={testName ? "btn-primary-premium" : ""}
                           style={{
                             padding: "10px 20px",
-                            background: testName ? "#000" : "#ccc",
-                            color: "#fff",
+                            background: testName ? "" : "#e2e8f0",
+                            color: testName ? "" : "#94a3b8",
                             border: "none",
-                            fontWeight: 900,
-                            fontSize: "0.7rem",
+                            borderRadius: '12px',
+                            fontWeight: 700,
+                            fontSize: "0.8rem",
                             cursor: testName ? "pointer" : "not-allowed",
                           }}
                         >
-                          ADD TO ORDER
+                          Add to Order
                         </button>
                       </div>
                       <p
@@ -1186,20 +1029,22 @@ export default function DoctorDashboard() {
                               setQueuedTests([...queuedTests, test])
                             }
                             style={{
-                              padding: "8px 12px",
+                              padding: "8px 16px",
                               background: queuedTests.includes(test)
-                                ? "#10b981"
+                                ? "var(--color-accent)"
                                 : "#fff",
                               color: queuedTests.includes(test)
                                 ? "#fff"
-                                : "#000",
-                              border: "1px solid #000",
-                              fontWeight: 900,
-                              fontSize: "0.6rem",
+                                : "var(--text-primary)",
+                              border: queuedTests.includes(test) ? "1px solid var(--color-accent)" : "1px solid #e2e8f0",
+                              borderRadius: "20px",
+                              fontWeight: 700,
+                              fontSize: "0.75rem",
                               cursor: queuedTests.includes(test)
                                 ? "default"
                                 : "pointer",
                               transition: "all 0.2s",
+                              boxShadow: queuedTests.includes(test) ? "0 2px 8px rgba(14,168,155,0.2)" : "0 2px 4px rgba(0,0,0,0.02)"
                             }}
                           >
                             {test} {queuedTests.includes(test) && "✓"}
@@ -1210,15 +1055,16 @@ export default function DoctorDashboard() {
 
                     {queuedTests.length > 0 && (
                       <div
-                        className="card"
+                        className="card-premium"
                         style={{ padding: "1.5rem", marginBottom: "2rem" }}
                       >
                         <h4
                           style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 900,
-                            letterSpacing: "1px",
+                            fontSize: "0.8rem",
+                            fontWeight: 800,
+                            letterSpacing: "0.5px",
                             marginBottom: "1.5rem",
+                            color: "var(--text-primary)"
                           }}
                         >
                           QUEUED DIAGNOSTICS ({queuedTests.length})
@@ -1237,12 +1083,12 @@ export default function DoctorDashboard() {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                padding: "10px",
-                                borderBottom: "1px solid #eee",
+                                padding: "12px",
+                                borderBottom: "1px solid #f1f5f9",
                               }}
                             >
                               <span
-                                style={{ fontWeight: 900, fontSize: "0.8rem" }}
+                                style={{ fontWeight: 700, fontSize: "0.85rem", color: 'var(--text-primary)' }}
                               >
                                 {t}
                               </span>
@@ -1253,31 +1099,31 @@ export default function DoctorDashboard() {
                                   )
                                 }
                                 style={{
-                                  background: "none",
+                                  background: "rgba(239, 68, 68, 0.1)",
                                   border: "none",
-                                  color: "#dc2626",
-                                  fontWeight: 900,
-                                  fontSize: "0.6rem",
+                                  color: "#ef4444",
+                                  fontWeight: 700,
+                                  fontSize: "0.7rem",
+                                  padding: "4px 10px",
+                                  borderRadius: "12px",
                                   cursor: "pointer",
                                 }}
                               >
-                                REMOVE
+                                Remove
                               </button>
                             </div>
                           ))}
                         </div>
                         <button
                           onClick={handleTestRequest}
+                          className="btn-primary-premium"
                           style={{
                             width: "100%",
                             marginTop: "1.5rem",
-                            background: "#000",
-                            color: "#fff",
-                            border: "none",
-                            padding: "15px",
-                            fontWeight: 900,
-                            fontSize: "0.8rem",
-                            cursor: "pointer",
+                            padding: "16px",
+                            fontWeight: 800,
+                            fontSize: "0.85rem",
+                            justifyContent: "center",
                           }}
                         >
                           TRANSMIT FULL DIAGNOSTICS ORDER TO LAB
@@ -1350,10 +1196,10 @@ export default function DoctorDashboard() {
                   >
                     {/* Medicine Selection Engine */}
                     <div
+                      className="card-premium"
                       style={{
-                        background: "#f4f4f5",
                         padding: "1.5rem",
-                        border: "2px solid #000",
+                        overflow: "hidden"
                       }}
                     >
                       <div
@@ -1366,35 +1212,38 @@ export default function DoctorDashboard() {
                       >
                         <p
                           style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 900,
-                            letterSpacing: "1px",
+                            fontSize: "0.8rem",
+                            fontWeight: 800,
+                            letterSpacing: "0.5px",
+                            color: "var(--text-primary)",
                           }}
                         >
                           PHARMACEUTICAL INVENTORY SELECTOR
                         </p>
                         <div style={{ position: "relative", width: "250px" }}>
                           <Search
-                            size={14}
+                            size={16}
                             style={{
                               position: "absolute",
-                              left: "10px",
+                              left: "12px",
                               top: "50%",
                               transform: "translateY(-50%)",
-                              opacity: 0.5,
+                              color: "var(--text-secondary)",
                             }}
                           />
                           <input
                             type="text"
-                            placeholder="SEARCH MEDICINES..."
+                            placeholder="Search medicines..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "8px 8px 8px 30px",
-                              border: "1px solid #000",
-                              fontSize: "0.7rem",
-                              fontWeight: 800,
+                              padding: "10px 12px 10px 36px",
+                              border: "1px solid #cbd5e1",
+                              borderRadius: "12px",
+                              fontSize: "0.85rem",
+                              fontWeight: 600,
+                              outline: "none",
                             }}
                           />
                         </div>
@@ -1431,25 +1280,27 @@ export default function DoctorDashboard() {
                                 })
                               }
                               style={{
-                                padding: "12px",
+                                padding: "16px",
                                 background:
-                                  item.quantity > 0 ? "#10b981" : "#dc2626",
-                                color: "#fff",
+                                  item.quantity > 0 ? "rgba(16, 185, 129, 0.05)" : "rgba(239, 68, 68, 0.05)",
+                                color: "var(--text-primary)",
                                 cursor:
                                   item.quantity > 0 ? "pointer" : "not-allowed",
-                                opacity: item.quantity > 0 ? 1 : 0.4,
+                                opacity: item.quantity > 0 ? 1 : 0.6,
                                 border:
                                   prescription.medicine === item.name
-                                    ? "3px solid #000"
-                                    : "none",
+                                    ? "2px solid var(--color-accent)"
+                                    : item.quantity > 0 ? "1px solid rgba(16, 185, 129, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
+                                borderRadius: "12px",
                                 textAlign: "center",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: "4px",
+                                gap: "6px",
+                                transition: "all 0.2s"
                               }}
                             >
                               <p
-                                style={{ fontSize: "0.7rem", fontWeight: 900 }}
+                                style={{ fontSize: "0.8rem", fontWeight: 800 }}
                               >
                                 {item.name}
                               </p>
@@ -1476,30 +1327,35 @@ export default function DoctorDashboard() {
                           style={{
                             display: "grid",
                             gridTemplateColumns: "2fr 1fr 1fr auto",
-                            gap: "10px",
+                            gap: "15px",
                             alignItems: "flex-end",
-                            background: "#fff",
+                            background: "#f8fafc",
                             padding: "1.5rem",
-                            border: "2px solid #000",
+                            borderRadius: "16px",
+                            border: "1px solid #e2e8f0",
                           }}
                         >
                           <div>
                             <label
                               style={{
-                                fontSize: "0.55rem",
-                                fontWeight: 900,
+                                fontSize: "0.7rem",
+                                fontWeight: 700,
                                 display: "block",
-                                marginBottom: "5px",
+                                marginBottom: "8px",
+                                color: "var(--text-secondary)",
                               }}
                             >
-                              SELECTED MEDICINE
+                              Selected Medicine
                             </label>
                             <div
                               style={{
-                                padding: "10px",
-                                background: "#f4f4f5",
-                                fontWeight: 900,
-                                fontSize: "0.8rem",
+                                padding: "12px 16px",
+                                background: "#fff",
+                                border: "1px solid #cbd5e1",
+                                borderRadius: "12px",
+                                fontWeight: 800,
+                                fontSize: "0.85rem",
+                                color: "var(--text-primary)",
                               }}
                             >
                               {prescription.medicine}
@@ -1508,13 +1364,14 @@ export default function DoctorDashboard() {
                           <div>
                             <label
                               style={{
-                                fontSize: "0.55rem",
-                                fontWeight: 900,
+                                fontSize: "0.7rem",
+                                fontWeight: 700,
                                 display: "block",
-                                marginBottom: "5px",
+                                marginBottom: "8px",
+                                color: "var(--text-secondary)",
                               }}
                             >
-                              POWER / DOSAGE
+                              Power / Dosage
                             </label>
                             <input
                               type="text"
@@ -1527,23 +1384,26 @@ export default function DoctorDashboard() {
                               }
                               style={{
                                 width: "100%",
-                                padding: "10px",
-                                border: "1px solid #000",
-                                fontWeight: 800,
-                                fontSize: "0.8rem",
+                                padding: "12px 16px",
+                                border: "1px solid #cbd5e1",
+                                borderRadius: "12px",
+                                fontWeight: 700,
+                                fontSize: "0.85rem",
+                                outline: "none",
                               }}
                             />
                           </div>
                           <div>
                             <label
                               style={{
-                                fontSize: "0.55rem",
-                                fontWeight: 900,
+                                fontSize: "0.7rem",
+                                fontWeight: 700,
                                 display: "block",
-                                marginBottom: "5px",
+                                marginBottom: "8px",
+                                color: "var(--text-secondary)",
                               }}
                             >
-                              AMOUNT (QTY)
+                              Amount (Qty)
                             </label>
                             <input
                               type="number"
@@ -1556,26 +1416,24 @@ export default function DoctorDashboard() {
                               }
                               style={{
                                 width: "100%",
-                                padding: "10px",
-                                border: "1px solid #000",
-                                fontWeight: 800,
-                                fontSize: "0.8rem",
+                                padding: "12px 16px",
+                                border: "1px solid #cbd5e1",
+                                borderRadius: "12px",
+                                fontWeight: 700,
+                                fontSize: "0.85rem",
+                                outline: "none",
                               }}
                             />
                           </div>
                           <button
                             onClick={handleAddMed}
+                            className="btn-primary-premium"
                             style={{
-                              background: "#000",
-                              color: "#fff",
-                              border: "none",
                               padding: "12px 20px",
-                              fontWeight: 900,
-                              fontSize: "1rem",
-                              cursor: "pointer",
+                              height: "45px",
                             }}
                           >
-                            +
+                            Add
                           </button>
                         </motion.div>
                       )}
@@ -1583,13 +1441,14 @@ export default function DoctorDashboard() {
 
                     {/* Prescribed List Queued */}
                     {prescribedMedsList.length > 0 && (
-                      <div className="card" style={{ padding: "1.5rem" }}>
+                      <div className="card-premium" style={{ padding: "1.5rem" }}>
                         <h4
                           style={{
-                            fontSize: "0.7rem",
-                            fontWeight: 900,
-                            letterSpacing: "1px",
+                            fontSize: "0.8rem",
+                            fontWeight: 800,
+                            letterSpacing: "0.5px",
                             marginBottom: "1.5rem",
+                            color: "var(--text-primary)"
                           }}
                         >
                           QUEUED PRESCRIPTION ({prescribedMedsList.length})
@@ -1608,24 +1467,25 @@ export default function DoctorDashboard() {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                padding: "10px",
-                                borderBottom: "1px solid #eee",
+                                padding: "12px",
+                                borderBottom: "1px solid #f1f5f9",
                               }}
                             >
                               <div>
                                 <span
                                   style={{
-                                    fontWeight: 900,
-                                    fontSize: "0.8rem",
+                                    fontWeight: 800,
+                                    fontSize: "0.85rem",
+                                    color: "var(--text-primary)"
                                   }}
                                 >
                                   {med.medicine}
                                 </span>
                                 <span
                                   style={{
-                                    fontSize: "0.65rem",
-                                    fontWeight: 700,
-                                    opacity: 0.5,
+                                    fontSize: "0.75rem",
+                                    fontWeight: 600,
+                                    color: "var(--text-secondary)",
                                     marginLeft: "10px",
                                   }}
                                 >
@@ -1641,31 +1501,31 @@ export default function DoctorDashboard() {
                                   )
                                 }
                                 style={{
-                                  background: "none",
+                                  background: "rgba(239, 68, 68, 0.1)",
                                   border: "none",
-                                  color: "#dc2626",
-                                  fontWeight: 900,
-                                  fontSize: "0.6rem",
+                                  color: "#ef4444",
+                                  fontWeight: 700,
+                                  fontSize: "0.7rem",
+                                  padding: "4px 10px",
+                                  borderRadius: "12px",
                                   cursor: "pointer",
                                 }}
                               >
-                                REMOVE
+                                Remove
                               </button>
                             </div>
                           ))}
                         </div>
                         <button
                           onClick={handleFinalPrescribe}
+                          className="btn-primary-premium"
                           style={{
                             width: "100%",
                             marginTop: "1.5rem",
-                            background: "#10b981",
-                            color: "#fff",
-                            border: "none",
-                            padding: "15px",
-                            fontWeight: 900,
-                            fontSize: "0.8rem",
-                            cursor: "pointer",
+                            padding: "16px",
+                            fontWeight: 800,
+                            fontSize: "0.85rem",
+                            justifyContent: "center",
                           }}
                         >
                           TRANSMIT FULL PRESCRIPTION TO PHARMACY

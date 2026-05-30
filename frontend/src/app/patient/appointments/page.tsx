@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Clock, User, MessageSquare, ChevronLeft, Send, CheckCircle, Activity, Shield } from "lucide-react";
@@ -85,28 +85,29 @@ export default function PatientAppointmentsPage() {
   return (
     <DashboardLayout role="patient" userName={session?.name || "Patient"}>
       <div style={{ marginBottom: '3rem' }}>
-        <button onClick={() => router.back()} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 900, fontSize: '0.7rem', opacity: 0.5, marginBottom: '1rem' }}>
-          <ChevronLeft size={16} /> BACK TO HUB
+        <button onClick={() => router.back()} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+          <ChevronLeft size={16} /> Back to Hub
         </button>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>SCHEDULE CLINICAL VISIT</h1>
-        <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SECURE APPOINTMENT ORCHESTRATION NODE</p>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)' }}>Schedule Clinical Visit</h1>
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '4px' }}>SECURE APPOINTMENT ORCHESTRATION NODE</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '3rem', marginBottom: '4rem' }}>
-        <div className="card" style={{ padding: '3rem' }}>
+        <div className="card-premium" style={{ padding: '2.5rem' }}>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>SELECT SPECIALIST / DOCTOR</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>SELECT SPECIALIST / DOCTOR</label>
               <div style={{ position: 'relative' }}>
-                <User style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <User style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                 <select 
                   required
                   value={formData.doctor_id}
                   onChange={e => setFormData({...formData, doctor_id: e.target.value})}
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: '2px solid transparent', fontWeight: 800, outline: 'none', cursor: 'pointer' }}
+                  className="search-input-premium"
+                  style={{ width: '100%', padding: '12px 16px 12px 45px', cursor: 'pointer' }}
                 >
-                  <option value="">SELECT CLINICIAN</option>
+                  <option value="">Select Clinician</option>
                   {doctors.map(d => (
                     <option key={d.id} value={d.id}>{d.user?.name?.toUpperCase()} — {d.specialization?.toUpperCase()}</option>
                   ))}
@@ -116,21 +117,22 @@ export default function PatientAppointmentsPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>PREFERRED DATE & TIME</label>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>PREFERRED DATE & TIME</label>
                 <div style={{ position: 'relative' }}>
-                  <Calendar style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                  <Calendar style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
                   <input 
                     type="datetime-local" 
                     required
                     value={formData.preferred_time}
                     onChange={e => setFormData({...formData, preferred_time: e.target.value})}
-                    style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                    className="search-input-premium"
+                    style={{ width: '100%', padding: '12px 16px 12px 45px' }}
                   />
                 </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>VISIT TYPE</label>
-                <div style={{ display: 'flex', gap: '8px', background: '#f4f4f5', padding: '4px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>VISIT TYPE</label>
+                <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   {["offline", "online"].map(t => (
                     <button 
                       key={t}
@@ -139,12 +141,14 @@ export default function PatientAppointmentsPage() {
                       style={{ 
                         flex: 1, 
                         padding: '10px', 
-                        fontSize: '0.6rem', 
-                        fontWeight: 900, 
+                        fontSize: '0.75rem', 
+                        fontWeight: 700, 
                         border: 'none', 
-                        background: formData.type === t ? '#000' : 'transparent',
-                        color: formData.type === t ? '#fff' : '#000',
-                        cursor: 'pointer'
+                        background: formData.type === t ? 'var(--color-accent)' : 'transparent',
+                        color: formData.type === t ? '#fff' : 'var(--text-secondary)',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       {t.toUpperCase()}
@@ -155,37 +159,38 @@ export default function PatientAppointmentsPage() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>REASON FOR CLINICAL CONSULTATION</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>REASON FOR CLINICAL CONSULTATION</label>
               <div style={{ position: 'relative' }}>
-                <MessageSquare style={{ position: 'absolute', left: '15px', top: '15px' }} size={18} />
+                <MessageSquare style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--text-secondary)' }} size={18} />
                 <textarea 
                   required
-                  placeholder="DESCRIBE YOUR SYMPTOMS OR REASON FOR VISIT..."
+                  placeholder="Describe your symptoms or reason for visit..."
                   value={formData.reason}
                   onChange={e => setFormData({...formData, reason: e.target.value})}
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none', minHeight: '120px', resize: 'none' }}
+                  className="search-input-premium"
+                  style={{ width: '100%', padding: '16px 16px 16px 45px', minHeight: '120px', resize: 'none' }}
                 />
               </div>
             </div>
 
-            <button type="submit" disabled={isSubmitting} className="btn-black" style={{ padding: '20px', gap: '12px', marginTop: '1rem' }}>
-              {isSubmitting ? <Clock className="animate-spin" /> : <Send size={18} />}
+            <button type="submit" disabled={isSubmitting} className="btn-primary-premium" style={{ padding: '16px', gap: '12px', marginTop: '1rem', width: '100%', justifyContent: 'center' }}>
+              {isSubmitting ? <Clock className="animate-spin" size={18} /> : <Send size={18} />}
               {isSubmitting ? "TRANSMITTING REQUEST..." : "SUBMIT APPOINTMENT REQUEST"}
             </button>
           </form>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div className="card" style={{ background: '#000', color: '#fff', padding: '2.5rem' }}>
-             <Shield size={24} style={{ marginBottom: '1.5rem' }} />
-             <h3 style={{ fontWeight: 900, fontSize: '0.9rem', marginBottom: '1rem' }}>SECURE CLINICAL ROUTING</h3>
-             <p style={{ fontSize: '0.75rem', lineHeight: '1.6', opacity: 0.7, fontWeight: 700 }}>
+          <div className="card-premium" style={{ background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', padding: '2.5rem', border: 'none' }}>
+             <Shield size={28} style={{ marginBottom: '1.5rem', opacity: 0.9 }} />
+             <h3 style={{ fontWeight: 800, fontSize: '1.1rem', marginBottom: '1rem' }}>Secure Clinical Routing</h3>
+             <p style={{ fontSize: '0.85rem', lineHeight: '1.6', opacity: 0.8, fontWeight: 500 }}>
                Your request will be transmitted directly to the selected clinician's dashboard. The doctor will review your clinical history and confirm a specific time window for your consultation.
              </p>
           </div>
 
-          <div className="card" style={{ padding: '2.5rem' }}>
-             <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '8px' }}>SCHEDULING PROTOCOLS</h3>
+          <div className="card-premium" style={{ padding: '2.5rem' }}>
+             <h3 style={{ fontWeight: 800, fontSize: '0.9rem', letterSpacing: '1px', marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '12px', color: 'var(--text-primary)' }}>SCHEDULING PROTOCOLS</h3>
              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {[
                   "Request status updates in real-time.",
@@ -193,8 +198,8 @@ export default function PatientAppointmentsPage() {
                   "Digital consults require stable network node.",
                   "Emergency cases should use the SOS terminal."
                 ].map((text, i) => (
-                  <li key={i} style={{ display: 'flex', gap: '10px', fontSize: '0.7rem', fontWeight: 800 }}>
-                    <CheckCircle size={14} color="#10b981" /> {text.toUpperCase()}
+                  <li key={i} style={{ display: 'flex', gap: '12px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                    <CheckCircle size={16} color="var(--color-accent)" style={{ flexShrink: 0 }} /> {text}
                   </li>
                 ))}
               </ul>
@@ -203,42 +208,44 @@ export default function PatientAppointmentsPage() {
       </div>
 
       {/* Appointment Status Registry (Moved from Dashboard) */}
-      <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-        <div style={{ padding: '1.5rem 2.5rem', background: '#3b82f6', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Calendar size={18} />
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>CONSULTATION REQUEST STATUS</h3>
+      <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem 2rem', background: 'var(--bg-side)', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Calendar size={20} />
+              <h3 style={{ fontWeight: 800, fontSize: '0.9rem', letterSpacing: '1px' }}>CONSULTATION REQUEST STATUS</h3>
            </div>
-           <span style={{ fontSize: '0.6rem', fontWeight: 900 }}>REAL-TIME TRACKING</span>
+           <span style={{ fontSize: '0.7rem', fontWeight: 800, background: 'rgba(255,255,255,0.2)', padding: '4px 10px', borderRadius: '12px' }}>REAL-TIME TRACKING</span>
         </div>
-        <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-          <table className="data-table" style={{ border: 'none', width: '100%', borderCollapse: 'collapse' }}>
+        <div className="table-responsive">
+          <table className="data-table-premium">
              <thead>
-               <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '2px solid #29ABE2', textAlign: 'left' }}>
-                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
-                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>VISIT REASON</th>
-                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>PREFERRED TIME</th>
-                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>FINALIZED SCHEDULE</th>
-                 <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px', textAlign: 'right' }}>STATUS</th>
+               <tr>
+                 <th style={{ width: '80px' }}>S.NO</th>
+                 <th>VISIT REASON</th>
+                 <th>PREFERRED TIME</th>
+                 <th>FINALIZED SCHEDULE</th>
+                 <th style={{ textAlign: 'right' }}>STATUS</th>
                </tr>
              </thead>
              <tbody>
                {appointments.length === 0 ? (
-                 <tr><td colSpan={5} style={{ textAlign: 'center', padding: '3rem', fontWeight: 800, opacity: 0.3 }}>NO ACTIVE REQUESTS</td></tr>
+                 <tr><td colSpan={5} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>NO ACTIVE REQUESTS</td></tr>
                ) : appointments.map((a, i) => (
-                 <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                   <td style={{ padding: '20px 25px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                   <td style={{ padding: '20px 25px', fontWeight: 900, fontSize: '0.8rem' }}>{a.reason?.toUpperCase()}</td>
-                   <td style={{ padding: '20px 25px', fontWeight: 700, fontSize: '0.75rem', opacity: 0.6 }}>{a.preferred_time}</td>
-                   <td style={{ padding: '20px 25px', fontWeight: 900, fontSize: '0.8rem' }}>
-                      {a.scheduled_at ? new Date(a.scheduled_at).toLocaleString() : "TBD BY DOCTOR"}
+                 <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                   <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                   <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{a.reason?.toUpperCase()}</td>
+                   <td style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>{a.preferred_time}</td>
+                   <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>
+                      {a.scheduled_at ? new Date(a.scheduled_at).toLocaleString() : <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>TBD BY DOCTOR</span>}
                    </td>
-                   <td style={{ padding: '20px 25px', textAlign: 'right' }}>
-                      <span className="badge" style={{ 
-                        fontSize: '0.55rem', 
-                        background: a.status === 'scheduled' ? '#10b981' : '#f59e0b',
-                        color: '#fff',
-                        border: 'none'
+                   <td style={{ textAlign: 'right' }}>
+                      <span style={{ 
+                        fontSize: '0.7rem', 
+                        fontWeight: 800, 
+                        padding: '4px 10px', 
+                        borderRadius: '12px',
+                        background: a.status === 'scheduled' ? '#d1fae5' : '#fef3c7',
+                        color: a.status === 'scheduled' ? '#059669' : '#d97706'
                       }}>
                         {a.status?.toUpperCase()}
                       </span>
@@ -248,11 +255,6 @@ export default function PatientAppointmentsPage() {
              </tbody>
           </table>
         </div>
-        <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
-        `}</style>
       </div>
     </DashboardLayout>
   );

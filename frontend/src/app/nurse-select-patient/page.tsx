@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Users, ChevronRight, Activity, Search, ShieldCheck, FileText, X, Clock, Heart } from "lucide-react";
@@ -70,39 +70,42 @@ export default function NurseSelectPatientPage() {
     <DashboardLayout role="nurse" userName={session?.name || "Nurse"}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 900, letterSpacing: '-1px' }}>PATIENT SELECTION TERMINAL</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SELECT AN ACTIVE ASSIGNMENT TO INITIATE CLINICAL MONITORING</p>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)' }}>Patient Selection Terminal</h1>
+          <p style={{ color: 'var(--text-secondary)', fontWeight: 500, marginTop: '8px' }}>Select an active assignment to initiate clinical monitoring</p>
         </div>
 
         <div style={{ position: 'relative', marginBottom: '3rem' }}>
-          <Search size={24} style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', opacity: 0.3 }} />
+          <Search size={24} style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
           <input 
             type="text" 
-            placeholder="SEARCH BY NAME OR ENROLLMENT ID..." 
+            placeholder="Search by name or enrollment ID..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ 
               width: '100%', 
-              padding: '2rem 2rem 2rem 4rem', 
-              fontSize: '1.25rem', 
-              fontWeight: 800, 
-              border: '4px solid #29ABE2',
+              padding: '1.25rem 2rem 1.25rem 3.5rem', 
+              fontSize: '1rem', 
+              fontWeight: 500, 
+              border: '1px solid #e2e8f0',
+              borderRadius: '16px',
               background: '#fff',
-              boxShadow: '10px 10px 0 #000'
+              color: 'var(--text-primary)',
+              outline: 'none',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
             }} 
           />
         </div>
 
-        <div style={{ maxHeight: '70vh', overflowY: 'auto', border: '4px solid #29ABE2' }} className="custom-scrollbar">
-          <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff' }}>
+        <div className="table-responsive card-premium" style={{ padding: 0 }}>
+          <table className="data-table-premium">
             <thead>
-              <tr style={{ background: '#f4f4f5', borderBottom: '4px solid #29ABE2', textAlign: 'left', position: 'sticky', top: 0, zIndex: 10 }}>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px', width: '80px' }}>S.NO</th>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>PATIENT IDENTITY</th>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>ADMIT DATE</th>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>PRIMARY DOCTOR</th>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px' }}>ROOM/BED</th>
-                <th style={{ padding: '1.5rem', fontSize: '0.7rem', fontWeight: 900, letterSpacing: '1px', textAlign: 'right' }}>ACTIONS</th>
+              <tr>
+                <th style={{ width: '80px' }}>S.NO</th>
+                <th>PATIENT IDENTITY</th>
+                <th>ADMIT DATE</th>
+                <th>PRIMARY DOCTOR</th>
+                <th>ROOM/BED</th>
+                <th style={{ textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -117,50 +120,52 @@ export default function NurseSelectPatientPage() {
                 const admission = admissions.find(a => a.patient_id === p.id);
                 const bed = beds.find(b => b.patient_id === p.id);
                 return (
-                  <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                    <td style={{ padding: '1.5rem', fontWeight: 900, fontSize: '0.8rem', opacity: 0.3 }}>
+                  <tr key={i}>
+                    <td style={{ fontWeight: 800, opacity: 0.4 }}>
                       {(i + 1).toString().padStart(2, '0')}
                     </td>
-                    <td style={{ padding: '1.5rem' }}>
+                    <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <div style={{ width: '32px', height: '32px', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 900 }}>
+                        <div style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 800, borderRadius: '10px' }}>
                           {p.name.charAt(0)}
                         </div>
                         <div>
                           <h4 
                             onClick={() => fetchPatientReport(p)}
-                            style={{ fontWeight: 900, fontSize: '0.9rem', textDecoration: 'underline', cursor: 'pointer' }}
+                            style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--bg-side)', cursor: 'pointer' }}
                           >
-                            {p.name.toUpperCase()}
+                            {p.name}
                           </h4>
-                          <p style={{ fontSize: '0.65rem', fontWeight: 700, opacity: 0.5 }}>{p.username}</p>
+                          <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-secondary)' }}>{p.username}</p>
                         </div>
                       </div>
                     </td>
-                    <td style={{ padding: '1.5rem', fontSize: '0.8rem', fontWeight: 800 }}>
+                    <td style={{ fontSize: '0.85rem', fontWeight: 600 }}>
                       {admission ? new Date(admission.admitted_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '---'}
                     </td>
-                    <td style={{ padding: '1.5rem', fontSize: '0.8rem', fontWeight: 800 }}>
-                      {admission?.doctor?.name ? `DR. ${admission.doctor.name.toUpperCase()}` : 'NOT ASSIGNED'}
+                    <td style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+                      {admission?.doctor?.name ? `Dr. ${admission.doctor.name}` : 'Not Assigned'}
                     </td>
-                    <td style={{ padding: '1.5rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.65rem', fontWeight: 900, background: bed ? '#000' : '#f4f4f5', color: bed ? '#fff' : '#000', padding: '6px 12px', border: '1px solid #000', width: 'fit-content' }}>
-                        <ShieldCheck size={12} /> {bed ? `ROOM ${bed.room_number} / B${bed.bed_number}` : 'AWAITING ROOM'}
+                    <td>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 700, background: bed ? 'rgba(6, 125, 113, 0.1)' : '#f8fafc', color: bed ? 'var(--bg-side)' : 'var(--text-secondary)', padding: '6px 12px', borderRadius: '20px' }}>
+                        <ShieldCheck size={14} /> {bed ? `Room ${bed.room_number} / B${bed.bed_number}` : 'Awaiting Room'}
                       </div>
                     </td>
-                    <td style={{ padding: '1.5rem', textAlign: 'right' }}>
+                    <td style={{ textAlign: 'right' }}>
                     <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                       <button 
                         onClick={() => router.push(`/nurse?patient=${p.username}`)}
-                        style={{ background: '#000', color: '#fff', border: 'none', padding: '8px 16px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}
+                        className="btn-primary-premium"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem' }}
                       >
-                        UPDATE VITALS
+                        Update Vitals
                       </button>
                       <button 
                         onClick={() => fetchPatientReport(p)}
-                        style={{ background: '#f4f4f5', border: '1px solid #000', padding: '8px 16px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}
+                        className="btn-outline-premium"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem' }}
                       >
-                        VIEW REPORT
+                        View Report
                       </button>
                     </div>
                   </td>
@@ -181,62 +186,62 @@ export default function NurseSelectPatientPage() {
               onClick={() => setSelectedReport(null)}
               style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
             />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-              style={{ width: '600px', background: '#fff', border: '8px solid #000', position: 'relative', padding: '3rem', maxHeight: '90vh', overflowY: 'auto' }}
-              className="custom-scrollbar"
-            >
-              <button onClick={() => setSelectedReport(null)} style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'none', border: 'none', cursor: 'pointer' }}>
-                <X size={24} />
-              </button>
+              <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+                style={{ width: '600px', position: 'relative', padding: '3rem', maxHeight: '90vh', overflowY: 'auto' }}
+                className="custom-scrollbar card-premium"
+              >
+                <button onClick={() => setSelectedReport(null)} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: '#f1f5f9', border: 'none', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <X size={18} color="var(--text-secondary)" />
+                </button>
 
-              <div style={{ marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '0.5rem' }}>{selectedReport.name.toUpperCase()}</h2>
-                <p style={{ fontWeight: 800, opacity: 0.4 }}>ID: {selectedReport.username} • CLINICAL STATUS REPORT</p>
-              </div>
+                <div style={{ marginBottom: '2rem' }}>
+                  <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{selectedReport.name}</h2>
+                  <p style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>ID: {selectedReport.username} • Clinical Status Report</p>
+                </div>
 
               {isLoadingReport ? (
                 <div style={{ padding: '4rem', textAlign: 'center', fontWeight: 900 }}>TRANSMITTING DATA...</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                    {/* Vitals Summary */}
-                   <div style={{ border: '2px solid #29ABE2', padding: '1.5rem' }}>
-                     <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem', borderBottom: '2px solid #29ABE2', paddingBottom: '0.5rem' }}>LATEST VITALS</h4>
+                   <div style={{ border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.5rem' }}>
+                     <h4 style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '1.5rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>Latest Vitals</h4>
                      {reportData?.vitals ? (
-                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                          <div><p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>BLOOD PRESSURE</p><p style={{ fontWeight: 900 }}>{reportData.vitals.blood_pressure}</p></div>
-                          <div><p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>HEART RATE</p><p style={{ fontWeight: 900 }}>{reportData.vitals.heart_rate} BPM</p></div>
-                          <div><p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>SPO2 LEVEL</p><p style={{ fontWeight: 900 }}>{reportData.vitals.spo2}%</p></div>
-                          <div><p style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5 }}>TEMPERATURE</p><p style={{ fontWeight: 900 }}>{reportData.vitals.temperature}°C</p></div>
+                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                          <div><p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Blood Pressure</p><p style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{reportData.vitals.blood_pressure}</p></div>
+                          <div><p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Heart Rate</p><p style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{reportData.vitals.heart_rate} bpm</p></div>
+                          <div><p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>SpO2 Level</p><p style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{reportData.vitals.spo2}%</p></div>
+                          <div><p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Temperature</p><p style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{reportData.vitals.temperature}°F</p></div>
                        </div>
                      ) : (
-                       <p style={{ textAlign: 'center', opacity: 0.3, fontWeight: 900 }}>NO VITALS DATA ON RECORD</p>
+                       <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontWeight: 600 }}>No vitals data on record</p>
                      )}
                    </div>
 
                    {/* AI Risk Score */}
-                   <div style={{ background: '#000', color: '#fff', padding: '1.5rem' }}>
-                      <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>AI RISK ANALYSIS</h4>
+                   <div style={{ background: 'var(--bg-side)', color: '#fff', borderRadius: '12px', padding: '1.5rem' }}>
+                      <h4 style={{ fontWeight: 700, fontSize: '0.85rem', opacity: 0.8, textTransform: 'uppercase', marginBottom: '1rem' }}>AI Risk Analysis</h4>
                       {reportData?.risk ? (
                         <div>
-                           <p style={{ fontSize: '1.5rem', fontWeight: 900, color: reportData.risk.risk_level === 'CRITICAL' ? '#ef4444' : '#10b981' }}>{reportData.risk.risk_level} RISK</p>
-                           <p style={{ fontSize: '0.7rem', fontWeight: 800, opacity: 0.6 }}>SCORE: {reportData.risk.score_value}/10</p>
+                           <p style={{ fontSize: '1.5rem', fontWeight: 800, color: reportData.risk.risk_level === 'CRITICAL' ? '#fca5a5' : '#6ee7b7' }}>{reportData.risk.risk_level} RISK</p>
+                           <p style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.8 }}>Score: {reportData.risk.score_value}/10</p>
                         </div>
                       ) : (
-                        <p style={{ opacity: 0.4, fontSize: '0.7rem', fontWeight: 800 }}>ANALYSIS ENGINE PENDING SYNC...</p>
+                        <p style={{ opacity: 0.6, fontSize: '0.85rem', fontWeight: 500 }}>Analysis engine pending sync...</p>
                       )}
                    </div>
 
                    {/* Observations */}
-                   <div style={{ border: '2px solid #29ABE2', padding: '1.5rem' }}>
-                     <h4 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1rem' }}>NURSING OBSERVATIONS</h4>
-                     <p style={{ fontSize: '0.8rem', fontWeight: 700, lineHeight: '1.6' }}>
-                       {reportData?.vitals?.nursing_notes || "NO RECENT CLINICAL OBSERVATIONS RECORDED IN SYSTEM."}
+                   <div style={{ border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.5rem' }}>
+                     <h4 style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '1rem' }}>Nursing Observations</h4>
+                     <p style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: '1.6' }}>
+                       {reportData?.vitals?.nursing_notes || "No recent clinical observations recorded in system."}
                      </p>
                     </div>
 
-                    <div style={{ background: '#f4f4f5', padding: '1rem', textAlign: 'center', fontSize: '0.6rem', fontWeight: 900 }}>
-                      SYSTEM NOTICE: READ-ONLY ACCESS GRANTED. MODIFICATION RESTRICTED.
+                    <div style={{ background: '#f8fafc', padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', borderRadius: '12px' }}>
+                      System Notice: Read-only access granted. Modification restricted.
                     </div>
                  </div>
                )}
@@ -245,10 +250,11 @@ export default function NurseSelectPatientPage() {
          )}
        </AnimatePresence>
        
-       <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
+        <style jsx global>{`
+          .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+          .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
        `}</style>
     </DashboardLayout>
   );

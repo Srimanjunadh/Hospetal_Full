@@ -54,49 +54,50 @@ export default function LabPendingPage() {
     <DashboardLayout role="lab" userName={session?.name || "Lab Tech"}>
       <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>PENDING DIAGNOSTIC QUEUE</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>ACTIVE REQUISITIONS AWAITING TRANSMISSION</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--text-primary)' }}>Pending Diagnostic Queue</h1>
+          <p style={{ color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '4px' }}>ACTIVE REQUISITIONS AWAITING TRANSMISSION</p>
         </div>
         <div style={{ position: 'relative', width: '350px' }}>
-          <Search size={18} style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', opacity: 0.3 }} />
+          <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
           <input 
             type="text" 
+            className="search-input-premium"
             placeholder="SEARCH QUEUE..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: '100%', padding: '12px 15px 12px 45px', border: '3px solid #000', fontWeight: 800, fontSize: '0.8rem' }}
+            style={{ width: '100%' }}
           />
         </div>
       </div>
 
-      <div className="card" style={{ padding: '0', border: '4px solid #000' }}>
-        <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="custom-scrollbar">
-          <table className="data-table" style={{ border: 'none', width: '100%', borderCollapse: 'collapse' }}>
+      <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+        <div className="table-responsive">
+          <table className="data-table-premium">
             <thead>
-              <tr style={{ position: 'sticky', top: 0, zIndex: 10, background: '#f4f4f5', borderBottom: '4px solid #000', textAlign: 'left' }}>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px', width: '80px' }}>S.NO</th>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>REFERENCE</th>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>PATIENT</th>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>DIAGNOSTIC TYPE</th>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px' }}>ORDERING PHYSICIAN</th>
-                <th style={{ padding: '15px 25px', fontSize: '0.65rem', letterSpacing: '1px', textAlign: 'right' }}>ACTION</th>
+              <tr>
+                <th style={{ width: '80px' }}>S.NO</th>
+                <th>REFERENCE</th>
+                <th>PATIENT</th>
+                <th>DIAGNOSTIC TYPE</th>
+                <th>ORDERING PHYSICIAN</th>
+                <th style={{ textAlign: 'right' }}>ACTION</th>
               </tr>
             </thead>
             <tbody>
               {filteredTests.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', padding: '5rem', fontWeight: 800, opacity: 0.2 }}>QUEUE EMPTY</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: 'center', padding: '4rem', fontWeight: 700, color: 'var(--text-secondary)' }}>QUEUE EMPTY</td></tr>
               ) : filteredTests.map((t, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #f4f4f5' }}>
-                  <td style={{ padding: '20px 25px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                  <td style={{ padding: '20px 25px', fontWeight: 900, fontSize: '0.85rem' }}>#{t.test_id}</td>
-                  <td style={{ padding: '20px 25px', fontWeight: 800 }}>{t.patient?.name.toUpperCase()}</td>
-                  <td style={{ padding: '20px 25px' }}>
-                    <span style={{ padding: '6px 12px', background: '#000', color: '#fff', fontSize: '0.6rem', fontWeight: 900, borderRadius: '2px' }}>{t.test_name.toUpperCase()}</span>
+                <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                  <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>#{t.test_id}</td>
+                  <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{t.patient?.name.toUpperCase()}</td>
+                  <td>
+                    <span style={{ background: '#f8fafc', padding: '4px 10px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t.test_name.toUpperCase()}</span>
                   </td>
-                  <td style={{ padding: '20px 25px', fontSize: '0.75rem', fontWeight: 700, opacity: 0.6 }}>DR. {t.doctor?.user?.name.toUpperCase()}</td>
-                  <td style={{ padding: '20px 25px', textAlign: 'right' }}>
-                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#10b981', color: '#fff', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer', transition: '0.2s' }}>
-                      <Upload size={14} /> UPLOAD RESULTS
+                  <td style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>DR. {t.doctor?.user?.name.toUpperCase()}</td>
+                  <td style={{ textAlign: 'right' }}>
+                    <label className="btn-primary-premium" style={{ display: 'inline-flex', padding: '8px 16px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <Upload size={14} /> Upload Results
                       <input 
                         type="file" 
                         accept="application/pdf" 
@@ -110,11 +111,7 @@ export default function LabPendingPage() {
             </tbody>
           </table>
         </div>
-        <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
-        `}</style>
+
       </div>
     </DashboardLayout>
   );

@@ -4,7 +4,7 @@ from typing import List, Optional, Any
 
 class UserBase(BaseModel):
     username: str
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     name: str
     role: str
     phone: Optional[str] = None

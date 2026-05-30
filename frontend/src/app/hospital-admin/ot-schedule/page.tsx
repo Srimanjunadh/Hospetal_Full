@@ -1,18 +1,42 @@
-﻿"use client";
-import { useEffect, useState } from "react";
-import { Activity, Clipboard, Clock, CheckCircle2, AlertTriangle, Play, Check, Plus, Trash2 } from "lucide-react";
+"use client";
+import { useState, useEffect, useCallback } from "react";
+import { Activity, Clipboard, Clock, Play, Check, Plus, Trash2 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
-
 import { apiService } from "@/services/api";
+
+interface Doctor {
+  id: number;
+  user?: {
+    name: string;
+  };
+  specialization?: string;
+}
+
+interface Patient {
+  id: number;
+  name: string;
+}
+
+interface Surgery {
+  id: number;
+  procedure_name: string;
+  doctor: Doctor;
+  patient: Patient;
+  ot_room_number: string;
+  scheduled_at: string;
+  notes?: string;
+  status: string;
+  checklist_status: Record<string, boolean>;
+}
 
 export default function OTSchedulePage() {
   const { showToast } = useToast();
-  const [surgeries, setSurgeries] = useState<any[]>([]);
-  const [doctors, setDoctors] = useState<any[]>([]);
-  const [patients, setPatients] = useState<any[]>([]);
+  const [surgeries, setSurgeries] = useState<Surgery[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [mounted, setMounted] = useState(false);
-  const [selectedSurgery, setSelectedSurgery] = useState<any>(null);
+  const [selectedSurgery, setSelectedSurgery] = useState<Surgery | null>(null);
 
   // Add Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -25,12 +49,7 @@ export default function OTSchedulePage() {
     notes: ''
   });
 
-  useEffect(() => {
-    setMounted(true);
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
       if (session?.hospital_id) {
@@ -43,21 +62,26 @@ export default function OTSchedulePage() {
         const pats = await apiService.getPatients(session.hospital_id);
         setPatients(Array.isArray(pats) ? pats : []);
       }
-    } catch (e) {
-      console.error("Failed to fetch OT data", e);
+    } catch {
       setSurgeries([]);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+    fetchData();
+  }, [fetchData]);
 
   const toggleChecklist = async (surgeryId: number, item: string) => {
     const surgery = surgeries.find(s => s.id === surgeryId);
+    if (!surgery) return;
     const newChecklist = { ...surgery.checklist_status, [item]: !surgery.checklist_status[item] };
     
     try {
       await apiService.updateSurgicalChecklist(surgeryId, newChecklist);
       showToast("Checklist Updated", "success");
       fetchData();
-    } catch (e) {
+    } catch {
       showToast("Update failed", "error");
     }
   };
@@ -94,8 +118,8 @@ export default function OTSchedulePage() {
         notes: ''
       });
       fetchData();
-    } catch (err: any) {
-      showToast(err.message || "Failed to schedule surgery", "error");
+    } catch (err) {
+      showToast((err as Error).message || "Failed to schedule surgery", "error");
     }
   };
 
@@ -107,8 +131,8 @@ export default function OTSchedulePage() {
       showToast("Surgery schedule deleted successfully", "success");
       if (selectedSurgery?.id === id) setSelectedSurgery(null);
       fetchData();
-    } catch (err: any) {
-      showToast(err.message || "Failed to delete surgery", "error");
+    } catch (err) {
+      showToast((err as Error).message || "Failed to delete surgery", "error");
     }
   };
 
@@ -116,99 +140,163 @@ export default function OTSchedulePage() {
 
   return (
     <DashboardLayout role="hospital_admin" userName="Admin Manju">
-      <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>SURGICAL CENTER COMMAND</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>OPERATING THEATER (OT) QUEUE & READINESS CHECKLISTS</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Surgical Center Command</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Operating Theater (OT) Queue & Readiness Checklists</p>
         </div>
         <button 
           onClick={() => setIsAddModalOpen(true)}
-          className="btn-black" 
-          style={{ height: '45px', padding: '0 2rem', display: 'flex', alignItems: 'center', gap: '10px' }}
+          className="btn-primary-premium" 
+          style={{ height: '42px', padding: '0 1.5rem', borderRadius: '30px' }}
         >
-          <Plus size={18} /> ADD SURGERY
+          <Plus size={16} />
+          <span>Schedule Procedure</span>
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '3rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '2.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+          
           {/* OT Queue */}
-          <div className="card" style={{ padding: '0' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>TODAY'S SURGICAL QUEUE</h3>
-              <Clock size={18} />
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.25rem 2rem', background: 'rgba(14, 165, 233, 0.06)', borderBottom: '1px solid rgba(14, 165, 233, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Clock size={18} style={{ color: '#0ea5e9' }} />
+                <h3 style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0ea5e9', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Today&apos;s Surgical Queue</h3>
+              </div>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '12px' }}>
+                {surgeries.length} Slotted
+              </span>
             </div>
-            <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
+            
+            <div style={{ maxHeight: '420px', overflowY: 'auto' }} className="custom-scrollbar">
               {!Array.isArray(surgeries) || surgeries.length === 0 ? (
-                <div style={{ padding: '3rem', textAlign: 'center', opacity: 0.3, fontWeight: 900 }}>NO SURGERIES SCHEDULED</div>
+                <div style={{ padding: '4rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                  <Activity size={36} style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                  <p style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>No surgeries scheduled for today</p>
+                </div>
               ) : (
-                surgeries.map((s, i) => (
-                  <div key={i} style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #eee', display: 'flex', gap: '20px', alignItems: 'center', cursor: 'pointer', background: selectedSurgery?.id === s.id ? '#f4f4f5' : '#fff' }} onClick={() => setSelectedSurgery(s)}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</span>
-                    <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <p style={{ fontWeight: 900, fontSize: '0.9rem' }}>{s.procedure_name.toUpperCase()}</p>
-                        <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-secondary)' }}>OT ROOM {s.ot_room_number} • {new Date(s.scheduled_at).toLocaleTimeString()}</p>
-                      </div>
-                      <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.6rem', fontWeight: 900, padding: '4px 8px', border: '1px solid #000' }}>{s.status}</span>
-                        <Activity size={16} />
-                        <button 
-                          onClick={(e) => handleDeleteSurgery(s.id, e)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-                          title="Delete Surgery"
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                surgeries.map((s, i) => {
+                  const isSelected = selectedSurgery?.id === s.id;
+                  let statusBg = '#fffbeb';
+                  let statusColor = '#d97706';
+                  if (s.status === 'IN-PROGRESS') {
+                    statusBg = '#e0f2fe';
+                    statusColor = '#0284c7';
+                  } else if (s.status === 'COMPLETED') {
+                    statusBg = '#ecfdf5';
+                    statusColor = '#059669';
+                  }
+                  
+                  return (
+                    <div 
+                      key={i} 
+                      style={{ 
+                        padding: '1.25rem 2rem', 
+                        borderBottom: '1px solid #f1f5f9', 
+                        display: 'flex', 
+                        gap: '20px', 
+                        alignItems: 'center', 
+                        cursor: 'pointer', 
+                        background: isSelected ? 'rgba(6, 125, 113, 0.04)' : '#fff',
+                        borderLeft: isSelected ? '4px solid var(--bg-side)' : '4px solid transparent',
+                        transition: 'all 0.2s ease'
+                      }} 
+                      onClick={() => setSelectedSurgery(s)}
+                    >
+                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-secondary)', opacity: 0.4 }}>{(i + 1).toString().padStart(2, '0')}</span>
+                      <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                        <div>
+                          <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '4px' }}>{s.procedure_name}</h4>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 600, background: '#f1f5f9', color: 'var(--text-primary)', padding: '2px 6px', borderRadius: '4px' }}>{s.ot_room_number}</span>
+                            <span style={{ width: '4px', height: '4px', background: '#cbd5e1', borderRadius: '50%' }}></span>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-secondary)' }}>
+                              Dr. {s.doctor?.user?.name}
+                            </span>
+                            <span style={{ width: '4px', height: '4px', background: '#cbd5e1', borderRadius: '50%' }}></span>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Clock size={12} /> {new Date(s.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                          <span style={{ 
+                            fontSize: '0.7rem', 
+                            fontWeight: 700, 
+                            padding: '4px 8px', 
+                            borderRadius: '12px',
+                            background: statusBg,
+                            color: statusColor
+                          }}>
+                            {s.status}
+                          </span>
+                          <button 
+                            onClick={(e) => handleDeleteSurgery(s.id, e)}
+                            style={{ background: 'none', border: 'none', color: '#f43f5e', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center', borderRadius: '50%', transition: 'background 0.2s' }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#ffe4e6'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                            title="Delete Schedule"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
-            <style jsx global>{`
-              .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-              .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-              .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-            `}</style>
           </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* WHO Checklist */}
           {selectedSurgery ? (
-            <div className="card" style={{ border: '4px solid #29ABE2' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.9rem', marginBottom: '0.5rem' }}>WHO SAFETY CHECKLIST</h3>
-              <p style={{ fontSize: '0.6rem', fontWeight: 800, color: '#666', marginBottom: '2rem' }}>PROCEDURE: {selectedSurgery.procedure_name.toUpperCase()}</p>
+            <div className="card-premium" style={{ borderTop: '4px solid var(--bg-side)' }}>
+              <h3 style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '4px' }}>WHO Safety Checklist</h3>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Proc: {selectedSurgery.procedure_name}</p>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {Object.keys(selectedSurgery.checklist_status).map((item) => (
-                  <div key={item} 
-                    onClick={() => toggleChecklist(selectedSurgery.id, item)}
-                    style={{ 
-                      padding: '12px', 
-                      border: '2px solid #29ABE2', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      background: selectedSurgery.checklist_status[item] ? '#10b981' : '#fff',
-                      color: selectedSurgery.checklist_status[item] ? '#fff' : '#000'
-                    }}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>{item.toUpperCase()}</span>
-                    {selectedSurgery.checklist_status[item] ? <Check size={16} /> : <div style={{ width: '16px', height: '16px', border: '2px solid #29ABE2' }} />}
-                  </div>
-                ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {Object.keys(selectedSurgery.checklist_status).map((item) => {
+                  const checked = selectedSurgery.checklist_status[item];
+                  return (
+                    <div key={item} 
+                      onClick={() => toggleChecklist(selectedSurgery.id, item)}
+                      style={{ 
+                        padding: '12px 16px', 
+                        border: '1px solid #e2e8f0', 
+                        borderRadius: '10px',
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        background: checked ? 'rgba(16, 185, 129, 0.06)' : '#fff',
+                        borderColor: checked ? 'rgba(16, 185, 129, 0.25)' : '#e2e8f0',
+                        color: checked ? '#047857' : 'var(--text-primary)',
+                        transition: 'all 0.15s ease'
+                      }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 700 }}>{item.replace(/_/g, ' ')}</span>
+                      {checked ? (
+                        <Check size={16} style={{ color: '#10b981' }} />
+                      ) : (
+                        <div style={{ width: '16px', height: '16px', border: '2px solid #cbd5e1', borderRadius: '4px' }} />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
-              <button className="btn-black" style={{ width: '100%', marginTop: '2rem', height: '50px' }}>
-                <Play size={16} style={{ marginRight: '10px' }} /> COMMENCE SURGERY
+              <button className="btn-primary-premium" style={{ width: '100%', marginTop: '2rem', height: '46px', justifyContent: 'center' }}>
+                <Play size={14} />
+                <span>Commence Surgical Operation</span>
               </button>
             </div>
           ) : (
-            <div className="card" style={{ textAlign: 'center', padding: '3rem', opacity: 0.3 }}>
-              <Clipboard size={48} style={{ margin: '0 auto 1rem' }} />
-              <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>SELECT A PROCEDURE TO VIEW READINESS</p>
+            <div className="card-premium" style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <Clipboard size={36} style={{ opacity: 0.3 }} />
+              <p style={{ fontWeight: 600, fontSize: '0.85rem' }}>Select a procedure to view readiness checklist</p>
             </div>
           )}
         </div>
@@ -217,56 +305,59 @@ export default function OTSchedulePage() {
       {/* Add Surgery Modal */}
       {isAddModalOpen && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+          position: 'fixed', inset: 0,
+          background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+          padding: '1rem'
         }}>
-          <div className="card" style={{ width: '100%', maxWidth: '600px', background: '#fff', border: '4px solid #29ABE2', padding: '2.5rem' }}>
+          <div className="card-premium" style={{ width: '100%', maxWidth: '580px', background: '#fff', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>SCHEDULE NEW SURGERY</h2>
-              <button onClick={() => setIsAddModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', fontWeight: 900 }}>✕</button>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)' }}>Schedule Surgical Procedure</h2>
+              <button onClick={() => setIsAddModalOpen(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: 'var(--text-secondary)' }}>✕</button>
             </div>
 
             <form onSubmit={handleAddSurgery} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>TYPE OF OPERATION / PROCEDURE *</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Procedure Name *</label>
                 <input 
                   type="text" 
                   required
-                  placeholder="e.g. APPENDECTOMY, CABG, KNEE REPLACEMENT"
+                  placeholder="e.g. Appendectomy, CABG, Knee Replacement"
                   value={newSurgery.procedure_name}
                   onChange={e => setNewSurgery({...newSurgery, procedure_name: e.target.value})}
-                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700 }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>ASSIGN DOCTOR *</label>
+                  <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Assign Surgeon *</label>
                   <select 
                     required
                     value={newSurgery.doctor_id} 
                     onChange={e => setNewSurgery({...newSurgery, doctor_id: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none', cursor: 'pointer' }}
+                    title="Assign Surgeon"
                   >
                     <option value="">-- Select Doctor --</option>
                     {doctors.map(d => (
-                      <option key={d.id} value={d.id}>Dr. {d.user?.name || d.specialization || `Doctor #${d.id}`}</option>
+                      <option key={d.id} value={d.id}>Dr. {d.user?.name || d.specialization}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>SELECT PATIENT / CLIENT *</label>
+                  <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Select Patient *</label>
                   <select 
                     required
                     value={newSurgery.patient_id} 
                     onChange={e => setNewSurgery({...newSurgery, patient_id: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none', cursor: 'pointer' }}
+                    title="Select Patient"
                   >
                     <option value="">-- Select Patient --</option>
                     {patients.map(p => (
-                      <option key={p.id} value={p.id}>{p.name || p.username || `Patient #${p.id}`}</option>
+                      <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                   </select>
                 </div>
@@ -274,47 +365,48 @@ export default function OTSchedulePage() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>OPERATING THEATER (OT) ROOM *</label>
+                  <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Operating Theater (OT) Room *</label>
                   <select 
                     value={newSurgery.ot_room_number} 
                     onChange={e => setNewSurgery({...newSurgery, ot_room_number: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, background: '#fff' }}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none', cursor: 'pointer' }}
+                    title="Operating Theater Room"
                   >
-                    <option value="OT-101">OT ROOM 101 (CARDIAC / MAJOR)</option>
-                    <option value="OT-102">OT ROOM 102 (ORTHO / GENERAL)</option>
-                    <option value="OT-204">OT ROOM 204 (NEURO / SPECIAL)</option>
-                    <option value="OT-305">OT ROOM 305 (EMERGENCY)</option>
+                    <option value="OT-101">OT Room 101 (Cardiac / Major)</option>
+                    <option value="OT-102">OT Room 102 (Ortho / General)</option>
+                    <option value="OT-204">OT Room 204 (Neuro / Special)</option>
+                    <option value="OT-305">OT Room 305 (Emergency)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>DATE & TIME *</label>
+                  <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Date & Scheduled Time *</label>
                   <input 
                     type="datetime-local" 
                     required
                     value={newSurgery.scheduled_at}
                     onChange={e => setNewSurgery({...newSurgery, scheduled_at: e.target.value})}
-                    style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700 }}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 900, marginBottom: '0.5rem' }}>SURGICAL NOTES / SPECIAL INSTRUCTIONS</label>
+                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>Surgical Notes / Pre-Op Instructions</label>
                 <textarea 
-                  placeholder="Enter any pre-op notes or equipment requirements..."
+                  placeholder="Enter pre-op specifications or special equipment requirements..."
                   value={newSurgery.notes}
                   onChange={e => setNewSurgery({...newSurgery, notes: e.target.value})}
-                  style={{ width: '100%', padding: '0.8rem', border: '2px solid #29ABE2', fontWeight: 700, minHeight: '80px' }}
+                  style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none', minHeight: '80px', resize: 'vertical' }}
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" onClick={() => setIsAddModalOpen(false)} style={{ padding: '0.8rem 2rem', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>
-                  CANCEL
+              <div style={{ display: 'flex', gap: '12px', marginTop: '1rem' }}>
+                <button type="button" className="btn-outline-premium" onClick={() => setIsAddModalOpen(false)} style={{ flex: 1, justifyContent: 'center' }}>
+                  Cancel
                 </button>
-                <button type="submit" className="btn-black" style={{ padding: '0.8rem 2.5rem', fontWeight: 900 }}>
-                  CONFIRM & NOTIFY DOCTOR
+                <button type="submit" className="btn-primary-premium" style={{ flex: 2, justifyContent: 'center' }}>
+                  Schedule & Notify Doctor
                 </button>
               </div>
             </form>

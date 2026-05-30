@@ -122,7 +122,7 @@ export default function PatientRegistryPage() {
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
            <button 
-             className="btn-outline" 
+             className="btn-outline-premium" 
              onClick={() => hospitalId && fetchPatientRegistry(hospitalId)}
              style={{
                display: 'inline-flex',
@@ -138,29 +138,38 @@ export default function PatientRegistryPage() {
       </div>
 
       {/* Online Applications Section */}
-      <div className="card" style={{ padding: '2rem', marginBottom: '3rem', border: '2px solid #29ABE2' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="card-premium" style={{ padding: '0', marginBottom: '3rem', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>ONLINE APPLICATIONS</h2>
             <p style={{ color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.75rem' }}>INCOMING APPOINTMENTS FROM PMS PORTAL</p>
           </div>
-          <div style={{ padding: '8px 16px', background: '#29ABE2', color: '#fff', fontSize: '0.65rem', fontWeight: 900 }}>
-            PENDING: {appointments.filter(a => a.status === 'pending').length}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ position: 'relative' }}>
+              <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+              <input type="text" placeholder="Search applications..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+            </div>
+            <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+              <Filter size={14} /> FILTER
+            </button>
+            <div style={{ padding: '8px 16px', background: '#e0f2fe', color: '#0369a1', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>
+              PENDING: {appointments.filter(a => a.status === 'pending').length}
+            </div>
           </div>
         </div>
 
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div>
           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table className="data-table" style={{ border: 'none' }}>
+            <table className="data-table-premium">
               <thead>
-                <tr style={{ background: '#29ABE2', color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
-                  <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                  <th style={{ padding: '12px 20px' }}>PATIENT NAME</th>
-                  <th style={{ padding: '12px 20px' }}>PROBLEM / REASON</th>
-                  <th style={{ padding: '12px 20px' }}>DOCTOR NAME</th>
-                  <th style={{ padding: '12px 20px' }}>STATUS</th>
-                  <th style={{ padding: '12px 20px' }}>DATE & TIME</th>
-                  <th style={{ padding: '12px 20px' }}>ACTIONS</th>
+                <tr>
+                  <th>S.NO</th>
+                  <th>PATIENT NAME</th>
+                  <th>PROBLEM / REASON</th>
+                  <th>DOCTOR NAME</th>
+                  <th>STATUS</th>
+                  <th>DATE & TIME</th>
+                  <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -228,12 +237,13 @@ export default function PatientRegistryPage() {
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding: '15px 20px' }}>
+                      <td>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           {appt.status === 'pending' && (
                             <button 
                               onClick={() => handleApproveAppt(appt.id)}
-                              style={{ background: '#29ABE2', color: '#fff', border: 'none', padding: '6px 12px', fontSize: '0.65rem', fontWeight: 900, cursor: 'pointer' }}
+                              className="btn-primary-premium"
+                              style={{ padding: '6px 12px', fontSize: '0.7rem' }}
                             >
                               APPROVE
                             </button>
@@ -245,10 +255,10 @@ export default function PatientRegistryPage() {
                               setNewDate(appt.scheduled_at ? new Date(appt.scheduled_at).toISOString().slice(0, 16) : "");
                               setIsRescheduleModalOpen(true);
                             }}
-                            className="btn-outline" 
-                            style={{ padding: '6px 12px', fontSize: '0.65rem', fontWeight: 900 }}
+                            className="btn-outline-premium" 
+                            style={{ padding: '6px 12px', fontSize: '0.7rem' }}
                           >
-                            <Edit size={12} style={{ marginRight: '6px' }} /> CHANGE DOCTOR/DATE
+                            <Edit size={12} /> CHANGE DOCTOR/DATE
                           </button>
                         </div>
                       </td>
@@ -262,41 +272,43 @@ export default function PatientRegistryPage() {
       </div>
 
       {/* Patient Registry Section */}
-      <div className="card" style={{ padding: '2rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="card-premium" style={{ padding: '0', marginBottom: '2rem', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>PATIENT REGISTRY</h2>
             <p style={{ color: 'var(--text-secondary)', fontWeight: 700, fontSize: '0.75rem' }}>GLOBAL FACILITY PATIENT AUDIT</p>
           </div>
-          <div style={{ padding: '8px 16px', background: '#f4f4f5', border: '1px solid #000', fontSize: '0.65rem', fontWeight: 900 }}>
-            TOTAL REGISTERED: {patients.length}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ position: 'relative' }}>
+              <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+              <input 
+                type="text" 
+                placeholder="Search patients..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} 
+              />
+            </div>
+            <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+              <Filter size={14} /> FILTER
+            </button>
+            <div style={{ padding: '8px 16px', background: '#f1f5f9', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+              TOTAL REGISTERED: {patients.length}
+            </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
-          <div style={{ flex: 1, position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
-            <input 
-              type="text" 
-              placeholder="SEARCH PATIENTS BY NAME, ID, OR ROOM" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem' }}
-            />
-          </div>
-        </div>
-
-        <div className="table-responsive" style={{ border: '2px solid #000' }}>
+        <div>
           <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table className="data-table" style={{ border: 'none' }}>
+            <table className="data-table-premium">
               <thead>
-                <tr style={{ background: '#29ABE2', color: '#fff', position: 'sticky', top: 0, zIndex: 10 }}>
-                  <th style={{ padding: '12px 20px', fontSize: '0.65rem' }}>S.NO</th>
-                  <th style={{ padding: '12px 20px' }}>PATIENT IDENTITY</th>
-                  <th style={{ padding: '12px 20px' }}>LOCATION / AGE</th>
-                  <th style={{ padding: '12px 20px' }}>CARE TEAM</th>
-                  <th style={{ padding: '12px 20px' }}>FACILITY STATUS</th>
-                  <th style={{ padding: '12px 20px' }}>ROOM/BED</th>
+                <tr>
+                  <th>S.NO</th>
+                  <th>PATIENT IDENTITY</th>
+                  <th>LOCATION / AGE</th>
+                  <th>CARE TEAM</th>
+                  <th>FACILITY STATUS</th>
+                  <th>ROOM/BED</th>
                 </tr>
               </thead>
               <tbody>
@@ -334,11 +346,11 @@ export default function PatientRegistryPage() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div style={{ width: '6px', height: '6px', background: '#3b82f6', borderRadius: '50%' }}></div>
-                            <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>DR. {p.doctorName.split(' ').pop().toUpperCase()}</span>
+                            <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>DR. {p.doctorName === "NOT ASSIGNED" ? "NOT ASSIGNED" : p.doctorName.replace(/^Dr\.\s*/i, '').toUpperCase()}</span>
                          </div>
                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }}></div>
-                            <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>NRS. {p.nurseName.split(' ').pop().toUpperCase()}</span>
+                            <span style={{ fontSize: '0.7rem', fontWeight: 900 }}>NRS. {p.nurseName === "NOT ASSIGNED" ? "NOT ASSIGNED" : p.nurseName.replace(/^(Nurse|Nrs\.)\s*/i, '').toUpperCase()}</span>
                          </div>
                       </div>
                     </td>
@@ -364,28 +376,23 @@ export default function PatientRegistryPage() {
             </table>
           </div>
         </div>
-        <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-        `}</style>
       </div>
 
       {/* Reschedule & Clinician Assignment Modal */}
       {isRescheduleModalOpen && selectedAppt && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ background: '#fff', width: '450px', padding: '2.5rem', border: '4px solid #000' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+           <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ background: '#fff', width: '450px', padding: '2.5rem', borderRadius: '20px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', alignItems: 'center' }}>
-                 <h3 style={{ fontSize: '1rem', fontWeight: 900, letterSpacing: '1px' }}>CHANGE CLINICIAN & DATE</h3>
-                 <X size={20} onClick={() => setIsRescheduleModalOpen(false)} style={{ cursor: 'pointer' }} />
+                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>Change Clinician & Date</h3>
+                 <X size={20} onClick={() => setIsRescheduleModalOpen(false)} style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                  <div>
-                    <label style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5, marginBottom: '8px', display: 'block', letterSpacing: '1px' }}>ASSIGN CLINICIAN</label>
+                    <label style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px', display: 'block', textTransform: 'uppercase' }}>Assign Clinician</label>
                     <select 
                       value={newDoctorId} 
                       onChange={e => setNewDoctorId(e.target.value ? Number(e.target.value) : "")} 
-                      style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 800, fontSize: '0.8rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                     >
                       <option value="">CURRENT: {selectedAppt.doctor_name?.toUpperCase()}</option>
                       {doctorsList.map((doc: any) => (
@@ -395,20 +402,21 @@ export default function PatientRegistryPage() {
                  </div>
                  
                  <div>
-                    <label style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.5, marginBottom: '8px', display: 'block', letterSpacing: '1px' }}>NEW DATE & TIME</label>
+                    <label style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px', display: 'block', textTransform: 'uppercase' }}>New Date & Time</label>
                     <input 
                       type="datetime-local" 
                       value={newDate} 
                       onChange={e => setNewDate(e.target.value)} 
-                      style={{ width: '100%', padding: '12px', border: '2px solid #000', fontWeight: 800, fontSize: '0.8rem', outline: 'none' }} 
+                      style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }} 
                     />
                  </div>
 
                  <button 
                    onClick={handleSaveReschedule} 
-                   style={{ width: '100%', background: '#29ABE2', color: '#fff', border: 'none', padding: '15px', fontWeight: 900, cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '1px', marginTop: '1rem' }}
+                   className="btn-primary-premium"
+                   style={{ width: '100%', justifyContent: 'center', marginTop: '1rem', height: '46px' }}
                  >
-                   SAVE CHANGES & SYNC
+                   Save Changes & Sync
                  </button>
               </div>
            </motion.div>

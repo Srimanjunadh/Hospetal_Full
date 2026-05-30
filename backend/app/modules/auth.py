@@ -126,6 +126,8 @@ async def register(user_data: UserCreate, background_tasks: BackgroundTasks, db:
     existing_user = result.scalars().first()
     if existing_user:
         raise HTTPException(status_code=400, detail="User already registered")
+    if user_data.role == "patient" and not user_data.assigned_doctor_id:
+        raise HTTPException(status_code=400, detail="Doctor selection is mandatory for patient registration.")
     
     # Find Hospital ID if node_code provided
     hospital_id = user_data.hospital_id
@@ -135,6 +137,22 @@ async def register(user_data: UserCreate, background_tasks: BackgroundTasks, db:
         h_rec = h_res.scalars().first()
         if h_rec:
             hospital_id = h_rec.id
+
+    # Round-Robin Nurse Auto-Assignment for ERP
+    assigned_nurse_id = user_data.assigned_nurse_id
+    if user_data.role == "patient" and not assigned_nurse_id:
+        target_hosp_id = hospital_id or 1
+        nurses_res = await db.execute(
+            select(User).filter(User.role == "nurse", User.hospital_id == target_hosp_id).order_by(User.id)
+        )
+        nurses = nurses_res.scalars().all()
+        if nurses:
+            from sqlalchemy import func
+            patients_count_res = await db.execute(
+                select(func.count(User.id)).filter(User.role == "patient", User.hospital_id == target_hosp_id)
+            )
+            total_patients = patients_count_res.scalar() or 0
+            assigned_nurse_id = nurses[total_patients % len(nurses)].id
 
     try:
         hashed_password = get_password_hash(user_data.password)
@@ -150,8 +168,8 @@ async def register(user_data: UserCreate, background_tasks: BackgroundTasks, db:
             location=user_data.location,
             weight=user_data.weight,
             assigned_doctor_id=user_data.assigned_doctor_id,
-            assigned_nurse_id=user_data.assigned_nurse_id,
-            hospital_id=hospital_id
+            assigned_nurse_id=assigned_nurse_id,
+            hospital_id=hospital_id or (1 if user_data.role == "patient" else None)
         )
         db.add(new_user)
         await db.flush() 
@@ -338,7 +356,16 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
         if doctor_rec:
             doctor_id = doctor_rec.id
         elif is_master:
-            doctor_id = 1 # Dummy for master
+            if req.node_code:
+                h_res = await db.execute(select(Hospital).filter(Hospital.node_code == req.node_code))
+                h_rec = h_res.scalars().first()
+                if h_rec:
+                    doc_res = await db.execute(select(Doctor).filter(Doctor.hospital_id == h_rec.id))
+                    doc_rec = doc_res.scalars().first()
+                    if doc_rec:
+                        doctor_id = doc_rec.id
+            if not doctor_id:
+                doctor_id = 1 # Fallback dummy
 
     return {
         "access_token": access_token, 

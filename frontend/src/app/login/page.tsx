@@ -11,7 +11,11 @@ type Role = "super_admin" | "hospital_admin" | "doctor" | "nurse" | "lab" | "pat
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div style={{ height: '100vh', background: '#fff' }} />}>
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'url(/custom_login_bg.jpg) center/cover no-repeat fixed' }}>
+        <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+      </div>
+    }>
       <LoginContent />
     </Suspense>
   );
@@ -125,20 +129,25 @@ function LoginContent() {
   };
 
   if (!mounted) return (
-    <div style={{ height: '100vh', background: '#fff' }} />
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'url(/custom_login_bg.jpg) center/cover no-repeat fixed' }}>
+      <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }}>
+        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    </div>
   );
 
   return (
     <div 
       style={{ 
-        height: '100vh', 
+        minHeight: '100vh', 
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 
         justifyContent: 'center', 
-        background: '#ffffff',
-        fontFamily: '"Inter", sans-serif',
-        color: '#000'
+        background: 'url(/custom_login_bg.jpg) center/cover no-repeat fixed',
+        fontFamily: 'var(--font-primary)',
+        color: 'var(--text-primary)',
+        padding: '2rem'
       }}
     >
       
@@ -150,56 +159,62 @@ function LoginContent() {
         zIndex: 100
       }}>
         <Link href="/" style={{ 
-          display: 'flex', 
+          display: 'inline-flex', 
           alignItems: 'center', 
           gap: '8px', 
           textDecoration: 'none', 
-          color: '#29ABE2', 
-          fontSize: '0.7rem', 
-          fontWeight: 900,
-          background: '#fff',
-          padding: '10px 18px',
-          border: '2px solid #29ABE2',
-          borderRadius: '4px',
-          transition: 'all 0.2s ease'
+          color: 'var(--bg-side)', 
+          fontSize: '0.8rem', 
+          fontWeight: 700,
+          background: '#ffffff',
+          padding: '10px 20px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+          transition: 'all 0.3s ease'
         }}>
-          <ChevronLeft size={16} /> ECOSYSTEM HUB
+          <ChevronLeft size={16} /> Ecosystem Hub
         </Link>
       </div>
 
       {/* Role Selection Terminal */}
       <div style={{ 
-        marginBottom: '3rem',
-        textAlign: 'center'
+        marginBottom: '2.5rem',
+        textAlign: 'center',
+        zIndex: 10
       }}>
-        <p style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '3px', color: '#666', marginBottom: '1.5rem' }}>SELECT ACCESS TERMINAL</p>
+        <p style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '2px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)', marginBottom: '1rem', textTransform: 'uppercase' }}>Select Access Terminal</p>
         <div style={{ 
           display: 'flex', 
-          gap: '10px', 
-          background: '#f9fafb', 
-          padding: '6px',
-          borderRadius: '12px',
-          border: '1px solid #e5e7eb',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '8px', 
+          background: 'rgba(255, 255, 255, 0.7)', 
+          padding: '8px',
+          borderRadius: '16px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255,255,255,0.8)'
         }}>
           {(["super_admin", "hospital_admin", "doctor", "nurse", "lab", "patient"] as Role[]).map((r) => (
-            <button 
+              <button 
               key={r}
               onClick={() => setRole(r)}
               style={{ 
-                padding: '10px 16px', 
-                fontSize: '0.65rem', 
-                fontWeight: 800, 
+                padding: '10px 20px', 
+                fontSize: '0.75rem', 
+                fontWeight: 700, 
                 border: 'none', 
                 cursor: 'pointer',
-                borderRadius: '8px',
-                background: role === r ? '#29ABE2' : 'transparent',
-                color: role === r ? '#fff' : '#6b7280',
-                transition: '0.3s all cubic-bezier(0.4, 0, 0.2, 1)',
-                letterSpacing: '0.5px'
+                borderRadius: '12px',
+                background: role === r ? 'var(--bg-side)' : 'transparent',
+                color: role === r ? '#fff' : '#ffffff',
+                textShadow: role === r ? 'none' : '0 1px 3px rgba(0,0,0,0.8)',
+                boxShadow: role === r ? '0 4px 12px rgba(6, 125, 113, 0.3)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                textTransform: 'capitalize'
               }}
             >
-              {r.replace('_', ' ').toUpperCase()}
+              {r.replace('_', ' ')}
             </button>
           ))}
         </div>
@@ -207,32 +222,46 @@ function LoginContent() {
 
       <motion.div 
         key={role}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.4, type: 'spring', bounce: 0.2 }}
         style={{ 
-          width: '360px', 
-          background: '#fff', 
+          width: '100%',
+          maxWidth: '420px', 
+          background: '#ffffff', 
           padding: '3rem 2.5rem', 
-          border: '2px solid #29ABE2', 
+          borderRadius: '24px',
           position: 'relative',
-          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.05)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02)',
+          border: '1px solid rgba(226, 232, 240, 0.8)',
+          zIndex: 10
         }}
       >
-        <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem' }}>
-             <Command size={18} style={{ color: '#29ABE2' }} />
-             <span style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '2px', color: '#29ABE2' }}>{theme.badge}</span>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+           <div style={{ 
+             display: 'inline-flex', 
+             alignItems: 'center', 
+             justifyContent: 'center',
+             gap: '8px', 
+             marginBottom: '1rem',
+             background: '#f0fdfa',
+             padding: '8px 16px',
+             borderRadius: '20px',
+             color: 'var(--color-accent)'
+           }}>
+             {theme.icon}
+             <span style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '1px' }}>{theme.badge}</span>
            </div>
-           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.4rem', color: '#000' }}>{theme.label}</h1>
-           <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500 }}>Sign in to MediClues+</p>
+           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{theme.label}</h1>
+           <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Sign in to MediClues+</p>
         </div>
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {role !== 'super_admin' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.55rem', fontWeight: 800, color: '#000', letterSpacing: '1px' }}>FACILITY NODE ID (4-DIGIT)</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Facility Node ID (4-Digit)</label>
               <div style={{ position: 'relative' }}>
+                <Building2 style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.6 }} size={18} />
                 <input 
                   type="text" 
                   required
@@ -241,19 +270,20 @@ function LoginContent() {
                   onChange={(e) => setFormData({...formData, nodeId: e.target.value.replace(/\D/g, '')})}
                   placeholder="0000" 
                   style={{ 
-                    width: '100%', padding: '12px 0', background: 'transparent', border: 'none', borderBottom: '1px solid #e5e7eb',
-                    fontWeight: 900, outline: 'none', color: '#000', fontSize: '1rem', letterSpacing: '8px', transition: 'border-color 0.3s ease'
+                    width: '100%', padding: '14px 16px 14px 44px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                    fontWeight: 700, outline: 'none', color: 'var(--text-primary)', fontSize: '1rem', letterSpacing: '4px', transition: 'all 0.3s ease'
                   }}
-                  onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
-                  onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 168, 155, 0.1)'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = 'none'; }}
                 />
               </div>
             </div>
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '0.55rem', fontWeight: 800, color: '#000', letterSpacing: '1px' }}>ID IDENTIFIER</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>ID Identifier</label>
             <div style={{ position: 'relative' }}>
+              <User style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.6 }} size={18} />
               <input 
                 type="text" 
                 required
@@ -261,26 +291,19 @@ function LoginContent() {
                 onChange={(e) => setFormData({...formData, identifier: e.target.value})}
                 placeholder={role === 'patient' ? "Patient Identity" : "Network ID"} 
                 style={{ 
-                  width: '100%', 
-                  padding: '12px 0', 
-                  background: 'transparent', 
-                  border: 'none', 
-                  borderBottom: '1px solid #e5e7eb',
-                  fontWeight: 600, 
-                  outline: 'none',
-                  color: '#000',
-                  fontSize: '0.9rem',
-                  transition: 'border-color 0.3s ease'
+                  width: '100%', padding: '14px 16px 14px 44px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                  fontWeight: 600, outline: 'none', color: 'var(--text-primary)', fontSize: '0.95rem', transition: 'all 0.3s ease'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
-                onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
+                onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 168, 155, 0.1)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = 'none'; }}
               />
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label style={{ fontSize: '0.55rem', fontWeight: 800, color: '#000', letterSpacing: '1px' }}>SECURITY TOKEN</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Security Token</label>
             <div style={{ position: 'relative' }}>
+              <Lock style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.6 }} size={18} />
               <input 
                 type="password" 
                 required
@@ -288,19 +311,11 @@ function LoginContent() {
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 placeholder="••••••••" 
                 style={{ 
-                  width: '100%', 
-                  padding: '12px 0', 
-                  background: 'transparent', 
-                  border: 'none', 
-                  borderBottom: '1px solid #e5e7eb',
-                  fontWeight: 600, 
-                  outline: 'none',
-                  color: '#000',
-                  fontSize: '0.9rem',
-                  transition: 'border-color 0.3s ease'
+                  width: '100%', padding: '14px 16px 14px 44px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                  fontWeight: 600, outline: 'none', color: 'var(--text-primary)', fontSize: '0.95rem', transition: 'all 0.3s ease'
                 }}
-                onFocus={(e) => e.currentTarget.style.borderBottomColor = '#29ABE2'}
-                onBlur={(e) => e.currentTarget.style.borderBottomColor = '#e5e7eb'}
+                onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 168, 155, 0.1)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = 'none'; }}
               />
             </div>
           </div>
@@ -309,42 +324,43 @@ function LoginContent() {
             type="submit" 
             disabled={isLoading}
             style={{ 
-              padding: '14px', 
-              marginTop: '0.5rem', 
+              padding: '16px', 
+              marginTop: '1rem', 
               display: 'flex', 
               alignItems: 'center',
               justifyContent: 'center', 
-              gap: '10px',
-              background: '#29ABE2',
+              gap: '12px',
+              background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)',
               color: '#fff',
               border: 'none',
-              borderRadius: '4px',
-              fontWeight: 700,
-              fontSize: '0.8rem',
+              borderRadius: '12px',
+              fontWeight: 800,
+              fontSize: '0.9rem',
               cursor: isLoading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.3s ease'
+              boxShadow: '0 10px 20px rgba(14, 168, 155, 0.2)',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+              letterSpacing: '1px'
             }}
+            onMouseOver={(e) => { if(!isLoading) e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(14, 168, 155, 0.3)' }}
+            onMouseOut={(e) => { if(!isLoading) e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 20px rgba(14, 168, 155, 0.2)' }}
           >
-            {isLoading ? "AUTHORIZING..." : "SIGN IN"}
-            {!isLoading && <ArrowRight size={16} />}
+            {isLoading ? "AUTHORIZING..." : "SECURE SIGN IN"}
+            {!isLoading && <ArrowRight size={18} />}
           </button>
         </form>
 
-        <div style={{ marginTop: '3rem', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '1px', opacity: 0.3 }}>
-            © 2026 MEDCLUES+ ERP • GLOBAL HEALTH NETWORK
-          </p>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-             <Link href="/pms" style={{ fontSize: '0.55rem', fontWeight: 900, color: '#29ABE2', textDecoration: 'none', borderBottom: '2px solid #29ABE2' }}>GO TO PMS PORTAL</Link>
+        <div style={{ marginTop: '2.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ width: '100%', height: '1px', background: '#f1f5f9' }}></div>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+             <p style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+               © 2026 MEDCLUES+
+             </p>
+             <Link href="/pms" style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--color-accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+               <Globe size={14} /> PMS PORTAL
+             </Link>
           </div>
         </div>
       </motion.div>
-
-
-      {/* Global CSS for Inter */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-      `}</style>
     </div>
   );
 }

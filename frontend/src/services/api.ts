@@ -208,18 +208,6 @@ export const apiService = {
     return handleResponse(response);
   },
 
-  getHospitalAppointments: async (hospitalId: number) => {
-    const response = await fetch(`${API_BASE_URL}/appointments/hospital/${hospitalId}`);
-    return handleResponse(response);
-  },
-
-  approveAppointment: async (appointmentId: number) => {
-    const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/approve`, {
-      method: 'POST'
-    });
-    return handleResponse(response);
-  },
-
   getSystemAlerts: async (userId: number) => {
     const response = await fetch(`${API_BASE_URL}/clinical/alerts/${userId}`);
     return handleResponse(response);
@@ -398,6 +386,12 @@ export const apiService = {
   getPatientExpenditure: async (patientId: number) => {
     const response = await fetch(`${API_BASE_URL}/clinical/patient/${patientId}/billing`);
     return handleResponse(response);
+  },
+
+  getPatientBills: async (patientId: number) => {
+    const response = await fetch(`${API_BASE_URL}/clinical/patient/${patientId}/billing`);
+    const data = await handleResponse(response);
+    return data.history || [];
   },
 
   getPatientHistory: async (patientId: number) => {

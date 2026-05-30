@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { X, Users, Clock, ClipboardList, Heart, Droplets, ChevronRight, Save } from "lucide-react";
@@ -149,17 +149,17 @@ function NurseDashboardContent() {
 
   return (
     <DashboardLayout role="nurse" userName={session?.name || "Nurse"}>
-      <div style={{ marginBottom: '3rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>NURSING COMMAND CENTER</h1>
-        <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>SYNCHRONIZED PATIENT CARE NODE</p>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Nursing Command Center</h1>
+        <p style={{ color: 'var(--text-secondary)', fontWeight: 500, fontSize: '0.9rem', marginTop: '4px' }}>Synchronized Patient Care Node</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '3rem' }}>
         {/* Patient Roster */}
         <div>
-          <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-            <div style={{ padding: '1.5rem 2rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-               <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ASSIGNED PATIENTS</h3>
+          <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+            <div style={{ padding: '1.25rem 2rem', background: 'rgba(6, 125, 113, 0.05)', color: 'var(--bg-side)', borderBottom: '1px solid rgba(6, 125, 113, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <h3 style={{ fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Assigned Patients</h3>
                <Users size={18} />
             </div>
             <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
@@ -180,11 +180,11 @@ function NurseDashboardContent() {
                     gap: '20px'
                   }}
                 >
-                  <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, opacity: 0.4, color: 'var(--text-secondary)' }}>{(i + 1).toString().padStart(2, '0')}</span>
                   <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h4 style={{ fontWeight: 900, fontSize: '1rem' }}>{p.name.toUpperCase()}</h4>
-                      <p style={{ fontSize: '0.7rem', fontWeight: 700, color: '#666' }}>ID: {p.username}</p>
+                      <h4 style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{p.name}</h4>
+                      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>ID: {p.username}</p>
                     </div>
                     <ChevronRight size={18} />
                   </div>
@@ -203,53 +203,52 @@ function NurseDashboardContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="card" 
-                style={{ padding: '2.5rem', border: '2px solid #29ABE2' }}
+                className="card-premium" 
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2rem' }}>
-                   <div style={{ width: '40px', height: '40px', background: '#29ABE2', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>{selectedPatient.name.charAt(0)}</div>
+                   <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, var(--bg-side) 0%, var(--color-accent) 100%)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, borderRadius: '10px' }}>{selectedPatient.name.charAt(0)}</div>
                    <div>
-                     <h3 style={{ fontWeight: 900, fontSize: '1.2rem' }}>{selectedPatient.name.toUpperCase()}</h3>
-                     <p style={{ fontSize: '0.65rem', fontWeight: 800, color: '#666' }}>VITAL SYNCHRONIZATION TERMINAL</p>
+                     <h3 style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-primary)' }}>{selectedPatient.name}</h3>
+                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>VITAL SYNCHRONIZATION TERMINAL</p>
                    </div>
                 </div>
 
                 <form onSubmit={handleUpdateVitals} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                       <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>HEART RATE (BPM)</label>
+                       <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Heart Rate (BPM)</label>
                        <div style={{ position: 'relative' }}>
-                          <Heart size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
-                          <input type="number" required placeholder="72" value={vitals.hr} onChange={e => setVitals({...vitals, hr: e.target.value})} style={{ width: '100%', padding: '12px 12px 12px 40px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                          <Heart size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                          <input type="number" required placeholder="72" value={vitals.hr} onChange={e => setVitals({...vitals, hr: e.target.value})} style={{ width: '100%', padding: '12px 12px 12px 40px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, color: 'var(--text-primary)', outline: 'none' }} />
                        </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                       <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>GLUCOSE (MG/DL)</label>
+                       <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Glucose (mg/dL)</label>
                        <div style={{ position: 'relative' }}>
-                          <Droplets size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
-                          <input type="number" required placeholder="100" value={vitals.glucose} onChange={e => setVitals({...vitals, glucose: e.target.value})} style={{ width: '100%', padding: '12px 12px 12px 40px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                          <Droplets size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                          <input type="number" required placeholder="100" value={vitals.glucose} onChange={e => setVitals({...vitals, glucose: e.target.value})} style={{ width: '100%', padding: '12px 12px 12px 40px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, color: 'var(--text-primary)', outline: 'none' }} />
                        </div>
                     </div>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                       <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>BLOOD PRESSURE</label>
-                       <input type="text" placeholder="120/80" value={vitals.bp} onChange={e => setVitals({...vitals, bp: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                       <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Blood Pressure</label>
+                       <input type="text" placeholder="120/80" value={vitals.bp} onChange={e => setVitals({...vitals, bp: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, color: 'var(--text-primary)', outline: 'none' }} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                       <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>TEMPERATURE (°F)</label>
-                       <input type="number" step="0.1" placeholder="98.6" value={vitals.temp} onChange={e => setVitals({...vitals, temp: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f4f4f5', border: 'none', fontWeight: 800 }} />
+                       <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Temperature (°F)</label>
+                       <input type="number" step="0.1" placeholder="98.6" value={vitals.temp} onChange={e => setVitals({...vitals, temp: e.target.value})} style={{ width: '100%', padding: '12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, color: 'var(--text-primary)', outline: 'none' }} />
                     </div>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>NURSING OBSERVATIONS</label>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Nursing Observations</label>
                     <textarea 
-                      placeholder="ENTER CLINICAL NOTES..."
+                      placeholder="Enter clinical notes..."
                       value={vitals.notes}
                       onChange={e => setVitals({...vitals, notes: e.target.value})}
-                      style={{ width: '100%', padding: '15px', background: '#f4f4f5', border: 'none', fontWeight: 700, minHeight: '120px', resize: 'none' }}
+                      style={{ width: '100%', padding: '15px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 500, color: 'var(--text-primary)', outline: 'none', minHeight: '100px', resize: 'vertical' }}
                     />
                   </div>
 
@@ -266,10 +265,10 @@ function NurseDashboardContent() {
                           showToast("EMERGENCY BROADCAST SENT TO ALL DOCTORS", "error");
                         } catch (e) { showToast("Broadcast Failed", "error"); }
                       }}
-                      className="btn-black" 
-                      style={{ background: '#dc2626', color: '#fff', border: 'none', padding: '12px', fontSize: '0.65rem', fontWeight: 900 }}
+                      className="btn-primary-premium" 
+                      style={{ background: '#ef4444', justifyContent: 'center' }}
                     >
-                      EMERGENCY ALERT
+                      Emergency Alert
                     </button>
 
                     <button 
@@ -285,53 +284,53 @@ function NurseDashboardContent() {
                           showToast("AMBULANCE DISPATCHED", "success");
                         } catch (e) { showToast("Dispatch Failed", "error"); }
                       }}
-                      className="btn-outline" 
-                      style={{ padding: '12px', fontSize: '0.65rem', fontWeight: 900 }}
+                      className="btn-outline-premium" 
+                      style={{ justifyContent: 'center' }}
                     >
-                      REQUEST AMBULANCE
+                      Request Ambulance
                     </button>
 
                     <button 
                       type="button" 
                       onClick={() => setShowRecordModal(true)}
-                      className="btn-outline" 
-                      style={{ padding: '12px', fontSize: '0.65rem', fontWeight: 900 }}
+                      className="btn-outline-premium" 
+                      style={{ justifyContent: 'center' }}
                     >
-                      ADD OLD DOCS
+                      Add Old Docs
                     </button>
 
                     <button 
                       type="button" 
                       onClick={openMedicineModal}
-                      className="btn-outline" 
-                      style={{ padding: '12px', fontSize: '0.65rem', fontWeight: 900 }}
+                      className="btn-outline-premium" 
+                      style={{ justifyContent: 'center', gridColumn: '1 / span 3' }}
                     >
-                      REQUEST MEDICINE
+                      Request Medicine
                     </button>
                   </div>
 
-                  <button type="submit" className="btn-black" style={{ padding: '1.25rem', gap: '10px', marginTop: '1rem' }}>
-                    <Save size={18} /> SYNCHRONIZE DATA
+                  <button type="submit" className="btn-primary-premium" style={{ width: '100%', justifyContent: 'center', padding: '1rem', marginTop: '1.5rem', borderRadius: '30px' }}>
+                    <Save size={18} /> Synchronize Data
                   </button>
                 </form>
 
-                <div style={{ marginTop: '3rem', borderTop: '2px solid #000', paddingTop: '2rem' }}>
+                <div style={{ marginTop: '3rem', borderTop: '1px solid #e2e8f0', paddingTop: '2rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-                    <h3 style={{ fontWeight: 900, fontSize: '0.85rem', letterSpacing: '1px' }}>DIAGNOSTIC TEST RESULTS</h3>
+                    <h3 style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)', textTransform: 'uppercase' }}>Diagnostic Test Results</h3>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {patientTests.length === 0 ? (
-                      <p style={{ opacity: 0.5, fontWeight: 900, textAlign: 'center', padding: '1rem' }}>NO TESTS REQUESTED</p>
+                      <p style={{ color: 'var(--text-secondary)', fontWeight: 600, textAlign: 'center', padding: '1rem' }}>No tests requested</p>
                     ) : patientTests.map((t, i) => (
-                      <div key={i} style={{ padding: '1rem', border: '1px solid #eee', display: 'flex', gap: '15px', alignItems: 'center', opacity: t.status === 'pending' ? 0.5 : 1 }}>
-                         <span style={{ fontSize: '0.6rem', fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</span>
+                      <div key={i} style={{ padding: '1rem', background: '#f8fafc', borderRadius: '12px', display: 'flex', gap: '15px', alignItems: 'center', opacity: t.status === 'pending' ? 0.6 : 1 }}>
+                         <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>{(i + 1).toString().padStart(2, '0')}</span>
                          <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                            <div>
-                             <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>{t.test_name}</p>
-                             <p style={{ fontSize: '0.6rem', fontWeight: 700, opacity: 0.5 }}>{t.status === 'pending' ? 'PENDING LAB VERIFICATION' : `RELEASED: ${new Date(t.created_at).toLocaleDateString()}`}</p>
+                             <p style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)' }}>{t.test_name}</p>
+                             <p style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--text-secondary)', marginTop: '2px' }}>{t.status === 'pending' ? 'Pending Lab Verification' : `Released: ${new Date(t.created_at).toLocaleDateString()}`}</p>
                            </div>
-                           {t.status === 'pending' ? <Clock size={16} /> : (
-                             <button type="button" onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} className="btn-black" style={{ padding: '8px 12px', fontSize: '0.6rem' }}>DOWNLOAD PDF</button>
+                           {t.status === 'pending' ? <Clock size={16} color="var(--text-secondary)" /> : (
+                             <button type="button" onClick={() => window.open(`http://localhost:8000/${t.file_path}`, '_blank')} className="btn-primary-premium" style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '20px' }}>View PDF</button>
                            )}
                          </div>
                       </div>
@@ -344,11 +343,11 @@ function NurseDashboardContent() {
                 key="empty"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="card" 
-                style={{ padding: '5rem', textAlign: 'center', background: '#f4f4f5', border: '2px dashed #ccc' }}
+                className="card-premium" 
+                style={{ padding: '5rem', textAlign: 'center', border: '1px dashed #cbd5e1' }}
               >
-                <ClipboardList size={48} style={{ margin: '0 auto 1.5rem', opacity: 0.2 }} />
-                <h3 style={{ fontWeight: 900, opacity: 0.3 }}>SELECT A PATIENT TO UPDATE VITALS</h3>
+                <ClipboardList size={48} style={{ margin: '0 auto 1.5rem', color: 'var(--text-secondary)', opacity: 0.5 }} />
+                <h3 style={{ fontWeight: 700, color: 'var(--text-secondary)' }}>Select a patient to update vitals</h3>
               </motion.div>
             )}
           </AnimatePresence>
@@ -358,9 +357,9 @@ function NurseDashboardContent() {
       {/* Medicine Request Modal */}
       {isMedicineModalOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setIsMedicineModalOpen(false)} />
-          <div style={{ width: '600px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>MEDICINE REQUEST TERMINAL</h2>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)' }} onClick={() => setIsMedicineModalOpen(false)} />
+          <div className="card-premium" style={{ width: '600px', position: 'relative', padding: '2.5rem', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '2rem' }}>Medicine Request Terminal</h2>
             
             <div style={{ marginBottom: '2rem' }}>
               <h4 style={{ fontSize: '0.65rem', fontWeight: 900, marginBottom: '1rem', opacity: 0.5 }}>DOCTOR PRESCRIBED MEDICINES</h4>
@@ -436,8 +435,8 @@ function NurseDashboardContent() {
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-              <button onClick={() => setIsMedicineModalOpen(false)} style={{ flex: 1, padding: '14px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleSendMedicineRequest} style={{ flex: 1, padding: '14px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>SEND TO PHARMACY</button>
+              <button onClick={() => setIsMedicineModalOpen(false)} className="btn-outline-premium" style={{ flex: 1, justifyContent: 'center' }}>Cancel</button>
+              <button onClick={handleSendMedicineRequest} className="btn-primary-premium" style={{ flex: 1, justifyContent: 'center' }}>Send to Pharmacy</button>
             </div>
           </div>
         </div>
@@ -446,31 +445,31 @@ function NurseDashboardContent() {
       {/* Health Record Upload Modal */}
       {showRecordModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setShowRecordModal(false)} />
-          <div style={{ width: '450px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)' }} onClick={() => setShowRecordModal(false)} />
+          <div className="card-premium" style={{ width: '450px', position: 'relative', padding: '2.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
-               <h3 style={{ fontSize: '1rem', fontWeight: 900 }}>HISTORICAL HEALTH RECORD</h3>
-               <X size={20} onClick={() => setShowRecordModal(false)} style={{ cursor: 'pointer' }} />
+               <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>Historical Health Record</h3>
+               <X size={20} onClick={() => setShowRecordModal(false)} style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                <div>
-                  <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>RECORD TITLE</label>
-                  <input placeholder="E.G., OLD DISCHARGE SUMMARY" value={recordData.title} onChange={e => setRecordData({...recordData, title: e.target.value.toUpperCase()})} style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 800 }} />
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Record Title</label>
+                  <input placeholder="e.g., Old Discharge Summary" value={recordData.title} onChange={e => setRecordData({...recordData, title: e.target.value})} style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#f8fafc', fontWeight: 500, outline: 'none' }} />
                </div>
                <div>
-                  <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>CATEGORY</label>
-                  <select value={recordData.type} onChange={e => setRecordData({...recordData, type: e.target.value})} style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 800 }}>
-                      <option value="REPORT">DIAGNOSTIC REPORT</option>
-                      <option value="SCAN">IMAGING SCAN</option>
-                      <option value="PRESCRIPTION">EXTERNAL PRESCRIPTION</option>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Category</label>
+                  <select value={recordData.type} onChange={e => setRecordData({...recordData, type: e.target.value})} style={{ width: '100%', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#f8fafc', fontWeight: 500, outline: 'none' }}>
+                      <option value="REPORT">Diagnostic Report</option>
+                      <option value="SCAN">Imaging Scan</option>
+                      <option value="PRESCRIPTION">External Prescription</option>
                    </select>
                </div>
                <div>
-                  <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>DOCUMENT FILE (PDF/IMG)</label>
-                  <input type="file" onChange={e => setRecordData({...recordData, file: e.target.files?.[0] || null})} style={{ fontSize: '0.7rem', fontWeight: 900 }} />
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Document File (PDF/IMG)</label>
+                  <input type="file" onChange={e => setRecordData({...recordData, file: e.target.files?.[0] || null})} style={{ fontSize: '0.8rem', fontWeight: 500 }} />
                </div>
-               <button onClick={handleRecordUpload} disabled={!recordData.file || !recordData.title || isSubmittingRecord} style={{ width: '100%', background: '#29ABE2', color: '#fff', border: 'none', padding: '15px', fontWeight: 900, cursor: 'pointer', opacity: isSubmittingRecord ? 0.5 : 1 }}>
-                 {isSubmittingRecord ? "SYNCHRONIZING..." : "UPLOAD TO EHR CLOUD"}
+               <button onClick={handleRecordUpload} disabled={!recordData.file || !recordData.title || isSubmittingRecord} className="btn-primary-premium" style={{ width: '100%', justifyContent: 'center', opacity: isSubmittingRecord ? 0.5 : 1 }}>
+                 {isSubmittingRecord ? "Synchronizing..." : "Upload to EHR Cloud"}
                </button>
             </div>
           </div>

@@ -1,33 +1,57 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Bed, Plus, CheckCircle, RefreshCcw, User, Activity, MapPin, Clock } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Bed, RefreshCcw, Activity, Clock, Search, Filter } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
 import { apiService } from "@/services/api";
 
+interface BedType {
+  id: number;
+  room_number: string;
+  bed_number: string;
+  status: string;
+  dept?: string;
+}
+
+interface Patient {
+  id: number;
+  name: string;
+}
+
+interface Doctor {
+  id: number;
+  user?: {
+    name: string;
+  };
+}
+
+interface Admission {
+  id: number;
+  hospital_id: number;
+  patient_id: number;
+  doctor_id: number;
+  room_number?: string;
+  reason?: string;
+  status: string;
+  admitted_at: string;
+  patient?: Patient;
+  doctor?: Doctor;
+}
+
 export default function AdmissionsManagementPage() {
   const { showToast } = useToast();
   const [mounted, setMounted] = useState(false);
-  const [pendingRequests, setPendingRequests] = useState<any[]>([]);
-  const [activeAdmissions, setActiveAdmissions] = useState<any[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<Admission[]>([]);
+  const [activeAdmissions, setActiveAdmissions] = useState<Admission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hospitalId, setHospitalId] = useState<number | null>(null);
-  const [beds, setBeds] = useState<any[]>([]);
+  const [beds, setBeds] = useState<BedType[]>([]);
 
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<any>(null);
+  const [selectedRequest, setSelectedRequest] = useState<Admission | null>(null);
   const [roomNumber, setRoomNumber] = useState("");
 
-  useEffect(() => {
-    setMounted(true);
-    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
-    if (session && session.hospital_id) {
-      setHospitalId(session.hospital_id);
-      fetchData(session.hospital_id);
-    }
-  }, []);
-
-  const fetchData = async (hId: number) => {
+  const fetchData = useCallback(async (hId: number) => {
     setIsLoading(true);
     try {
       const [pending, active, allBeds] = await Promise.all([
@@ -36,14 +60,23 @@ export default function AdmissionsManagementPage() {
         apiService.getBeds(hId)
       ]);
       setPendingRequests(Array.isArray(pending) ? pending : []);
-      setActiveAdmissions(Array.isArray(active) ? active.filter((a: any) => a.hospital_id === hId && a.status === 'admitted') : []);
-      setBeds(Array.isArray(allBeds) ? allBeds.filter((b: any) => b.status === 'available') : []);
-    } catch (error) {
+      setActiveAdmissions(Array.isArray(active) ? active.filter((a: Admission) => a.hospital_id === hId && a.status === 'admitted') : []);
+      setBeds(Array.isArray(allBeds) ? allBeds.filter((b: BedType) => b.status === 'available') : []);
+    } catch {
       showToast("Failed to sync admission data", "error");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    setMounted(true);
+    const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
+    if (session && session.hospital_id) {
+      setHospitalId(session.hospital_id);
+      fetchData(session.hospital_id);
+    }
+  }, [fetchData]);
 
   const handleFinalize = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +91,7 @@ export default function AdmissionsManagementPage() {
       setShowAssignModal(false);
       setRoomNumber("");
       if (hospitalId) fetchData(hospitalId);
-    } catch (error) {
+    } catch {
       showToast("Finalization failed", "error");
     }
   };
@@ -67,90 +100,143 @@ export default function AdmissionsManagementPage() {
 
   return (
     <DashboardLayout role="hospital_admin" userName="Admin Manju">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>ADMISSION CONTROL</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>WARD MANAGEMENT & ROOM ASSIGNMENT HUB</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Admission Control</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Ward Management & Room Assignment Hub</p>
         </div>
         <button 
           onClick={() => hospitalId && fetchData(hospitalId)} 
-          className="btn-outline"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            flexDirection: 'row',
-            whiteSpace: 'nowrap'
-          }}
+          className="btn-outline-premium"
+          style={{ height: '42px', padding: '0 1.25rem' }}
         >
-           <RefreshCcw size={18} className={isLoading ? "animate-spin" : ""} /> <span>REFRESH</span>
+           <RefreshCcw size={16} className={isLoading ? "animate-spin" : ""} />
+           <span>Refresh Status</span>
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
         
         {/* Pending Requests */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-           <div style={{ padding: '1.5rem 2.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>PENDING ADMISSION REQUESTS</h3>
-              <Clock size={18} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+           <div style={{ padding: '1.25rem 2rem', background: 'rgba(14, 165, 233, 0.06)', borderBottom: '1px solid rgba(14, 165, 233, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Clock size={18} style={{ color: '#0ea5e9' }} />
+                <h3 style={{ fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.5px', color: '#0ea5e9', textTransform: 'uppercase' }}>Pending Admission Requests</h3>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ position: 'relative' }}>
+                  <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                  <input type="text" placeholder="Search requests..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+                </div>
+                <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <Filter size={14} /> FILTER
+                </button>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '12px' }}>
+                  {pendingRequests.length} Requests
+                </span>
+              </div>
            </div>
-           <div style={{ maxHeight: '450px', overflowY: 'auto' }} className="custom-scrollbar">
+           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
              {pendingRequests.length === 0 ? (
-               <div style={{ padding: '4rem', textAlign: 'center', fontWeight: 900, opacity: 0.3 }}>NO PENDING REQUESTS</div>
+               <div style={{ padding: '4rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                 <Activity size={36} style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                 <p style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>No pending admission requests at this node</p>
+               </div>
              ) : pendingRequests.map((req, i) => (
-               <div key={i} style={{ padding: '2rem 2.5rem', borderBottom: '1px solid #eee', display: 'flex', gap: '20px', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.7rem', fontWeight: 900, opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</span>
-                  <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <div key={i} style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-secondary)', opacity: 0.4, marginTop: '2px' }}>{(i + 1).toString().padStart(2, '0')}</span>
                     <div>
-                       <h4 style={{ fontWeight: 900, fontSize: '1.1rem', marginBottom: '4px' }}>{req.patient?.name?.toUpperCase()}</h4>
-                       <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                          <p style={{ fontSize: '0.7rem', fontWeight: 800, opacity: 0.5 }}>REQUESTED BY: DR. {req.doctor?.user?.name?.toUpperCase()}</p>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.65rem', fontWeight: 900, color: '#3b82f6' }}>
-                             <Clock size={12} /> {req.admitted_at ? new Date(req.admitted_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) : 'JUST NOW'}
-                          </div>
+                       <h4 style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', marginBottom: '4px' }}>{req.patient?.name}</h4>
+                       <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Req. by: <strong style={{ color: 'var(--text-primary)' }}>Dr. {req.doctor?.user?.name}</strong></span>
+                          <span style={{ width: '4px', height: '4px', background: '#cbd5e1', borderRadius: '50%' }}></span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                             <Clock size={12} /> {req.admitted_at ? new Date(req.admitted_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Just now'}
+                          </span>
                        </div>
-                       <p style={{ fontSize: '0.7rem', fontWeight: 700, marginTop: '8px', padding: '4px 8px', background: '#f4f4f5', display: 'inline-block' }}>REASON: {req.reason}</p>
+                       <div style={{ marginTop: '8px' }}>
+                         <span style={{ fontSize: '0.7rem', fontWeight: 600, padding: '4px 8px', background: '#f1f5f9', color: 'var(--text-primary)', borderRadius: '6px' }}>
+                           Reason: {req.reason}
+                         </span>
+                       </div>
                     </div>
-                    <button className="btn-black" onClick={() => { setSelectedRequest(req); setShowAssignModal(true); }}>
-                       ASSIGN ROOM & ADMIT
-                    </button>
                   </div>
+                  <button className="btn-primary-premium" onClick={() => { setSelectedRequest(req); setShowAssignModal(true); }} style={{ padding: '8px 16px', borderRadius: '30px', fontSize: '0.8rem' }}>
+                     Assign Room & Admit
+                  </button>
                </div>
              ))}
            </div>
         </div>
 
         {/* Active Admissions */}
-        <div className="card" style={{ padding: '0', border: '2px solid #29ABE2' }}>
-           <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>ACTIVE WARD OCCUPANCY</h3>
-              <Bed size={18} />
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+           <div style={{ padding: '1.25rem 2rem', background: 'rgba(6, 125, 113, 0.05)', borderBottom: '1px solid rgba(6, 125, 113, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Bed size={18} style={{ color: 'var(--bg-side)' }} />
+                <h3 style={{ fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.5px', color: 'var(--bg-side)', textTransform: 'uppercase' }}>Active Ward Occupancy</h3>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ position: 'relative' }}>
+                  <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                  <input type="text" placeholder="Search ward..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+                </div>
+                <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <Filter size={14} /> FILTER
+                </button>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#d1fae5', color: '#065f46', padding: '2px 8px', borderRadius: '12px' }}>
+                  {activeAdmissions.length} Admitted
+                </span>
+              </div>
            </div>
-           <div style={{ maxHeight: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-             <table className="data-table" style={{ border: 'none' }}>
+           <div style={{ overflowX: 'auto' }}>
+             <table className="data-table-premium">
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, background: '#f9fafb', zIndex: 10 }}>
-                   <th style={{ padding: '12px 25px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '12px 25px' }}>ROOM</th>
-                   <th style={{ padding: '12px 25px' }}>PATIENT</th>
-                   <th style={{ padding: '12px 25px' }}>DOCTOR</th>
-                   <th style={{ padding: '12px 25px' }}>ADMITTED AT</th>
-                   <th style={{ padding: '12px 25px' }}>STATUS</th>
+                 <tr>
+                   <th style={{ width: '80px' }}>S.No</th>
+                   <th>Room / Bed</th>
+                   <th>Patient Details</th>
+                   <th>Attending Physician</th>
+                   <th>Admitted At</th>
+                   <th style={{ textAlign: 'right' }}>Status</th>
                  </tr>
                </thead>
                <tbody>
                  {activeAdmissions.length === 0 ? (
-                   <tr><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', fontWeight: 900, opacity: 0.3 }}>WARD IS CURRENTLY EMPTY</td></tr>
+                   <tr>
+                     <td colSpan={6} style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                         <Bed size={36} style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />
+                         <p style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Ward is currently empty</p>
+                       </div>
+                     </td>
+                   </tr>
                  ) : activeAdmissions.map((adm, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 25px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 25px', fontWeight: 900 }}>{adm.room_number || "TBD"}</td>
-                     <td style={{ padding: '15px 25px', fontWeight: 900 }}>{adm.patient?.name?.toUpperCase()}</td>
-                     <td style={{ padding: '15px 25px', fontWeight: 700 }}>DR. {adm.doctor?.user?.name?.toUpperCase()}</td>
-                     <td style={{ padding: '15px 25px', opacity: 0.5, fontWeight: 800, fontSize: '0.75rem' }}>{new Date(adm.admitted_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}</td>
-                     <td style={{ padding: '15px 25px' }}>
-                        <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981' }}>ADMITTED</span>
+                   <tr key={i}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                       <span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: '6px', fontSize: '0.8rem' }}>
+                         Room {adm.room_number || "TBD"}
+                       </span>
+                     </td>
+                     <td style={{ fontWeight: 700 }}>{adm.patient?.name}</td>
+                     <td style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Dr. {adm.doctor?.user?.name}</td>
+                     <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                       {new Date(adm.admitted_at).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                     </td>
+                     <td style={{ textAlign: 'right' }}>
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          fontWeight: 700, 
+                          color: '#059669', 
+                          background: '#ecfdf5',
+                          padding: '4px 10px',
+                          borderRadius: '12px'
+                        }}>
+                          ADMITTED
+                        </span>
                      </td>
                    </tr>
                  ))}
@@ -160,49 +246,56 @@ export default function AdmissionsManagementPage() {
         </div>
         <style jsx global>{`
           .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
+          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         `}</style>
 
       </div>
 
       {/* Assign Room Modal */}
       {showAssignModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="card" style={{ width: '400px', padding: '3rem', background: '#fff' }}>
-             <h2 style={{ fontWeight: 900, fontSize: '1.5rem', marginBottom: '1rem' }}>ASSIGN ROOM</h2>
-             <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#6b7280', marginBottom: '2rem' }}>Finalizing admission for {selectedRequest?.patient?.name}</p>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="card-premium" style={{ width: '100%', maxWidth: '440px', padding: '2.5rem', background: '#fff', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}>
+             <h2 style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Assign Ward Bed</h2>
+             <p style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '2rem' }}>Finalizing admission node for <strong style={{ color: 'var(--text-primary)' }}>{selectedRequest?.patient?.name}</strong></p>
+             
              <form onSubmit={handleFinalize} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
-                   <label style={{ fontSize: '0.65rem', fontWeight: 900 }}>AVAILABLE ROOMS & WARDS (SELECT SECTION)</label>
+                   <label style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Available Beds by Section</label>
                    <select 
                      required 
                      value={roomNumber} 
                      onChange={e => setRoomNumber(e.target.value)} 
-                     style={{ width: '100%', padding: '15px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none', appearance: 'none', cursor: 'pointer' }}
+                     style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none', cursor: 'pointer', color: 'var(--text-primary)' }}
                    >
-                     <option value="">-- SELECT AVAILABLE ROOM --</option>
-                     {/* Grouping beds by department */}
+                     <option value="">-- Select Room / Bed --</option>
                      {Object.entries(
-                       beds.reduce((acc: any, bed) => {
+                       beds.reduce((acc: Record<string, BedType[]>, bed: BedType) => {
                          const dept = bed.dept || 'GENERAL';
                          if (!acc[dept]) acc[dept] = [];
                          acc[dept].push(bed);
                          return acc;
                        }, {})
-                     ).map(([dept, deptBeds]: [string, any]) => (
-                       <optgroup key={dept} label={dept.toUpperCase() + " SECTION"}>
-                         {deptBeds.map((bed: any) => (
+                     ).map(([dept, deptBeds]: [string, BedType[]]) => (
+                       <optgroup key={dept} label={`${dept.toUpperCase()} SECTION`}>
+                         {deptBeds.map((bed: BedType) => (
                            <option key={bed.id} value={bed.room_number}>
-                             ROOM {bed.room_number} - BED {bed.bed_number}
+                             Room {bed.room_number} - Bed {bed.bed_number}
                            </option>
                          ))}
                        </optgroup>
                      ))}
                    </select>
                 </div>
-                <button type="submit" className="btn-black" style={{ padding: '18px' }}>FINALIZE ADMISSION</button>
-                <button type="button" className="btn-outline" onClick={() => setShowAssignModal(false)}>CANCEL</button>
+                
+                <div style={{ display: 'flex', gap: '12px', marginTop: '1rem' }}>
+                  <button type="button" className="btn-outline-premium" onClick={() => setShowAssignModal(false)} style={{ flex: 1, justifyContent: 'center' }}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-primary-premium" style={{ flex: 2, justifyContent: 'center' }}>
+                    Admit Patient
+                  </button>
+                </div>
              </form>
           </div>
         </div>

@@ -19,6 +19,7 @@ import { useToast } from "@/components/ToastProvider";
 export default function InventoryPage() {
   const { showToast } = useToast();
   const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const globalInventory = [
     { id: "INV-8821", name: "AMOXICILLIN 500MG", facility: "METRO CORE", stock: 1240, status: "OPTIMAL" },
@@ -37,23 +38,29 @@ export default function InventoryPage() {
 
   const getStatusRowStyle = (status: string) => {
     switch (status) {
-      case 'OPTIMAL': return { borderLeft: '6px solid #10b981' };
-      case 'LOW STOCK': return { borderLeft: '6px solid #f59e0b' };
+      case 'OPTIMAL': return { borderLeft: '4px solid #10b981' };
+      case 'LOW STOCK': return { borderLeft: '4px solid #f59e0b' };
       case 'CRITICAL': 
-      case 'OUT OF STOCK': return { borderLeft: '6px solid #dc2626' };
+      case 'OUT OF STOCK': return { borderLeft: '4px solid #dc2626' };
       default: return {};
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'OPTIMAL': return '#10b981';
-      case 'LOW STOCK': return '#f59e0b';
+      case 'OPTIMAL': return '#137333';
+      case 'LOW STOCK': return '#b25e00';
       case 'CRITICAL':
-      case 'OUT OF STOCK': return '#dc2626';
-      default: return '#000';
+      case 'OUT OF STOCK': return '#c5221f';
+      default: return '#64748b';
     }
   };
+
+  const filteredInventory = globalInventory.filter(item => 
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.facility.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <DashboardLayout role="super_admin" userName="Master Admin">
@@ -64,90 +71,88 @@ export default function InventoryPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: '1px' }}>ROOT LOGISTICS • NETWORK SUPPLY CHAIN MONITOR</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="btn-outline-premium" onClick={() => showToast("Stock reallocator panel initialized", "info")} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
              <ArrowRightLeft size={18} /> REALLOCATE
           </button>
-          <button className="btn-black" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="btn-primary-premium" onClick={() => showToast("Bulk procurement order created", "success")} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShoppingCart size={18} /> BULK PROCUREMENT
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid-stack" style={{ marginBottom: '3rem' }}>
-        <div className="card" style={{ position: 'relative', overflow: 'hidden' }}>
-          <p className="card-title">GLOBAL ASSET VALUE</p>
-          <h2 className="card-value">$1.82M</h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '1rem', color: '#10b981' }}>
-            <TrendingUp size={14} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>+4.2% NETWORK GROWTH</span>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
+        {[
+          { label: "GLOBAL ASSET VALUE", value: "$1.82M", icon: <TrendingUp size={18} />, trend: "+4.2% NETWORK GROWTH", color: '#067D71', bg: '#eef7f6' },
+          { label: "SHORTAGE NODES", value: "06", icon: <AlertTriangle size={18} />, trend: "ACROSS 4 FACILITIES", color: '#dc2626', bg: '#fce8e6' },
+          { label: "EXPIRY SENTINEL", value: "24", icon: <Clock size={18} />, trend: "ITEMS EXPIRE < 30D", color: '#f59e0b', bg: '#fef3c7' }
+        ].map((stat, i) => (
+          <div key={i} className="card-premium" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem' }}>
+            <div>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>{stat.label}</p>
+              <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: stat.color === '#dc2626' ? '#dc2626' : 'var(--text-primary)' }}>{stat.value}</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color }}>
+                {stat.icon}
+              </div>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: stat.color }}>{stat.trend}</span>
+            </div>
           </div>
-        </div>
-        
-        <div className="card" style={{ borderLeft: '4px solid #dc2626' }}>
-          <p className="card-title">SHORTAGE NODES</p>
-          <h2 className="card-value" style={{ color: '#dc2626' }}>06</h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '1rem', color: '#dc2626' }}>
-            <AlertTriangle size={14} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>ACROSS 4 FACILITIES</span>
-          </div>
-        </div>
-
-        <div className="card">
-          <p className="card-title">EXPIRY SENTINEL</p>
-          <h2 className="card-value">24</h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '1rem', opacity: 0.6 }}>
-            <Clock size={14} />
-            <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>ITEMS EXPIRE &lt; 30D</span>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Main Inventory Control */}
-      <div className="card" style={{ padding: '2rem' }}>
+      <div className="card-premium" style={{ padding: '2rem' }}>
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2.5rem' }}>
           <div style={{ flex: 1, position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} size={18} />
+            <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} size={18} />
             <input 
               type="text" 
               placeholder="SEARCH ACROSS ALL FACILITY INVENTORIES BY ASSET NAME, NODE ID, OR CATEGORY" 
-              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', fontWeight: '700', fontSize: '0.8rem', outline: 'none' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ width: '100%', padding: '15px 16px 15px 50px', background: '#f4f4f5', border: 'none', borderRadius: '30px', fontWeight: '700', fontSize: '0.8rem', outline: 'none' }}
             />
           </div>
-          <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+          <button className="btn-outline-premium" style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
             <Filter size={18} /> <span>FILTER</span>
           </button>
-          <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button className="btn-outline-premium" onClick={() => showToast("Exporting compliance report...", "info")} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FileText size={18} /> EXPORT
           </button>
         </div>
 
-        <div className="table-responsive">
-          <table className="data-table">
+        <div className="table-responsive" style={{ overflowX: 'auto', border: '1px solid #f1f5f9', borderRadius: '12px' }}>
+          <table className="data-table-premium">
             <thead>
               <tr>
-                <th>ASSET IDENTITY</th>
-                <th>FACILITY NODE</th>
-                <th>STOCK LEVEL</th>
-                <th>STATUS</th>
-                <th>ROOT ACTIONS</th>
+                <th style={{ padding: '16px 20px' }}>ASSET IDENTITY</th>
+                <th style={{ padding: '16px 20px' }}>FACILITY NODE</th>
+                <th style={{ padding: '16px 20px' }}>STOCK LEVEL</th>
+                <th style={{ padding: '16px 20px' }}>STATUS</th>
+                <th style={{ padding: '16px 20px' }}>ROOT ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {globalInventory.map((item, i) => (
-                <tr key={item.id} style={getStatusRowStyle(item.status)}>
-                  <td style={{ padding: '1.25rem' }}>
+              {filteredInventory.map((item, i) => (
+                <tr key={item.id} style={{ 
+                  borderBottom: '1px solid #eee',
+                  ...getStatusRowStyle(item.status)
+                }}>
+                  <td style={{ padding: '15px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                        <div style={{ 
                          width: '36px', 
                          height: '36px', 
-                         background: '#000', 
-                         color: '#fff', 
+                         borderRadius: '50%',
+                         background: '#eef7f6', 
+                         color: '#067D71', 
                          display: 'flex', 
                          alignItems: 'center', 
                          justifyContent: 'center', 
                          fontWeight: 900, 
-                         fontSize: '0.75rem' 
+                         fontSize: '0.85rem' 
                        }}>
                          {item.name.charAt(0)}
                        </div>
@@ -157,40 +162,44 @@ export default function InventoryPage() {
                        </div>
                     </div>
                   </td>
-                  <td style={{ padding: '1.25rem', fontWeight: 900, fontSize: '0.75rem' }}>
+                  <td style={{ padding: '15px 20px', fontWeight: 900, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Hospital size={14} /> {item.facility}
+                      <Hospital size={14} style={{ color: 'var(--bg-side)' }} /> {item.facility}
                     </div>
                   </td>
-                  <td style={{ padding: '1.25rem', fontWeight: 900 }}>
+                  <td style={{ padding: '15px 20px', fontWeight: 900, color: 'var(--text-primary)' }}>
                     {item.stock.toLocaleString()}
                   </td>
-                  <td style={{ padding: '1.25rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: getStatusColor(item.status) }}></div>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 900, color: getStatusColor(item.status) }}>
-                        {item.status}
-                      </span>
-                    </div>
+                  <td style={{ padding: '15px 20px' }}>
+                    <span style={{ 
+                      padding: '4px 10px', 
+                      fontSize: '0.65rem', 
+                      fontWeight: 800, 
+                      borderRadius: '12px',
+                      background: item.status === 'OPTIMAL' ? '#e6f4ea' : item.status === 'LOW STOCK' ? '#fff7ed' : '#fce8e6',
+                      color: getStatusColor(item.status)
+                    }}>
+                      {item.status}
+                    </span>
                   </td>
-                  <td style={{ padding: '1.25rem' }}>
+                  <td style={{ padding: '15px 20px' }}>
                     <div style={{ display: 'flex', gap: '12px' }}>
                       <button 
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }} 
+                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px', color: 'var(--text-secondary)' }} 
                         onClick={() => showToast(`Initiating Bulk Reorder for ${item.name}`, "info")}
                         title="Bulk Procurement"
                       >
                         <ShoppingCart size={18} />
                       </button>
                       <button 
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
+                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px', color: 'var(--text-secondary)' }}
                         onClick={() => showToast(`Triggering Quick Restock for ${item.name}`, "success")}
                         title="Quick Restock"
                       >
                         <Zap size={18} />
                       </button>
                       <button 
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
+                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px', color: 'var(--text-secondary)' }}
                         onClick={() => showToast(`Refreshing sync for ${item.id}`, "info")}
                         title="Sync Data"
                       >

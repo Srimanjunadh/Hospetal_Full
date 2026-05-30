@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Package, Search, Truck, CheckCircle, Clock, Pill, Plus, RefreshCcw } from "lucide-react";
+import { Package, Search, Truck, CheckCircle, Clock, Pill, Plus, RefreshCcw, Filter } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
 
@@ -153,57 +153,60 @@ export default function PharmacyPage() {
           <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>STATION: PHARMA-CORE-09 • READY FOR DISPENSING</p>
         </div>
         <button 
-          className="btn-black" 
+          className="btn-primary-premium" 
           onClick={() => setIsAddingNew(true)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            flexDirection: 'row',
-            whiteSpace: 'nowrap'
-          }}
+          style={{ height: '42px', padding: '0 1.25rem' }}
         >
           <Plus size={18} /> <span>ADD NEW MEDICINE</span>
         </button>
       </div>      
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '3rem' }}>
-        <div className="card" style={{ borderLeft: '8px solid #000' }}>
-          <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px' }}>NODE STATUS</p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 10px #10b981' }}></div>
-            <h2 className="card-value" style={{ fontSize: '1.25rem' }}>OPERATIONAL</h2>
+        <div className="card-premium">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '1px' }}>NODE STATUS</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px' }}>
+            <div style={{ width: '10px', height: '10px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)' }}></div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>OPERATIONAL</h2>
           </div>
         </div>
-        <div className="card">
-          <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px' }}>PENDING QUEUE</p>
-          <h2 className="card-value" style={{ fontSize: '1.5rem' }}>{orders.length + nurseRequests.length}</h2>
+        <div className="card-premium">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '1px' }}>PENDING QUEUE</p>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '8px' }}>{orders.length + nurseRequests.length}</h2>
         </div>
-        <div className="card">
-          <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px' }}>STORAGE LOAD</p>
-          <h2 className="card-value" style={{ fontSize: '1.5rem' }}>82.4%</h2>
+        <div className="card-premium">
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '1px' }}>STORAGE LOAD</p>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '8px' }}>82.4%</h2>
         </div>
-        <div className="card" style={{ background: '#29ABE2', color: '#fff' }}>
-          <p className="card-title" style={{ fontSize: '0.6rem', letterSpacing: '1px', color: '#666' }}>TEMP CONTROL</p>
-          <h2 className="card-value" style={{ fontSize: '1.5rem', color: '#fff' }}>4.2°C</h2>
+        <div className="card-premium" style={{ background: 'var(--bg-side)', color: '#fff' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '1px' }}>TEMP CONTROL</p>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fff', marginTop: '8px' }}>4.2°C</h2>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start', marginBottom: '3rem' }}>
         {/* Active Medication Orders Card */}
-        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 1.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>DOCTOR ORDERS</h3>
-            <span style={{ fontSize: '0.55rem', fontWeight: 900, background: '#dc2626', color: '#fff', padding: '4px 8px', borderRadius: '2px' }}>{orders.length} PENDING</span>
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.25rem 1.5rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.5px', color: 'var(--text-primary)' }}>DOCTOR ORDERS</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ position: 'relative' }}>
+                <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                <input type="text" placeholder="Search orders..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+              </div>
+              <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                <Filter size={14} /> FILTER
+              </button>
+              <span style={{ fontSize: '0.65rem', fontWeight: 700, background: '#fee2e2', color: '#dc2626', padding: '4px 10px', borderRadius: '12px' }}>{orders.length} PENDING</span>
+            </div>
           </div>
           
           <div style={{ width: '100%', overflowX: 'auto', height: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table className="data-table" style={{ border: 'none', minWidth: '100%' }}>
+            <table className="data-table-premium" style={{ minWidth: '100%' }}>
               <thead>
-                <tr style={{ textAlign: 'left', background: '#f8fafc', position: 'sticky', top: 0, zIndex: 10 }}>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem' }}>S.NO</th>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem' }}>PATIENT</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.6rem' }}>MEDS</th>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem', textAlign: 'right' }}>ACTION</th>
+                <tr>
+                  <th style={{ padding: '1rem 1.5rem' }}>S.NO</th>
+                  <th style={{ padding: '1rem 1.5rem' }}>PATIENT</th>
+                  <th style={{ padding: '1rem 1rem' }}>MEDS</th>
+                  <th style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>ACTION</th>
                 </tr>
               </thead>
               <tbody>
@@ -231,20 +234,29 @@ export default function PharmacyPage() {
         </div>
 
         {/* Nurse Medicine Requests Card */}
-        <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2' }}>
-          <div style={{ padding: '1.2rem 1.5rem', background: '#29ABE2', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontWeight: 900, fontSize: '0.75rem', letterSpacing: '1px' }}>NURSE REQUESTS</h3>
-            <span style={{ fontSize: '0.55rem', fontWeight: 900, background: '#10b981', color: '#fff', padding: '4px 8px', borderRadius: '2px' }}>{nurseRequests.length} ACTIVE</span>
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+          <div style={{ padding: '1.25rem 1.5rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.5px', color: 'var(--text-primary)' }}>NURSE REQUESTS</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ position: 'relative' }}>
+                <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                <input type="text" placeholder="Search requests..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+              </div>
+              <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                <Filter size={14} /> FILTER
+              </button>
+              <span style={{ fontSize: '0.65rem', fontWeight: 700, background: '#dcfce7', color: '#10b981', padding: '4px 10px', borderRadius: '12px' }}>{nurseRequests.length} ACTIVE</span>
+            </div>
           </div>
           
           <div style={{ width: '100%', overflowX: 'auto', height: '400px', overflowY: 'auto' }} className="custom-scrollbar">
-            <table className="data-table" style={{ border: 'none', minWidth: '100%' }}>
+            <table className="data-table-premium" style={{ minWidth: '100%' }}>
               <thead>
-                <tr style={{ textAlign: 'left', background: '#f8fafc', position: 'sticky', top: 0, zIndex: 10 }}>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem' }}>S.NO</th>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem' }}>PATIENT</th>
-                  <th style={{ padding: '0.75rem 1rem', fontSize: '0.6rem' }}>MEDS</th>
-                  <th style={{ padding: '0.75rem 1.5rem', fontSize: '0.6rem', textAlign: 'right' }}>ACTION</th>
+                <tr>
+                  <th style={{ padding: '1rem 1.5rem' }}>S.NO</th>
+                  <th style={{ padding: '1rem 1.5rem' }}>PATIENT</th>
+                  <th style={{ padding: '1rem 1rem' }}>MEDS</th>
+                  <th style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>ACTION</th>
                 </tr>
               </thead>
               <tbody>
@@ -278,24 +290,33 @@ export default function PharmacyPage() {
       </div>
 
       {/* Stock Management Card - FULL WIDTH */}
-      <div className="card" style={{ padding: '0', overflow: 'hidden', border: '2px solid #29ABE2', marginBottom: '3rem' }}>
-        <div style={{ padding: '1.5rem 2rem', background: '#fff', borderBottom: '2px solid #29ABE2', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>STOCK MANAGEMENT (MASTER INVENTORY)</h3>
-          <button className="btn-black" style={{ padding: '8px', borderRadius: '4px' }} onClick={fetchInventory}>
-            <RefreshCcw size={14} />
-          </button>
+      <div className="card-premium" style={{ padding: '0', overflow: 'hidden', marginBottom: '3rem' }}>
+        <div style={{ padding: '1.5rem 2rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-primary)' }}>STOCK MANAGEMENT (MASTER INVENTORY)</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ position: 'relative' }}>
+              <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+              <input type="text" placeholder="Search stock..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+            </div>
+            <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+              <Filter size={14} /> FILTER
+            </button>
+            <button className="btn-outline-premium" style={{ padding: '8px 12px' }} onClick={fetchInventory}>
+              <RefreshCcw size={16} /> <span style={{ fontSize: '0.75rem' }}>Refresh</span>
+            </button>
+          </div>
         </div>
         
         <div style={{ width: '100%', overflowX: 'auto', maxHeight: '500px', overflowY: 'auto' }} className="custom-scrollbar">
-          <table className="data-table" style={{ border: 'none', minWidth: '100%' }}>
+          <table className="data-table-premium" style={{ minWidth: '100%' }}>
             <thead>
-              <tr style={{ textAlign: 'left', background: '#f8fafc', position: 'sticky', top: 0, zIndex: 10 }}>
-                <th style={{ padding: '1rem 2rem', fontSize: '0.65rem', letterSpacing: '1px' }}>S.NO</th>
-                <th style={{ padding: '1rem 2rem', fontSize: '0.65rem', letterSpacing: '1px' }}>ITEM</th>
-                <th style={{ padding: '1rem 1rem', fontSize: '0.65rem', letterSpacing: '1px' }}>STATUS</th>
-                <th style={{ padding: '1rem 1rem', fontSize: '0.65rem', letterSpacing: '1px' }}>CURRENT STOCK</th>
-                <th style={{ padding: '1rem 1rem', fontSize: '0.65rem', letterSpacing: '1px' }}>UNIT PRICE</th>
-                <th style={{ padding: '1rem 2rem', fontSize: '0.65rem', letterSpacing: '1px', textAlign: 'right' }}>ACTION</th>
+              <tr>
+                <th>S.NO</th>
+                <th>ITEM</th>
+                <th>STATUS</th>
+                <th>CURRENT STOCK</th>
+                <th>UNIT PRICE</th>
+                <th style={{ textAlign: 'right' }}>ACTION</th>
               </tr>
             </thead>
             <tbody>
@@ -361,32 +382,27 @@ export default function PharmacyPage() {
             </tbody>
           </table>
         </div>
-        <style jsx global>{`
-          .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-          .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-          .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-        `}</style>
       </div>
 
       {/* Add Stock Modal */}
       {addingStock && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => setAddingStock(null)} />
-          <div style={{ width: '400px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 900, marginBottom: '1rem' }}>REPLENISH STOCK</h2>
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, marginBottom: '1.5rem' }}>Item: {addingStock.name}</p>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)' }} onClick={() => setAddingStock(null)} />
+          <div className="card-premium" style={{ width: '400px', position: 'relative', padding: '2rem' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Replenish Stock</h2>
+            <p style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Item: <strong style={{ color: 'var(--text-primary)' }}>{addingStock.name}</strong></p>
             
-            <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>QUANTITY TO ADD</label>
+            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Quantity to Add</label>
             <input 
               type="number" 
               value={stockAmount} 
               onChange={(e) => setStockAmount(parseInt(e.target.value))}
-              style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', marginBottom: '1.5rem', fontWeight: 900 }}
+              style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', marginBottom: '1.5rem', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
             />
             
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button onClick={() => setAddingStock(null)} style={{ flex: 1, padding: '12px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleAddStock} style={{ flex: 1, padding: '12px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>CONFIRM</button>
+              <button onClick={() => setAddingStock(null)} className="btn-outline-premium" style={{ flex: 1, justifyContent: 'center' }}>Cancel</button>
+              <button onClick={handleAddStock} className="btn-primary-premium" style={{ flex: 1, justifyContent: 'center' }}>Confirm</button>
             </div>
           </div>
         </div>
@@ -395,46 +411,46 @@ export default function PharmacyPage() {
       {/* Add/Edit Medicine Modal */}
       {isAddingNew && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }} onClick={() => { setIsAddingNew(false); setEditingItem(null); }} />
-          <div style={{ width: '500px', background: '#fff', position: 'relative', border: '4px solid #29ABE2', padding: '2.5rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '2rem' }}>{editingItem ? 'EDIT MEDICINE' : 'REGISTER NEW MEDICINE'}</h2>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)' }} onClick={() => { setIsAddingNew(false); setEditingItem(null); }} />
+          <div className="card-premium" style={{ width: '500px', position: 'relative', padding: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '2rem', color: 'var(--text-primary)' }}>{editingItem ? 'Edit Medicine' : 'Register New Medicine'}</h2>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                <div>
-                  <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>MEDICINE NAME</label>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Medicine Name</label>
                   <input 
                     type="text" 
                     value={formData.name} 
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     placeholder="e.g. PARACETAMOL 500MG"
-                    style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
+                    style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                   />
                </div>
-               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                   <div>
-                     <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>INITIAL QTY</label>
+                     <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Initial Qty</label>
                      <input 
                        type="number" 
                        value={formData.quantity} 
                        onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value)})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                      />
                   </div>
                   <div>
-                     <label style={{ fontSize: '0.65rem', fontWeight: 900, display: 'block', marginBottom: '8px' }}>MIN THRESHOLD</label>
+                     <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Min Threshold</label>
                      <input 
                        type="number" 
                        value={formData.min_threshold} 
                        onChange={(e) => setFormData({...formData, min_threshold: parseInt(e.target.value)})}
-                       style={{ width: '100%', padding: '12px', border: '2px solid #29ABE2', fontWeight: 900 }}
+                       style={{ width: '100%', padding: '12px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', fontWeight: 600, fontSize: '0.9rem', outline: 'none' }}
                      />
                   </div>
                </div>
             </div>
             
             <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
-              <button onClick={() => { setIsAddingNew(false); setEditingItem(null); }} style={{ flex: 1, padding: '15px', border: '2px solid #29ABE2', background: '#fff', fontWeight: 900, cursor: 'pointer' }}>CANCEL</button>
-              <button onClick={handleSaveItem} style={{ flex: 1, padding: '15px', background: '#29ABE2', color: '#fff', border: 'none', fontWeight: 900, cursor: 'pointer' }}>{editingItem ? 'UPDATE RECORD' : 'CREATE RECORD'}</button>
+              <button onClick={() => { setIsAddingNew(false); setEditingItem(null); }} className="btn-outline-premium" style={{ flex: 1, justifyContent: 'center' }}>Cancel</button>
+              <button onClick={handleSaveItem} className="btn-primary-premium" style={{ flex: 1, justifyContent: 'center' }}>{editingItem ? 'Update Record' : 'Create Record'}</button>
             </div>
           </div>
         </div>

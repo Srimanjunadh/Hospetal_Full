@@ -1,9 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Key, User, ShieldCheck, Plus, Search, Filter, Activity, Lock, Mail, Star, Phone, Home, RefreshCcw, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Key, User, Star, Phone, Home, RefreshCcw, Eye, EyeOff, Search, Filter } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useToast } from "@/components/ToastProvider";
 import { apiService } from "@/services/api";
+
+interface DoctorAuth {
+  id: string;
+  name: string;
+  specialty: string;
+  room: string;
+  password: string;
+  status: string;
+}
 
 export default function DoctorAuthPage() {
   const { showToast } = useToast();
@@ -16,7 +25,7 @@ export default function DoctorAuthPage() {
     docId: "", 
     password: "" 
   });
-  const [doctorAuths, setDoctorAuths] = useState<any[]>([]);
+  const [doctorAuths, setDoctorAuths] = useState<DoctorAuth[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [revealedIds, setRevealedIds] = useState<string[]>([]);
@@ -25,13 +34,8 @@ export default function DoctorAuthPage() {
   const toggleReveal = (id: string) => {
     setRevealedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
-  
-  useEffect(() => {
-    setMounted(true);
-    fetchDoctors();
-  }, []);
 
-  const fetchDoctors = async () => {
+  const fetchDoctors = useCallback(async () => {
     setIsLoading(true);
     try {
       const session = JSON.parse(localStorage.getItem("medclues_session") || "null");
@@ -39,22 +43,37 @@ export default function DoctorAuthPage() {
       
       const data = await apiService.getDoctors(hId);
       if (Array.isArray(data)) {
-        const formatted = data.map(d => ({
+        interface RawDoctorData {
+          id: number;
+          room_number?: string;
+          specialization?: string;
+          user?: {
+            username: string;
+            name: string;
+            cleartext_password?: string;
+          };
+        }
+        const formatted = (data as RawDoctorData[]).map((d: RawDoctorData) => ({
           id: d.user?.username || `DOC-${d.id}`,
-          name: d.user?.name?.toUpperCase(),
-          specialty: d.specialization?.toUpperCase(),
+          name: d.user?.name?.toUpperCase() || "UNNAMED",
+          specialty: d.specialization?.toUpperCase() || "GENERAL",
           room: d.room_number || "N/A",
           password: d.user?.cleartext_password || "••••••••",
           status: "ACTIVE"
         }));
         setDoctorAuths(formatted);
       }
-    } catch (error) {
+    } catch {
       showToast("Failed to fetch clinical registry", "error");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    setMounted(true);
+    fetchDoctors();
+  }, [fetchDoctors]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +99,7 @@ export default function DoctorAuthPage() {
       } else {
         showToast(data.detail || "Forge Failed", "error");
       }
-    } catch (error) {
+    } catch {
       showToast("Network Error", "error");
     } finally {
       setIsSubmitting(false);
@@ -91,92 +110,92 @@ export default function DoctorAuthPage() {
 
   return (
     <DashboardLayout role="hospital_admin" userName="Hospital Admin">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900 }}>DOCTOR AUTH FORGE</h1>
-          <p style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>FACILITY ACCESS MANAGEMENT • CLINICAL CREDENTIALING</p>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>Doctor Auth Forge</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500 }}>Facility Access Management & Clinical Credentialing</p>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '3rem', marginBottom: '4rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '2.5rem', marginBottom: '4rem', alignItems: 'start' }}>
         
         {/* Creation Form */}
-        <div className="card" style={{ padding: '2.5rem' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '2.5rem', borderBottom: '2px solid #000', paddingBottom: '10px' }}>FORGE NEW CREDENTIALS</h3>
-          <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>DOCTOR FULL NAME</label>
+        <div className="card-premium" style={{ padding: '2rem' }}>
+          <h3 style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '1.75rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>Forge New Credentials</h3>
+          <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Doctor Full Name</label>
               <div style={{ position: 'relative' }}>
-                <User style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                <User style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.7 }} size={16} />
                 <input 
                   type="text" 
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="E.G. DR. ALICE REED" 
-                  style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  placeholder="e.g. Dr. Alice Reed" 
+                  style={{ width: '100%', padding: '12px 14px 12px 42px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>CLINICAL SPECIALTY</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Clinical Specialty</label>
                 <div style={{ position: 'relative' }}>
-                  <Star style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                  <Star style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.7 }} size={16} />
                   <input 
                     type="text" 
                     value={formData.specialization}
                     onChange={(e) => setFormData({...formData, specialization: e.target.value})}
-                    placeholder="NEUROSURGERY" 
-                    style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                    placeholder="Neurosurgery" 
+                    style={{ width: '100%', padding: '12px 14px 12px 42px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   />
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>MOBILE NUMBER</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Mobile Number</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                  <Phone style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.7 }} size={16} />
                   <input 
                     type="text" 
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     placeholder="+91 XXXXX XXXXX" 
-                    style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                    style={{ width: '100%', padding: '12px 14px 12px 42px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   />
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>WARD / ROOM NO.</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Ward / Room No.</label>
                 <div style={{ position: 'relative' }}>
-                  <Home style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} size={18} />
+                  <Home style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)', opacity: 0.7 }} size={16} />
                   <input 
                     type="text" 
                     value={formData.roomNumber}
                     onChange={(e) => setFormData({...formData, roomNumber: e.target.value})}
-                    placeholder="E.G. WARD-B1" 
-                    style={{ width: '100%', padding: '15px 15px 15px 45px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                    placeholder="e.g. Ward-B1" 
+                    style={{ width: '100%', padding: '12px 14px 12px 42px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   />
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>DOC-ID (FOR LOGIN)</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Doc-ID (For Login)</label>
                 <input 
                   type="text" 
                   required
                   value={formData.docId}
                   onChange={(e) => setFormData({...formData, docId: e.target.value})}
                   placeholder="DOC-001" 
-                  style={{ width: '100%', padding: '15px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                  style={{ width: '100%', padding: '12px 14px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                 />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ fontSize: '0.65rem', fontWeight: 900, opacity: 0.5 }}>INITIAL ACCESS PASSWORD</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Initial Access Password</label>
                 <div style={{ position: 'relative' }}>
                   <input 
                     type={showPassword ? "text" : "password"} 
@@ -184,89 +203,101 @@ export default function DoctorAuthPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                     placeholder="••••••••" 
-                    style={{ width: '100%', padding: '15px 45px 15px 15px', background: '#f4f4f5', border: 'none', fontWeight: 800, outline: 'none' }}
+                    style={{ width: '100%', padding: '12px 42px 12px 14px', border: '1px solid #e2e8f0', background: '#f8fafc', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600, outline: 'none' }}
                   />
                   <button 
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', opacity: 0.5 }}
+                    style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', opacity: 0.7 }}
+                    title="Toggle Reveal Password"
                   >
-                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
             </div>
 
-            <button type="submit" disabled={isSubmitting} className="btn-black" style={{ padding: '18px', marginTop: '1rem', gap: '10px', opacity: isSubmitting ? 0.7 : 1 }}>
-              {isSubmitting ? <RefreshCcw className="animate-spin" size={18} /> : <Key size={18} />} 
-              {isSubmitting ? "FORGING ACCESS..." : "GENERATE CLINICAL CREDENTIALS"}
+            <button type="submit" disabled={isSubmitting} className="btn-primary-premium" style={{ width: '100%', height: '46px', marginTop: '1rem', gap: '10px', opacity: isSubmitting ? 0.7 : 1, justifyContent: 'center' }}>
+              {isSubmitting ? <RefreshCcw className="animate-spin" size={16} /> : <Key size={16} />} 
+              {isSubmitting ? "Forging Access..." : "Generate Clinical Credentials"}
             </button>
           </form>
         </div>
 
         {/* Credential Registry */}
-        <div className="card" style={{ padding: '0' }}>
-           <div style={{ padding: '1.5rem 2.5rem', borderBottom: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 900, fontSize: '0.8rem', letterSpacing: '2px' }}>CLINICAL ACCESS REGISTRY</h3>
-              <button onClick={fetchDoctors} style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                <RefreshCcw size={16} className={isLoading ? "animate-spin" : ""} />
-              </button>
+        <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
+           <div style={{ padding: '1.25rem 2rem', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Clinical Access Registry</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ position: 'relative' }}>
+                  <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                  <input type="text" placeholder="Search identities..." style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '6px 10px 6px 30px', borderRadius: '20px', color: 'var(--text-primary)', fontSize: '0.75rem', outline: 'none' }} />
+                </div>
+                <button style={{ background: '#fff', border: '1px solid #e2e8f0', color: 'var(--text-primary)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  <Filter size={14} /> FILTER
+                </button>
+                <button onClick={fetchDoctors} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }} title="Refresh Doctors List">
+                  <RefreshCcw size={16} className={isLoading ? "animate-spin" : ""} />
+                </button>
+              </div>
            </div>
            <div style={{ maxHeight: '500px', overflowY: 'auto' }} className="custom-scrollbar">
-             <table className="data-table" style={{ border: 'none' }}>
+             <table className="data-table-premium">
                <thead>
-                 <tr style={{ position: 'sticky', top: 0, background: '#f9fafb', zIndex: 10 }}>
-                   <th style={{ padding: '12px 25px', fontSize: '0.65rem' }}>S.NO</th>
-                   <th style={{ padding: '12px 25px' }}>DOC-IDENTITY</th>
-                   <th style={{ padding: '12px 25px' }}>SPECIALTY</th>
-                   <th style={{ padding: '12px 25px' }}>ROOM</th>
-                   <th style={{ padding: '12px 25px' }}>PASSWORD</th>
-                   <th style={{ padding: '12px 25px' }}>STATUS</th>
+                 <tr>
+                   <th>S.No</th>
+                   <th>Doc-Identity</th>
+                   <th>Specialty</th>
+                   <th>Room</th>
+                   <th>Password</th>
+                   <th>Status</th>
                  </tr>
                </thead>
                <tbody>
                  {isLoading ? (
-                   <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', fontWeight: 800 }}>FETCHING CLINICAL NODES...</td></tr>
+                   <tr><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Fetching clinical nodes...</td></tr>
                  ) : doctorAuths.length === 0 ? (
-                   <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', fontWeight: 800 }}>NO REGISTERED CLINICIANS</td></tr>
+                   <tr><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', fontWeight: 700, color: 'var(--text-secondary)' }}>No registered clinicians found</td></tr>
                  ) : doctorAuths.map((auth, i) => (
-                   <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                     <td style={{ padding: '15px 25px', fontWeight: 900, fontSize: '0.75rem', opacity: 0.3 }}>{(i + 1).toString().padStart(2, '0')}</td>
-                     <td style={{ padding: '15px 25px' }}>
-                        <p style={{ fontWeight: 900, fontSize: '0.8rem' }}>{auth.name}</p>
-                        <p style={{ fontSize: '0.65rem', fontWeight: 800, opacity: 0.5 }}>{auth.id}</p>
+                   <tr key={i}>
+                     <td style={{ fontWeight: 700, color: 'var(--text-secondary)', opacity: 0.6 }}>{(i + 1).toString().padStart(2, '0')}</td>
+                     <td style={{ fontWeight: 700 }}>
+                        <p style={{ color: 'var(--text-primary)', marginBottom: '2px' }}>{auth.name}</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 550, color: 'var(--text-secondary)' }}>{auth.id}</p>
                      </td>
-                     <td style={{ padding: '15px 25px', fontWeight: 900, fontSize: '0.75rem' }}>{auth.specialty}</td>
-                     <td style={{ padding: '15px 25px', fontWeight: 800, fontSize: '0.75rem', opacity: 0.7 }}>{auth.room}</td>
-                     <td style={{ padding: '15px 25px' }}>
+                     <td style={{ fontWeight: 650, color: 'var(--text-secondary)' }}>{auth.specialty}</td>
+                     <td style={{ fontWeight: 600, color: 'var(--text-secondary)', opacity: 0.8 }}>{auth.room}</td>
+                     <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <code style={{ fontSize: '0.75rem', fontWeight: 900, background: '#f4f4f5', padding: '4px 8px', color: '#000', minWidth: '80px', textAlign: 'center' }}>
+                          <code style={{ fontSize: '0.75rem', fontWeight: 700, background: '#f1f5f9', padding: '4px 8px', borderRadius: '6px', color: 'var(--text-primary)', minWidth: '80px', textAlign: 'center' }}>
                              {revealedIds.includes(auth.id) ? auth.password : "••••••••"}
                           </code>
                           <button 
                             onClick={() => toggleReveal(auth.id)}
-                            style={{ background: 'transparent', border: 'none', cursor: 'pointer', opacity: 0.5, display: 'flex', alignItems: 'center' }}
+                            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }}
+                            title="Toggle Reveal Password"
                           >
                             {revealedIds.includes(auth.id) ? <EyeOff size={14} /> : <Eye size={14} />}
                           </button>
                         </div>
                      </td>
-                     <td style={{ padding: '15px 25px' }}>
-                        <span style={{ fontSize: '0.6rem', fontWeight: 900, color: auth.status === 'ACTIVE' ? '#10b981' : '#f59e0b' }}>{auth.status}</span>
+                     <td>
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          fontWeight: 700, 
+                          color: auth.status === 'ACTIVE' ? '#059669' : '#d97706',
+                          background: auth.status === 'ACTIVE' ? '#ecfdf5' : '#fffbeb',
+                          padding: '4px 10px',
+                          borderRadius: '12px'
+                        }}>{auth.status}</span>
                      </td>
                    </tr>
                  ))}
                </tbody>
              </table>
            </div>
-           <style jsx global>{`
-             .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-             .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
-             .custom-scrollbar::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
-           `}</style>
         </div>
 
       </div>
     </DashboardLayout>
   );
 }
-
